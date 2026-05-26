@@ -60,6 +60,25 @@ export async function uploadToCloudinary(
   );
 }
 
+/**
+ * Pull the Cloudinary public_id out of a secure_url.
+ * Returns null for non-Cloudinary URLs so callers can no-op safely.
+ *
+ * URL shape: https://res.cloudinary.com/<cloud>/image/upload/[v<ver>/][<transforms>/]<public_id>.<ext>
+ */
+export function publicIdFromUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const m = url.match(/^https?:\/\/res\.cloudinary\.com\/[^/]+\/(?:image|video|raw)\/upload\/(.+?)(?:\.[a-z0-9]+)?$/i);
+  if (!m) return null;
+  // Strip a leading version segment (v123456789/) if present.
+  return m[1].replace(/^v\d+\//, "");
+}
+
+export async function deleteFromCloudinary(publicId: string) {
+  const cld = getCloudinary();
+  return await cld.uploader.destroy(publicId, { invalidate: true });
+}
+
 export function cldUrl(publicId: string, opts?: { w?: number; h?: number; q?: string }) {
   const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   if (!cloud) return publicId;

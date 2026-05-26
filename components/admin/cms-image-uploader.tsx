@@ -3,9 +3,26 @@
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { ImagePlus, Loader2, RotateCcw, Trash2, Upload } from "lucide-react";
+import { ImagePlus, Loader2, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+async function destroyCloudinaryAsset(url: string | null): Promise<void> {
+  if (!url) return;
+  // The server route also guards against deleting shared fallback assets,
+  // but skip the round-trip for those entirely.
+  if (url.includes("/website/fallbacks/")) return;
+  try {
+    await fetch("/api/upload", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+  } catch {
+    // Non-fatal — the DB record will still be cleared. Orphaned asset
+    // can be cleaned up later.
+  }
+}
 
 interface CmsImageUploaderProps {
   sectionKey: string;
@@ -44,6 +61,7 @@ export function CmsImageUploader({
         return;
       }
 
+      const previousUrl = previewUrl;
       setUploading(true);
       try {
         // 1. Upload to Cloudinary
@@ -69,6 +87,10 @@ export function CmsImageUploader({
           throw new Error(err?.error ?? "Save failed");
         }
 
+        // 3. Destroy the previous custom asset so Cloudinary storage
+        // doesn't accumulate orphans on every replacement.
+        await destroyCloudinaryAsset(previousUrl);
+
         setPreviewUrl(secure_url);
         toast.success("Image updated");
         onSaved?.();
@@ -79,27 +101,42 @@ export function CmsImageUploader({
         setSaving(false);
       }
     },
-    [sectionKey, onSaved],
+    [sectionKey, previewUrl, onSaved],
   );
 
-  const handleReset = useCallback(async () => {
+  const handleDelete = useCallback(async () => {
+    const toRemove = previewUrl;
+    if (!toRemove) return;
+    if (
+      typeof window !== "undefined" &&
+      !window.confirm("Delete this image? It will be removed from Cloudinary and the slot will revert to the default image.")
+    ) {
+      return;
+    }
+
     setSaving(true);
     try {
+      // 1. Clear image_url in CMS first — even if Cloudinary destroy fails,
+      // the public site stops pointing at the dead asset.
       const res = await fetch(`/api/cms/${encodeURIComponent(sectionKey)}`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ image_url: null }),
       });
-      if (!res.ok) throw new Error("Reset failed");
+      if (!res.ok) throw new Error("Delete failed");
+
+      // 2. Destroy the Cloudinary asset.
+      await destroyCloudinaryAsset(toRemove);
+
       setPreviewUrl(null);
-      toast.success("Reverted to default image");
+      toast.success("Image deleted");
       onSaved?.();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Reset failed");
+      toast.error(err instanceof Error ? err.message : "Delete failed");
     } finally {
       setSaving(false);
     }
-  }, [sectionKey, onSaved]);
+  }, [sectionKey, previewUrl, onSaved]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -189,18 +226,18 @@ export function CmsImageUploader({
           className="h-8 gap-1.5 rounded-lg text-xs"
         >
           <ImagePlus className="h-3.5 w-3.5" />
-          Upload
+          {isCustom ? "Replace" : "Upload"}
         </Button>
         {isCustom && (
           <Button
             variant="ghost"
             size="sm"
             disabled={busy}
-            onClick={handleReset}
-            className="h-8 gap-1.5 rounded-lg text-xs text-slate-500 hover:text-red-600"
+            onClick={handleDelete}
+            className="h-8 gap-1.5 rounded-lg text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Reset to default
+            <Trash2 className="h-3.5 w-3.5" />
+            Delete
           </Button>
         )}
       </div>

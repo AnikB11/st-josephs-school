@@ -119,10 +119,11 @@ export function TabbedPage({ tabs }: { tabs: TabItem[] }) {
             {/* Animated indicator */}
             <span
               aria-hidden
-              className="pointer-events-none absolute bottom-0 h-[2px] rounded-full bg-[hsl(var(--primary))] transition-[transform,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="pointer-events-none absolute bottom-0 h-[2px] rounded-full bg-[hsl(var(--primary))]"
               style={{
                 transform: `translateX(${indicator.left}px)`,
                 width: indicator.width,
+                transition: "transform 300ms cubic-bezier(0.22, 1, 0.36, 1), width 300ms cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             />
           </div>

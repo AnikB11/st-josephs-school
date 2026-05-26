@@ -31,55 +31,55 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "home_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811206/website/fallbacks/home_hero_image.jpg",
       },
       {
         key: "home_campus_image",
         label: "Campus scroll image",
         fallback:
-          "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811210/website/fallbacks/home_campus_image.jpg",
       },
       {
         key: "home_principal_image",
         label: "Principal portrait",
         fallback:
-          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811213/website/fallbacks/home_principal_image.jpg",
       },
       {
         key: "home_gallery_1",
         label: "Gallery preview · 1",
         fallback:
-          "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=70",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811215/website/fallbacks/home_gallery_1.jpg",
       },
       {
         key: "home_gallery_2",
         label: "Gallery preview · 2",
         fallback:
-          "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=600&q=70",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811216/website/fallbacks/home_gallery_2.jpg",
       },
       {
         key: "home_gallery_3",
         label: "Gallery preview · 3",
         fallback:
-          "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=70",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811228/website/fallbacks/home_gallery_3.jpg",
       },
       {
         key: "home_gallery_4",
         label: "Gallery preview · 4",
         fallback:
-          "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=600&q=70",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811229/website/fallbacks/home_gallery_4.jpg",
       },
       {
         key: "home_gallery_5",
         label: "Gallery preview · 5",
         fallback:
-          "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=70",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811231/website/fallbacks/home_gallery_5.jpg",
       },
       {
         key: "home_admissions_cta_image",
         label: "Admissions CTA",
         fallback:
-          "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811232/website/fallbacks/home_admissions_cta_image.jpg",
       },
     ],
   },
@@ -91,31 +91,31 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "about_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811234/website/fallbacks/about_hero_image.jpg",
       },
       {
         key: "about_story_image",
         label: "Our story",
         fallback:
-          "https://images.unsplash.com/photo-1438565434616-3ef039228b15?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811237/website/fallbacks/about_story_image.jpg",
       },
       {
         key: "about_principal_image",
         label: "Principal photo",
         fallback:
-          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811239/website/fallbacks/about_principal_image.jpg",
       },
       {
         key: "about_library_image",
         label: "Library",
         fallback:
-          "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811241/website/fallbacks/about_library_image.jpg",
       },
       {
         key: "about_facilities_image",
         label: "Facilities",
         fallback:
-          "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811243/website/fallbacks/about_facilities_image.jpg",
       },
     ],
   },
@@ -127,37 +127,37 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "academics_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811245/website/fallbacks/academics_hero_image.jpg",
       },
       {
         key: "academics_preprimary_image",
         label: "Pre-Primary",
         fallback:
-          "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811247/website/fallbacks/academics_preprimary_image.jpg",
       },
       {
         key: "academics_primary_image",
         label: "Primary",
         fallback:
-          "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811249/website/fallbacks/academics_primary_image.jpg",
       },
       {
         key: "academics_middle_image",
         label: "Middle School",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811250/website/fallbacks/academics_middle_image.jpg",
       },
       {
         key: "academics_secondary_image",
         label: "Secondary",
         fallback:
-          "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811252/website/fallbacks/academics_secondary_image.jpg",
       },
       {
         key: "academics_senior_image",
         label: "Senior Secondary",
         fallback:
-          "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811253/website/fallbacks/academics_senior_image.jpg",
       },
     ],
   },
@@ -169,43 +169,43 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "campus_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811255/website/fallbacks/campus_hero_image.jpg",
       },
       {
         key: "campus_sports_image",
         label: "Sports",
         fallback:
-          "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811257/website/fallbacks/campus_sports_image.jpg",
       },
       {
         key: "campus_events_image",
         label: "Events",
         fallback:
-          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811260/website/fallbacks/campus_events_image.jpg",
       },
       {
         key: "campus_clubs_image",
         label: "Clubs",
         fallback:
-          "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811267/website/fallbacks/campus_clubs_image.jpg",
       },
       {
         key: "campus_activities_image",
         label: "Activities",
         fallback:
-          "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811269/website/fallbacks/campus_activities_image.jpg",
       },
       {
         key: "campus_cultural_image",
         label: "Cultural",
         fallback:
-          "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811271/website/fallbacks/campus_cultural_image.jpg",
       },
       {
         key: "campus_student_image",
         label: "Student life",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811274/website/fallbacks/campus_student_image.jpg",
       },
     ],
   },
@@ -217,13 +217,13 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "admissions_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811284/website/fallbacks/admissions_hero_image.jpg",
       },
       {
         key: "admissions_cta_image",
         label: "CTA image",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811286/website/fallbacks/admissions_cta_image.jpg",
       },
     ],
   },
@@ -235,7 +235,7 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "gallery_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811288/website/fallbacks/gallery_hero_image.jpg",
       },
     ],
   },
@@ -247,7 +247,7 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "notices_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811290/website/fallbacks/notices_hero_image.jpg",
       },
     ],
   },
@@ -259,13 +259,13 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "alumni_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811292/website/fallbacks/alumni_hero_image.jpg",
       },
       {
         key: "alumni_network_image",
         label: "Network image",
         fallback:
-          "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811296/website/fallbacks/alumni_network_image.jpg",
       },
     ],
   },
@@ -277,13 +277,13 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "contact_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811298/website/fallbacks/contact_hero_image.jpg",
       },
       {
         key: "contact_visit_image",
         label: "Visit us",
         fallback:
-          "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1600&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811300/website/fallbacks/contact_visit_image.jpg",
       },
     ],
   },
@@ -295,7 +295,7 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         key: "results_hero_image",
         label: "Hero background",
         fallback:
-          "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=2400&q=80",
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811302/website/fallbacks/results_hero_image.jpg",
       },
     ],
   },
