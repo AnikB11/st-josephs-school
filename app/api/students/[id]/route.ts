@@ -14,13 +14,36 @@ export async function GET(
 
   const { id } = await ctx.params;
   const supabase = createSupabaseAdminClient();
+
+  // Parents may only read students linked to their parent row.
+  if (user.dbUser?.role === "parent") {
+    const { data: parent } = await supabase
+      .from("parents")
+      .select("id")
+      .eq("user_id", user.dbUser.id)
+      .maybeSingle();
+    const parentId = (parent as { id: string } | null)?.id;
+    if (!parentId) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    const { data: ownership } = await supabase
+      .from("students")
+      .select("id")
+      .eq("id", id)
+      .eq("parent_id", parentId)
+      .maybeSingle();
+    if (!ownership) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const { data, error } = await supabase
     .from("students")
     .select("*, classes(grade, section), parents(*)")
     .eq("id", id)
     .maybeSingle();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("students[id] GET", error);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+  }
   if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ student: data });
 }

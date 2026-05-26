@@ -82,10 +82,11 @@ export default async function StudentDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const student = await getStudent(id);
+  const [student, attendance] = await Promise.all([
+    getStudent(id),
+    getAttendanceSummary(id),
+  ]);
   if (!student) notFound();
-
-  const attendance = await getAttendanceSummary(id);
 
   return (
     <>

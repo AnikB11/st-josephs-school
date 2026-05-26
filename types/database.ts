@@ -6,7 +6,7 @@
  *   supabase gen types typescript --project-id <id> > types/database.ts
  */
 
-export type UserRole = "admin" | "parent" | "alumni" | "student";
+export type UserRole = "admin" | "teacher" | "parent" | "alumni" | "student";
 export type AttendanceStatus = "present" | "absent" | "late" | "excused";
 export type StudentStatus = "active" | "promoted" | "retained" | "graduated" | "transferred";
 export type NoticeAudience = "all" | "parents" | "students" | "alumni" | "staff";
@@ -15,7 +15,8 @@ export type ResultStatus = "draft" | "published" | "archived";
 
 export interface User {
   id: string;
-  clerk_id: string;
+  auth_user_id: string | null;
+  clerk_id: string | null;
   email: string;
   full_name: string | null;
   avatar_url: string | null;
@@ -208,6 +209,58 @@ export interface AuditLog {
   created_at: string;
 }
 
+export interface Teacher {
+  id: string;
+  user_id: string | null;
+  invited_email: string | null;
+  full_name: string;
+  employee_code: string | null;
+  phone: string | null;
+  qualification: string | null;
+  date_of_joining: string;
+  is_active: boolean;
+  photo_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TeacherAssignment {
+  id: string;
+  teacher_id: string;
+  class_id: string;
+  subject_id: string | null;
+  is_class_teacher: boolean;
+  created_at: string;
+}
+
+export type AssignmentSubmissionStatus = "submitted" | "graded";
+
+export interface Assignment {
+  id: string;
+  class_id: string;
+  subject_id: string | null;
+  teacher_id: string | null;
+  title: string;
+  description: string | null;
+  pdf_url: string | null;
+  due_date: string | null;
+  max_marks: number | null;
+  is_published: boolean;
+  created_at: string;
+}
+
+export interface AssignmentSubmission {
+  id: string;
+  assignment_id: string;
+  student_id: string;
+  pdf_url: string | null;
+  remarks: string | null;
+  marks_obtained: number | null;
+  status: AssignmentSubmissionStatus;
+  submitted_at: string;
+  graded_at: string | null;
+}
+
 type Tbl<T> = {
   Row: T;
   Insert: Partial<T>;
@@ -234,6 +287,10 @@ export interface Database {
       events: Tbl<Event>;
       website_content: Tbl<WebsiteContent>;
       audit_logs: Tbl<AuditLog>;
+      teachers: Tbl<Teacher>;
+      teacher_assignments: Tbl<TeacherAssignment>;
+      assignments: Tbl<Assignment>;
+      assignment_submissions: Tbl<AssignmentSubmission>;
     };
     Views: Record<string, never>;
     Functions: {

@@ -18,6 +18,7 @@ export const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/academics", label: "Academics" },
+  { href: "/campus-life", label: "Campus Life" },
   { href: "/admissions", label: "Admissions" },
   { href: "/gallery", label: "Gallery" },
   { href: "/notices", label: "Notices" },
@@ -27,6 +28,7 @@ export const NAV_LINKS = [
 
 export const ROLES = {
   ADMIN: "admin",
+  TEACHER: "teacher",
   PARENT: "parent",
   ALUMNI: "alumni",
   STUDENT: "student",

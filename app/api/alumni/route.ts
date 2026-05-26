@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   }
   const { data, error } = await query.limit(200);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/alumni/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ alumni: data });
 }
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase.from("alumni").insert(parsed.data).select().single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/alumni/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
 
   await supabase.from("audit_logs").insert({
     actor_id: user.dbUser?.id ?? null,

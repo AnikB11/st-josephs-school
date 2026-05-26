@@ -13,6 +13,9 @@ import {
   GraduationCap,
   Settings,
   ArrowUpRight,
+  UserCircle,
+  BookOpen,
+  Briefcase,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,7 +29,9 @@ export type SidebarItem = {
 
 export const ADMIN_NAV: SidebarItem[] = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/users", label: "Users", icon: UserCircle },
   { href: "/admin/students", label: "Students", icon: Users },
+  { href: "/admin/teachers", label: "Teachers", icon: Briefcase },
   { href: "/admin/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/admin/results", label: "Results", icon: FileBarChart },
   { href: "/admin/notices", label: "Notices", icon: Megaphone },
@@ -37,11 +42,28 @@ export const ADMIN_NAV: SidebarItem[] = [
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
+export const TEACHER_NAV: SidebarItem[] = [
+  { href: "/teacher", label: "Overview", icon: LayoutDashboard },
+  { href: "/teacher/classes", label: "My Classes", icon: Users },
+  { href: "/teacher/attendance", label: "Attendance", icon: ClipboardCheck },
+  { href: "/teacher/results", label: "Marks Entry", icon: FileBarChart },
+  { href: "/teacher/assignments", label: "Assignments", icon: BookOpen },
+];
+
 export const PARENT_NAV: SidebarItem[] = [
   { href: "/parent", label: "Overview", icon: LayoutDashboard },
   { href: "/parent/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/parent/results", label: "Results", icon: FileBarChart },
   { href: "/parent/notices", label: "Notices", icon: Megaphone },
+];
+
+export const STUDENT_NAV: SidebarItem[] = [
+  { href: "/student", label: "Overview", icon: LayoutDashboard },
+  { href: "/student/attendance", label: "Attendance", icon: ClipboardCheck },
+  { href: "/student/results", label: "Results", icon: FileBarChart },
+  { href: "/student/assignments", label: "Assignments", icon: BookOpen },
+  { href: "/student/notices", label: "Notices", icon: Megaphone },
+  { href: "/student/profile", label: "Profile", icon: UserCircle },
 ];
 
 export const ALUMNI_NAV: SidebarItem[] = [
@@ -78,16 +100,20 @@ export function Sidebar({
         <ul className="space-y-0.5">
           {items.map((item) => {
             const Icon = item.icon;
+            const isBaseRoute =
+              item.href === "/admin" ||
+              item.href === "/parent" ||
+              item.href === "/student" ||
+              item.href === "/teacher" ||
+              item.href === "/alumni-portal";
             const active =
               pathname === item.href ||
-              (item.href !== "/admin" &&
-                item.href !== "/parent" &&
-                item.href !== "/alumni-portal" &&
-                pathname.startsWith(item.href));
+              (!isBaseRoute && pathname.startsWith(item.href));
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  prefetch
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     active
@@ -107,6 +133,7 @@ export function Sidebar({
       <div className="border-t border-slate-200/70 px-3 py-3">
         <Link
           href="/"
+          prefetch
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700"
         >
           ← Back to website

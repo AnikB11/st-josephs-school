@@ -1,8 +1,34 @@
 import { Search, Bell } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
+import { UserMenu } from "@/components/dashboard/user-menu";
+import { getAuthUser } from "@/lib/auth";
+import { getStudentSession } from "@/lib/student-session";
 
-export function TopNav({ title, subtitle }: { title: string; subtitle?: string }) {
+export async function TopNav({ title, subtitle }: { title: string; subtitle?: string }) {
+  // Resolve whichever session is active. Student/parent portals run on a
+  // JWT cookie; admin/teacher run on Supabase Auth. We don't fetch both
+  // — getStudentSession is a JWT verify (no DB hit), so it's cheap to
+  // check first and short-circuit when present.
+  const studentSession = await getStudentSession();
+
+  let display: { name: string; email: string; avatarUrl: string | null; sessionType: "supabase" | "student" };
+  if (studentSession) {
+    display = {
+      name: studentSession.fullName || "Account",
+      email: studentSession.admissionNumber,
+      avatarUrl: null,
+      sessionType: "student",
+    };
+  } else {
+    const user = await getAuthUser();
+    display = {
+      name: user?.dbUser?.full_name ?? user?.email ?? "Account",
+      email: user?.email ?? "",
+      avatarUrl: user?.dbUser?.avatar_url ?? null,
+      sessionType: "supabase",
+    };
+  }
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200/70 bg-white/80 px-6 backdrop-blur supports-[backdrop-filter]:bg-white/70">
       <div className="min-w-0">
@@ -26,7 +52,12 @@ export function TopNav({ title, subtitle }: { title: string; subtitle?: string }
           <Bell className="h-4 w-4" />
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald" />
         </button>
-        <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: "h-8 w-8" } }} />
+        <UserMenu
+          name={display.name}
+          email={display.email}
+          avatarUrl={display.avatarUrl}
+          sessionType={display.sessionType}
+        />
       </div>
     </header>
   );

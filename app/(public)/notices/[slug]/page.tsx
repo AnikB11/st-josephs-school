@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, FileText, Pin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseStaticClient } from "@/lib/supabase/static";
 import { formatDate } from "@/lib/utils";
 import type { Notice } from "@/types/database";
 
+export const revalidate = 60; // ISR: rebuild every 60 seconds
+
 async function getNotice(slug: string): Promise<Notice | null> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = createSupabaseStaticClient();
   const { data } = await supabase
     .from("notices")
     .select("*")
@@ -17,6 +19,20 @@ async function getNotice(slug: string): Promise<Notice | null> {
     .is("archived_at", null)
     .maybeSingle();
   return (data as Notice | null) ?? null;
+}
+
+export async function generateStaticParams() {
+  try {
+    const supabase = createSupabaseStaticClient();
+    const { data } = await supabase
+      .from("notices")
+      .select("slug")
+      .is("archived_at", null)
+      .limit(100);
+    return (data ?? []).map((n) => ({ slug: n.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({

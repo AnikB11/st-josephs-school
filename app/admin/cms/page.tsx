@@ -1,32 +1,37 @@
 import { TopNav } from "@/components/dashboard/topnav";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { CmsSectionForm } from "@/components/admin/cms-section-form";
+import { CmsDashboardClient } from "@/components/admin/cms-dashboard-client";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { ALL_IMAGE_KEYS } from "@/lib/cms-images";
 
 export const dynamic = "force-dynamic";
 
-type CmsRow = { section_key: string; title: string | null; body: string | null };
+type CmsRow = {
+  section_key: string;
+  title: string | null;
+  body: string | null;
+  image_url: string | null;
+};
 
-const SECTIONS: { key: string; title: string; placeholder?: string }[] = [
-  { key: "hero_headline", title: "Hero headline", placeholder: "Where tradition meets tomorrow." },
-  {
-    key: "principal_message",
-    title: "Principal's message",
-    placeholder: "A short note from the principal…",
-  },
-  { key: "about_intro", title: "About — introduction", placeholder: "Our story in 2–3 sentences." },
+const TEXT_SECTION_KEYS = [
+  "hero_headline",
+  "principal_message",
+  "about_intro",
+  "academics_intro",
+  "admissions_intro",
+  "contact_intro",
+  "gallery_intro",
+  "notices_intro",
 ];
+
+const SECTION_KEYS = [...TEXT_SECTION_KEYS, ...ALL_IMAGE_KEYS];
 
 async function getAll(): Promise<Record<string, CmsRow>> {
   try {
     const supabase = createSupabaseAdminClient();
     const { data } = await supabase
       .from("website_content")
-      .select("section_key,title,body")
-      .in(
-        "section_key",
-        SECTIONS.map((s) => s.key),
-      );
+      .select("section_key,title,body,image_url")
+      .in("section_key", SECTION_KEYS);
     const map: Record<string, CmsRow> = {};
     ((data as CmsRow[] | null) ?? []).forEach((r) => (map[r.section_key] = r));
     return map;
@@ -40,29 +45,9 @@ export default async function CmsPage() {
 
   return (
     <>
-      <TopNav title="Website CMS" subtitle="Edit copy that appears on the public website" />
+      <TopNav title="Website CMS" subtitle="Edit copy and images on the public website" />
       <div className="space-y-6 px-6 py-8">
-        {SECTIONS.map((s) => {
-          const row = map[s.key];
-          return (
-            <Card key={s.key}>
-              <CardHeader>
-                <CardTitle className="text-base">{s.title}</CardTitle>
-                <CardDescription className="font-mono text-xs">
-                  section_key: {s.key}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <CmsSectionForm
-                  sectionKey={s.key}
-                  initialTitle={row?.title ?? ""}
-                  initialBody={row?.body ?? ""}
-                  placeholder={s.placeholder}
-                />
-              </CardContent>
-            </Card>
-          );
-        })}
+        <CmsDashboardClient initialData={map} />
       </div>
     </>
   );

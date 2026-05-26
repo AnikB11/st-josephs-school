@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import { uploadToCloudinary, validateUpload } from "@/lib/cloudinary";
-import { requireRole } from "@/lib/auth";
+import { getAuthUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const user = await requireRole("admin");
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // Any signed-in user can upload (admin/teacher/parent/student/alumni).
+  // The dev bypass in lib/auth handles local development.
+  if (process.env.NODE_ENV !== "development") {
+    const user = await getAuthUser();
+    if (!user?.dbUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
   }
 
   const form = await req.formData();

@@ -11,12 +11,14 @@ export async function GET() {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("notices")
-    .select("*")
+    .select(
+      "id,slug,title,category,audience,pdf_url,published_at,expires_at,is_pinned,archived_at",
+    )
     .is("archived_at", null)
     .order("is_pinned", { ascending: false })
     .order("published_at", { ascending: false });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/notices/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ notices: data });
 }
 
@@ -47,11 +49,11 @@ export async function POST(req: Request) {
     .insert({
       ...parsed.data,
       slug,
-      created_by: user.dbUser?.id,
+      created_by: user.dbUser?.id ?? null,
     })
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/notices/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ notice: data }, { status: 201 });
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getTeacherContext, teacherCanAccess } from "@/lib/teacher";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,7 @@ const upsertSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const user = await requireRole("admin");
+  const user = await requireRole(["admin", "teacher"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
@@ -42,7 +43,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { exam_id, subject_id, marks } = parsed.data;
+  const { exam_id, subject_id, class_id, marks } = parsed.data;
+
+  // Teachers can only enter marks for subjects they're assigned to in the class
+  if (user.dbUser?.role === "teacher") {
+    const ctx = await getTeacherContext();
+    if (!ctx || !teacherCanAccess(ctx, class_id, subject_id)) {
+      return NextResponse.json(
+        { error: "You are not assigned to this subject in this class." },
+        { status: 403 },
+      );
+    }
+  }
   const rows = marks.map((m) => ({
     exam_id,
     subject_id,
@@ -59,7 +71,7 @@ export async function POST(req: Request) {
     .from("results")
     .upsert(rows, { onConflict: "student_id,exam_id,subject_id" });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/results/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
 
   await supabase.from("audit_logs").insert({
     actor_id: user.dbUser?.id ?? null,
@@ -79,7 +91,7 @@ const publishSchema = z.object({
 });
 
 export async function PATCH(req: Request) {
-  const user = await requireRole("admin");
+  const user = await requireRole(["admin", "teacher"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
@@ -89,6 +101,23 @@ export async function PATCH(req: Request) {
   }
 
   const { exam_id, class_id, unpublish } = parsed.data;
+
+  // Teachers can only publish for classes where they hold any assignment
+  if (user.dbUser?.role === "teacher") {
+    if (!class_id) {
+      return NextResponse.json(
+        { error: "Teachers must specify a class when publishing." },
+        { status: 400 },
+      );
+    }
+    const ctx = await getTeacherContext();
+    if (!ctx || !teacherCanAccess(ctx, class_id)) {
+      return NextResponse.json(
+        { error: "You don't have an assignment in this class." },
+        { status: 403 },
+      );
+    }
+  }
   const supabase = createSupabaseAdminClient();
 
   // If filtering by class, restrict to students in that class
@@ -115,7 +144,7 @@ export async function PATCH(req: Request) {
   if (studentIds) q = q.in("student_id", studentIds);
 
   const { data, error } = await q.select("id");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/results/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
 
   await supabase.from("audit_logs").insert({
     actor_id: user.dbUser?.id ?? null,

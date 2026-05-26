@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Users,
   ClipboardCheck,
@@ -61,8 +62,7 @@ async function getRecentNotices(): Promise<RecentNotice[]> {
 }
 
 export default async function AdminDashboardPage() {
-  const stats = await getStats();
-  const notices = await getRecentNotices();
+  const [stats, notices] = await Promise.all([getStats(), getRecentNotices()]);
   const attendancePct = Math.round((stats.presentToday / Math.max(stats.students, 1)) * 100);
 
   return (
@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
           />
           <StatCard
             label="Results published"
-            value={stats.results.toLocaleString()}
+            value={stats.results.toLocaleString("en-IN")}
             icon={FileBarChart}
             delta={{ value: "Mid-term 2026", positive: true }}
           />
@@ -101,9 +101,9 @@ export default async function AdminDashboardPage() {
               <h2 className="font-display text-base font-semibold text-slate-900">
                 Recent notices
               </h2>
-              <a href="/admin/notices" className="text-xs font-medium text-primary hover:underline">
+              <Link href="/admin/notices" className="text-xs font-medium text-primary hover:underline" prefetch>
                 Manage notices
-              </a>
+              </Link>
             </div>
             <div className="mt-4">
               {notices.length === 0 ? (
@@ -150,13 +150,14 @@ export default async function AdminDashboardPage() {
                 { href: "/admin/gallery", label: "Upload to gallery" },
               ].map((a) => (
                 <li key={a.href}>
-                  <a
+                  <Link
                     href={a.href}
+                    prefetch
                     className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5 transition-colors hover:border-primary/40 hover:bg-primary/5"
                   >
                     <span className="text-slate-700">{a.label}</span>
                     <TrendingUp className="h-3.5 w-3.5 text-slate-400" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

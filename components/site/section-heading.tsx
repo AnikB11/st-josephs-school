@@ -22,14 +22,14 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span className="inline-flex items-center rounded-full bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-primary">
-          {eyebrow}
-        </span>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
+          <span className="gold-rule">{eyebrow}</span>
+        </p>
       )}
-      <h2 className="heading mt-4 text-balance text-3xl font-semibold sm:text-4xl">
+      <h2 className="heading mt-4 text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
         {title}
       </h2>
-      {description && <p className="lead mt-3 text-base">{description}</p>}
+      {description && <p className="lead mt-4 text-base sm:text-lg">{description}</p>}
     </div>
   );
 }

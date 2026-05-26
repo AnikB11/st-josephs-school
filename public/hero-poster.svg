@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <!-- Sky gradient — dusk over a hill town -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1226"/>
+      <stop offset="40%" stop-color="#13224b"/>
+      <stop offset="75%" stop-color="#1f3a82"/>
+      <stop offset="100%" stop-color="#3458b8"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="78%" cy="55%" r="22%">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.65"/>
+      <stop offset="55%" stop-color="#fbbf24" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hill-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0e1a3a"/>
+      <stop offset="100%" stop-color="#1b2e62"/>
+    </linearGradient>
+    <linearGradient id="hill-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1428"/>
+      <stop offset="100%" stop-color="#0f1f48"/>
+    </linearGradient>
+    <linearGradient id="building" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0f24"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+
+  <!-- Soft sun glow -->
+  <rect width="1920" height="1080" fill="url(#sun)"/>
+
+  <!-- Stars / fireflies -->
+  <g fill="#ffffff" opacity="0.5">
+    <circle cx="160" cy="90"  r="1.2"/>
+    <circle cx="380" cy="160" r="0.8"/>
+    <circle cx="540" cy="60"  r="1.6"/>
+    <circle cx="780" cy="120" r="0.9"/>
+    <circle cx="980" cy="40"  r="1.0"/>
+    <circle cx="1240" cy="160" r="1.4"/>
+    <circle cx="1480" cy="80"  r="0.7"/>
+    <circle cx="1680" cy="200" r="1.1"/>
+    <circle cx="1820" cy="120" r="0.9"/>
+  </g>
+
+  <!-- Far mountain silhouette -->
+  <path d="M0,700 L180,540 L380,620 L580,500 L760,580 L940,460 L1120,540 L1320,460 L1520,540 L1720,480 L1920,560 L1920,1080 L0,1080 Z" fill="url(#hill-far)"/>
+
+  <!-- Mid hill silhouette -->
+  <path d="M0,820 L220,720 L420,780 L640,700 L860,760 L1080,690 L1300,750 L1540,690 L1760,740 L1920,710 L1920,1080 L0,1080 Z" fill="url(#hill-mid)" opacity="0.95"/>
+
+  <!-- School building silhouette — central clocktower + wings -->
+  <g fill="url(#building)">
+    <!-- Left wing -->
+    <rect x="640" y="800" width="280" height="180"/>
+    <!-- Right wing -->
+    <rect x="1000" y="800" width="280" height="180"/>
+    <!-- Center -->
+    <rect x="880" y="740" width="160" height="240"/>
+    <!-- Clocktower -->
+    <rect x="930" y="640" width="60" height="120"/>
+    <polygon points="918,640 1002,640 960,580"/>
+    <!-- Cross / spire -->
+    <rect x="956" y="555" width="8" height="32"/>
+    <rect x="948" y="565" width="24" height="6"/>
+  </g>
+
+  <!-- Glowing windows -->
+  <g fill="#fcd34d" opacity="0.85">
+    <rect x="690" y="850" width="14" height="22"/>
+    <rect x="730" y="850" width="14" height="22"/>
+    <rect x="770" y="850" width="14" height="22"/>
+    <rect x="810" y="850" width="14" height="22"/>
+    <rect x="850" y="850" width="14" height="22"/>
+    <rect x="1056" y="850" width="14" height="22"/>
+    <rect x="1096" y="850" width="14" height="22"/>
+    <rect x="1136" y="850" width="14" height="22"/>
+    <rect x="1176" y="850" width="14" height="22"/>
+    <rect x="1216" y="850" width="14" height="22"/>
+    <rect x="900" y="790" width="14" height="22"/>
+    <rect x="940" y="790" width="14" height="22"/>
+    <rect x="980" y="790" width="14" height="22"/>
+    <rect x="1010" y="790" width="14" height="22"/>
+  </g>
+
+  <!-- Clock face -->
+  <circle cx="960" cy="685" r="14" fill="#fef3c7" opacity="0.85"/>
+  <circle cx="960" cy="685" r="14" fill="none" stroke="#0a0f24" stroke-width="2"/>
+  <line x1="960" y1="685" x2="960" y2="676" stroke="#0a0f24" stroke-width="2" stroke-linecap="round"/>
+  <line x1="960" y1="685" x2="966" y2="688" stroke="#0a0f24" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Foreground fog / mist -->
+  <rect x="0" y="900" width="1920" height="180" fill="url(#hill-far)" opacity="0.4"/>
+</svg>

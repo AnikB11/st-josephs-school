@@ -22,7 +22,9 @@ async function getNotices(): Promise<Notice[]> {
     const supabase = createSupabaseAdminClient();
     const { data } = await supabase
       .from("notices")
-      .select("*")
+      .select(
+        "id,slug,title,category,audience,is_pinned,published_at,expires_at,archived_at",
+      )
       .order("is_pinned", { ascending: false })
       .order("published_at", { ascending: false })
       .limit(100);

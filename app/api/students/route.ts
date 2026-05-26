@@ -15,13 +15,18 @@ export async function GET(req: Request) {
   const q = searchParams.get("q")?.trim();
 
   const supabase = createSupabaseAdminClient();
-  let query = supabase.from("students").select("*").limit(200);
+  let query = supabase
+    .from("students")
+    .select(
+      "id,admission_number,roll_number,full_name,date_of_birth,gender,status,admission_date,class_id,photo_url",
+    )
+    .limit(200);
   if (q) {
     query = query.or(`full_name.ilike.%${q}%,admission_number.ilike.%${q}%`);
   }
   const { data, error } = await query.order("admission_number", { ascending: false });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/students/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ students: data });
 }
 
@@ -124,45 +129,68 @@ export async function POST(req: Request) {
     parentId = (createdParent as { id: string }).id;
   }
 
-  // 4. Generate admission number
-  const { data: admissionNumber, error: rpcErr } = await supabase.rpc(
-    "generate_admission_number",
-    { prefix: SCHOOL.admissionPrefix },
-  );
-  if (rpcErr) {
-    return NextResponse.json({ error: rpcErr.message }, { status: 500 });
+  // 4. Generate admission number (with retry for collisions)
+  let admissionNumber: string | null = null;
+  let student: Record<string, unknown> | null = null;
+  let attempts = 0;
+  const maxAttempts = 5;
+
+  while (attempts < maxAttempts) {
+    const { data: genNumber, error: rpcErr } = await supabase.rpc(
+      "generate_admission_number",
+      { prefix: SCHOOL.admissionPrefix },
+    );
+    if (rpcErr) {
+      return NextResponse.json({ error: rpcErr.message }, { status: 500 });
+    }
+    admissionNumber = genNumber as string;
+
+    // 5. Insert student
+    const { data: insertedStudent, error: studentErr } = await supabase
+      .from("students")
+      .insert({
+        admission_number: admissionNumber,
+        full_name: input.full_name,
+        date_of_birth: input.date_of_birth,
+        gender: input.gender,
+        class_id: classId,
+        parent_id: parentId,
+        roll_number: input.roll_number,
+        blood_group: input.blood_group,
+        address: input.address,
+        photo_url: input.photo_url,
+        status: "active",
+        admission_date: new Date().toISOString().slice(0, 10),
+      })
+      .select()
+      .single();
+
+    if (studentErr) {
+      // If duplicate admission number, retry with next sequence value
+      if (studentErr.message.includes("duplicate") || studentErr.code === "23505") {
+        attempts++;
+        continue;
+      }
+      return NextResponse.json({ error: studentErr.message }, { status: 500 });
+    }
+
+    student = insertedStudent as Record<string, unknown>;
+    break;
   }
 
-  // 5. Insert student
-  const { data: student, error: studentErr } = await supabase
-    .from("students")
-    .insert({
-      admission_number: admissionNumber as string,
-      full_name: input.full_name,
-      date_of_birth: input.date_of_birth,
-      gender: input.gender,
-      class_id: classId,
-      parent_id: parentId,
-      roll_number: input.roll_number,
-      blood_group: input.blood_group,
-      address: input.address,
-      photo_url: input.photo_url,
-      status: "active",
-      admission_date: new Date().toISOString().slice(0, 10),
-    })
-    .select()
-    .single();
-
-  if (studentErr) {
-    return NextResponse.json({ error: studentErr.message }, { status: 500 });
+  if (!student) {
+    return NextResponse.json(
+      { error: "Could not generate a unique admission number after multiple attempts. Please try again." },
+      { status: 500 },
+    );
   }
 
   await supabase.from("audit_logs").insert({
     actor_id: user.dbUser?.id ?? null,
     action: "student.create",
     entity_type: "student",
-    entity_id: (student as { id: string }).id,
-    metadata: { admission_number: (student as { admission_number: string }).admission_number },
+    entity_id: student.id as string,
+    metadata: { admission_number: student.admission_number as string },
   });
 
   return NextResponse.json({ student }, { status: 201 });

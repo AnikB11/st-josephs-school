@@ -55,7 +55,7 @@ export async function POST(req: Request) {
   }));
 
   const { data, error } = await supabase.from("gallery_media").insert(rows).select();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/gallery/media/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
 
   // If this album doesn't have a cover yet, use the first uploaded image
   const { data: album } = await supabase

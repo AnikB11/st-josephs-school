@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseStaticClient } from "@/lib/supabase/static";
 import { formatDate } from "@/lib/utils";
+
+export const revalidate = 60; // ISR: rebuild every 60 seconds
 
 type Album = {
   id: string;
@@ -25,7 +27,7 @@ type Media = {
 
 async function getAlbum(slug: string): Promise<Album | null> {
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = createSupabaseStaticClient();
     const { data } = await supabase
       .from("gallery_albums")
       .select("id,title,slug,description,cover_url,event_date")
@@ -40,13 +42,27 @@ async function getAlbum(slug: string): Promise<Album | null> {
 
 async function getMedia(albumId: string): Promise<Media[]> {
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = createSupabaseStaticClient();
     const { data } = await supabase
       .from("gallery_media")
       .select("id,cloudinary_url,caption,width,height")
       .eq("album_id", albumId)
       .order("display_order", { ascending: true });
     return (data as Media[] | null) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function generateStaticParams() {
+  try {
+    const supabase = createSupabaseStaticClient();
+    const { data } = await supabase
+      .from("gallery_albums")
+      .select("slug")
+      .eq("is_published", true)
+      .limit(100);
+    return (data ?? []).map((a) => ({ slug: a.slug }));
   } catch {
     return [];
   }

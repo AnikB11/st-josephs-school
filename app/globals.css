@@ -4,8 +4,9 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    /* Cream/ivory ground for a premium prep-school feel */
+    --background: 42 33% 97%;          /* warm ivory */
+    --foreground: 222 47% 11%;         /* near-black ink */
 
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
@@ -13,30 +14,40 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Royal blue */
-    --primary: 222 80% 32%;
-    --primary-foreground: 0 0% 100%;
+    /* Deep heritage navy — primary brand */
+    --primary: 222 80% 24%;
+    --primary-foreground: 42 33% 97%;
 
-    --secondary: 210 40% 96%;
+    /* Soft cream / sand */
+    --secondary: 40 30% 94%;
     --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 40 25% 93%;
+    --muted-foreground: 222 15% 38%;
 
-    --accent: 217 91% 60%;
+    /* Burnished gold accent (ivy/laurel feel) */
+    --accent: 38 60% 47%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --emerald: 152 76% 38%;
+    --emerald: 152 65% 32%;
     --emerald-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 80% 32%;
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 222 80% 24%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
+
+    /* Surface tints used directly via Tailwind arbitrary values */
+    --ivory: 42 33% 97%;
+    --cream: 40 40% 95%;
+    --sand: 36 30% 90%;
+    --ink: 222 47% 11%;
+    --ink-soft: 222 25% 28%;
+    --gold: 38 60% 47%;
   }
 }
 
@@ -55,6 +66,11 @@
   ::selection {
     @apply bg-primary/15 text-primary;
   }
+  /* Headings get the serif by default for the ivy/premium feel */
+  h1, h2, h3, h4 {
+    font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+    letter-spacing: -0.01em;
+  }
 }
 
 @layer components {
@@ -71,13 +87,46 @@
     @apply border-b border-slate-100;
   }
   .ring-soft {
-    @apply ring-1 ring-slate-200/70;
+    @apply ring-1 ring-[hsl(var(--border))];
   }
   .heading {
-    @apply font-display tracking-tight text-slate-900;
+    @apply font-display tracking-tight text-[hsl(var(--ink))];
   }
   .lead {
-    @apply text-slate-600 leading-relaxed;
+    @apply text-[hsl(var(--ink-soft))] leading-relaxed;
+  }
+  /* Premium surfaces */
+  .surface-ivory  { background-color: hsl(var(--ivory)); }
+  .surface-cream  { background-color: hsl(var(--cream)); }
+  .surface-sand   { background-color: hsl(var(--sand)); }
+  /* Subtle ivory paper texture via radial dots */
+  .surface-paper {
+    background-color: hsl(var(--ivory));
+    background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -14px -14px;
+  }
+  /* Inline gold rule used under eyebrows */
+  .gold-rule::after {
+    content: "";
+    display: inline-block;
+    height: 1px;
+    width: 28px;
+    margin-left: 10px;
+    vertical-align: middle;
+    background: hsl(var(--gold));
+  }
+  /* Animated gradient underline for nav links */
+  .nav-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size .35s cubic-bezier(.22,1,.36,1);
+  }
+  .nav-underline:hover,
+  .nav-underline[data-active="true"] {
+    background-size: 100% 1px;
   }
 }
 
@@ -92,4 +141,114 @@
     -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
     mask-image: linear-gradient(to bottom, black 60%, transparent);
   }
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+  }
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+}
+
+/* ── Hero entrance animations (CSS-only, replaces framer-motion) ── */
+@keyframes hero-entrance {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-entrance {
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: hero-entrance 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-entrance-d1 { animation-delay: 0.08s; }
+.hero-entrance-d2 { animation-delay: 0.20s; }
+.hero-entrance-d3 { animation-delay: 0.32s; }
+.hero-entrance-d4 { animation-delay: 0.55s; }
+.hero-entrance-d5 { animation-delay: 0.70s; }
+.hero-entrance-d6 { animation-delay: 0.85s; }
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fade-in-up 0.6s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+.scroll-bounce {
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+}
+
+/* ── Reveal-on-scroll: CSS classes toggled by tiny IO islands ──
+   Progressive enhancement: elements stay visible if JS is blocked /
+   hasn't hydrated. We only arm the hidden state when <html data-js="ready">
+   is set by the inline boot script in app/layout.tsx. */
+.reveal {
+  transition:
+    opacity 0.8s cubic-bezier(.22,1,.36,1),
+    transform 0.8s cubic-bezier(.22,1,.36,1);
+  will-change: transform, opacity;
+}
+html[data-js="ready"] .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+}
+html[data-js="ready"] .reveal.reveal-up    { transform: translateY(24px); }
+html[data-js="ready"] .reveal.reveal-left  { transform: translateX(-24px); }
+html[data-js="ready"] .reveal.reveal-right { transform: translateX(24px); }
+html[data-js="ready"] .reveal.reveal-scale { transform: scale(0.96); }
+html[data-js="ready"] .reveal[data-shown="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+html[data-js="ready"] .reveal[data-shown="true"].reveal-left,
+html[data-js="ready"] .reveal[data-shown="true"].reveal-right { transform: translateX(0); }
+html[data-js="ready"] .reveal[data-shown="true"].reveal-scale { transform: scale(1); }
+
+/* Slow zoom for hero/photo backdrops — one-shot, no oscillation
+   (back-and-forth percentage translates cause subpixel jitter). */
+@keyframes slow-zoom {
+  from { transform: scale(1.0); }
+  to   { transform: scale(1.06); }
+}
+.slow-pan {
+  transform-origin: center;
+  animation: slow-zoom 18s cubic-bezier(.22,1,.36,1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Tab panel enter — used by <TabbedPage> when active tab changes */
+@keyframes tab-panel-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tab-panel-enter {
+  animation: tab-panel-enter 0.5s cubic-bezier(.22,1,.36,1) both;
+  will-change: opacity, transform;
+}
+
+/* Marquee for ribbon / trust strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+
+/* ── Accessibility: kill animations for users who prefer reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
 }

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
 import { Toaster } from "sonner";
 import { SCHOOL } from "@/lib/constants";
 import "./globals.css";
@@ -11,10 +10,11 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const outfit = Outfit({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-fraunces",
   display: "swap",
+  axes: ["opsz"],
 });
 
 const APP_URL =
@@ -71,29 +71,31 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-// Syntactically valid public Clerk dev key. Used ONLY when the real env var
-// is missing, so that builds / first-run dev sessions don't crash before
-// the developer has wired up Clerk. Actual auth calls will fail until the
-// real key is configured in .env.local — that is the intended behavior.
-const FALLBACK_PUBLISHABLE_KEY =
-  "pk_test_Y2xlcmsuaW5jbHVkZWQua2F0eWRpZC05Mi5sY2wuZGV2JA";
-
+import { Suspense } from "react";
 import { TopLoader } from "@/components/site/top-loader";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const publishableKey =
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || FALLBACK_PUBLISHABLE_KEY;
-
   return (
-    <ClerkProvider publishableKey={publishableKey}>
-      <html lang="en" className={`${jakarta.variable} ${outfit.variable}`}>
-        <body>
+    <html
+      lang="en"
+      className={`${jakarta.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
+      <body>
+        {/* Arm scroll-reveal hiding before body content paints — if JS is
+            blocked or hydration fails, .reveal elements stay visible. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.setAttribute('data-js','ready');",
+          }}
+        />
+        <Suspense fallback={null}>
           <TopLoader />
-          {children}
-          <Toaster position="top-center" richColors />
-        </body>
-      </html>
-    </ClerkProvider>
+        </Suspense>
+        {children}
+        <Toaster position="top-center" richColors />
+      </body>
+    </html>
   );
 }
-

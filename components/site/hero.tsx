@@ -1,187 +1,132 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SCHOOL } from "@/lib/constants";
+
+// Backdrop image — Unsplash by default, override with env for school photography.
+// TODO: replace with a real campus photo (1600w+) and update via NEXT_PUBLIC_HERO_IMAGE.
+const HERO_IMAGE =
+  process.env.NEXT_PUBLIC_HERO_IMAGE ??
+  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=2400&q=80";
+
+const HERO_VIDEO_WEBM = process.env.NEXT_PUBLIC_HERO_VIDEO_WEBM ?? "";
+const HERO_VIDEO_MP4 = process.env.NEXT_PUBLIC_HERO_VIDEO_MP4 ?? "";
+const HAS_VIDEO = Boolean(HERO_VIDEO_WEBM || HERO_VIDEO_MP4);
 
 export function Hero({
   headline,
   subhead,
+  image,
 }: {
   headline?: string | null;
   subhead?: string | null;
+  image?: string | null;
 }) {
+  const heroSrc = image || HERO_IMAGE;
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-grid mask-fade-y opacity-[0.35]" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu blur-3xl"
-      >
-        <div
-          className="relative left-1/2 aspect-[1155/678] w-[72rem] -translate-x-1/2 bg-gradient-to-tr from-primary/15 via-accent/10 to-emerald/10 opacity-50"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
+    <section
+      className="relative isolate flex w-full flex-col overflow-hidden surface-ivory"
+      style={{ minHeight: "min(92svh, 880px)" }}
+    >
+      {/* Backdrop image — gently animated */}
+      <div aria-hidden className="absolute inset-0 -z-20">
+        <Image
+          src={heroSrc}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover slow-pan"
         />
+        {HAS_VIDEO && (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 hidden h-full w-full object-cover md:block"
+          >
+            {HERO_VIDEO_WEBM && <source src={HERO_VIDEO_WEBM} type="video/webm" />}
+            {HERO_VIDEO_MP4 && <source src={HERO_VIDEO_MP4} type="video/mp4" />}
+          </video>
+        )}
       </div>
 
-      <div className="container-wide py-20 sm:py-28 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-medium text-slate-600 backdrop-blur"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Admissions open for 2026–27
-            </motion.div>
+      {/* Ivory wash — keeps it bright & premium */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-[hsl(var(--ivory))]/80 via-[hsl(var(--ivory))]/70 to-[hsl(var(--ivory))]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,transparent_30%,hsl(var(--ivory))_85%)]"
+      />
 
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.05, ease: "easeOut" }}
-              className="heading mt-6 text-balance text-4xl font-semibold leading-[1.05] sm:text-5xl lg:text-6xl"
-            >
-              {headline ? (
-                headline
-              ) : (
-                <>
-                  Where tradition meets{" "}
-                  <span className="relative inline-block">
-                    <span className="relative z-10 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                      tomorrow.
-                    </span>
-                  </span>
-                </>
-              )}
-            </motion.h1>
+      <div className="container-wide relative z-10 flex flex-1 flex-col items-center justify-center pt-32 pb-16 text-center sm:pt-36">
+        <div className="hero-entrance hero-entrance-d1 inline-flex w-fit items-center gap-2 rounded-full border border-[hsl(var(--primary))]/15 bg-white/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[hsl(var(--primary))] shadow-sm backdrop-blur-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--gold))]" />
+          Admissions open for 2026–27
+        </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-              className="lead mt-6 max-w-xl text-lg"
-            >
-              {subhead ??
-                `${SCHOOL.name} has nurtured generations of curious, compassionate young people for over ${
-                  new Date().getFullYear() - SCHOOL.founded
-                } years — with the academic rigor of a top-tier institution and the warmth of a close community.`}
-            </motion.p>
+        <h1 className="hero-entrance hero-entrance-d2 font-display mt-7 max-w-5xl text-balance text-5xl font-semibold leading-[1.02] tracking-tight text-[hsl(var(--ink))] sm:text-6xl lg:text-[80px]">
+          {headline ? (
+            headline
+          ) : (
+            <>
+              An education for the
+              <br />
+              <span className="italic text-[hsl(var(--primary))]">curious, the kind</span>
+              {", and the brave."}
+            </>
+          )}
+        </h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
-              className="mt-8 flex flex-wrap items-center gap-3"
-            >
-              <Link href="/admissions">
-                <Button size="lg" className="group">
-                  Apply for admission
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
-              <Link href="/about">
-                <Button size="lg" variant="outline">Discover the school</Button>
-              </Link>
-            </motion.div>
+        <p className="hero-entrance hero-entrance-d3 mt-6 max-w-2xl font-sans text-lg leading-relaxed text-[hsl(var(--ink-soft))] sm:text-xl">
+          {subhead ??
+            `${SCHOOL.name} has nurtured generations of thoughtful, capable young people since ${SCHOOL.founded} — blending classical rigor with modern ideas.`}
+        </p>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="mt-10 flex items-center gap-6 text-xs text-slate-500"
+        <div className="hero-entrance hero-entrance-d4 mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Link href="/admissions">
+            <Button
+              size="lg"
+              className="group h-12 rounded-full bg-[hsl(var(--primary))] px-7 text-[14px] font-semibold tracking-wide text-[hsl(var(--ivory))] shadow-md transition-all hover:bg-[hsl(var(--primary))]/90 hover:shadow-lg"
             >
-              <span className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald" /> Accredited
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald" /> 32:1 community
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald" /> 60+ years
-              </span>
-            </motion.div>
-          </div>
+              Begin your application
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <Link href="/about">
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-12 rounded-full border-[hsl(var(--primary))]/20 bg-white/60 px-7 text-[14px] font-semibold tracking-wide text-[hsl(var(--ink))] backdrop-blur hover:bg-white"
+            >
+              Discover the school
+            </Button>
+          </Link>
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-            className="lg:col-span-5"
-          >
-            <HeroVisual />
-          </motion.div>
+        {/* Tagline — small inline meta */}
+        <p className="hero-entrance hero-entrance-d5 mt-12 text-[11px] font-semibold uppercase tracking-[0.32em] text-[hsl(var(--ink-soft))]/70">
+          {SCHOOL.tagline}
+        </p>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-[hsl(var(--ink-soft))]/60"
+        aria-hidden
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em]">Scroll</span>
+          <span className="scroll-bounce">
+            <ChevronDown className="h-4 w-4" />
+          </span>
         </div>
       </div>
     </section>
-  );
-}
-
-function HeroVisual() {
-  return (
-    <div className="relative mx-auto aspect-[5/6] w-full max-w-md">
-      <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-slate-50 via-white to-slate-50 ring-1 ring-slate-200/80 shadow-[0_8px_40px_-12px_rgba(15,23,42,0.18)]" />
-
-      {/* Animated rings — feel of a drone orbit */}
-      <motion.div
-        initial={{ rotate: 0 }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-6 rounded-[1.75rem] border border-dashed border-slate-200"
-      />
-      <motion.div
-        initial={{ rotate: 0 }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-12 rounded-[1.5rem] border border-slate-100"
-      />
-
-      {/* Center medallion */}
-      <div className="absolute inset-0 grid place-items-center">
-        <motion.div
-          initial={{ y: 0 }}
-          animate={{ y: [-4, 4, -4] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center"
-        >
-          <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-            <span className="font-display text-2xl font-semibold">SJ</span>
-          </div>
-          <p className="mt-5 font-display text-sm font-semibold text-slate-800">
-            St. Joseph's
-          </p>
-          <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">
-            Est. {SCHOOL.founded}
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Floating chips */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="absolute left-2 top-12 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur"
-      >
-        <p className="font-medium text-slate-900">98% pass rate</p>
-        <p className="text-[10px] text-slate-500">Class XII 2026</p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.75 }}
-        className="absolute -right-2 bottom-16 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur"
-      >
-        <p className="font-medium text-slate-900">800+ students</p>
-        <p className="text-[10px] text-slate-500">Across 12 grades</p>
-      </motion.div>
-    </div>
   );
 }

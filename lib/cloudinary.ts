@@ -18,12 +18,13 @@ export function getCloudinary() {
 const MAX_BYTES = 10 * 1024 * 1024;
 const ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp"];
 const ALLOWED_VIDEO = ["video/mp4", "video/webm"];
+const ALLOWED_DOC = ["application/pdf"];
 
 export function validateUpload(file: { type: string; size: number }) {
   if (file.size > MAX_BYTES) {
     return { ok: false, error: "File exceeds 10MB limit" };
   }
-  const allowed = [...ALLOWED_IMAGE, ...ALLOWED_VIDEO];
+  const allowed = [...ALLOWED_IMAGE, ...ALLOWED_VIDEO, ...ALLOWED_DOC];
   if (!allowed.includes(file.type)) {
     return { ok: false, error: `Unsupported type: ${file.type}` };
   }

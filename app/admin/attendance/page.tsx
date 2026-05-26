@@ -67,9 +67,13 @@ export default async function AttendancePage({
   const today = new Date().toISOString().slice(0, 10);
   const selectedDate = date ?? today;
 
-  const classes = await listClasses();
-  const roster = class_id ? await getRoster(class_id) : [];
-  const existing = class_id ? await getExistingMarks(class_id, selectedDate) : {};
+  const [classes, roster, existing] = await Promise.all([
+    listClasses(),
+    class_id ? getRoster(class_id) : Promise.resolve([] as Roster[]),
+    class_id
+      ? getExistingMarks(class_id, selectedDate)
+      : Promise.resolve({} as Record<string, "present" | "absent" | "late" | "excused">),
+  ]);
   const selectedClass = classes.find((c) => c.id === class_id);
 
   return (

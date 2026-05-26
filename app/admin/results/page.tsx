@@ -70,7 +70,10 @@ export default async function ResultsAdminPage({
   searchParams: Promise<{ exam_id?: string; class_id?: string; subject_id?: string }>;
 }) {
   const params = await searchParams;
-  const { exams, classes, subjects } = await getInitialData();
+  const [{ exams, classes, subjects }, roster] = await Promise.all([
+    getInitialData(),
+    params.class_id ? getRoster(params.class_id) : Promise.resolve([] as RosterRow[]),
+  ]);
 
   const examOptions = exams.map((e) => ({ id: e.id, label: e.name }));
   const classOptions = classes.map((c) => ({ id: c.id, label: `Class ${c.grade} · ${c.section}` }));
@@ -83,8 +86,6 @@ export default async function ResultsAdminPage({
   const selectedClass = classes.find((c) => c.id === params.class_id);
   const selectedSubject = subjects.find((s) => s.id === params.subject_id);
 
-  const roster =
-    params.class_id ? await getRoster(params.class_id) : ([] as RosterRow[]);
   const existing =
     params.exam_id && params.subject_id
       ? await getExistingMarks(

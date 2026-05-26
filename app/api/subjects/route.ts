@@ -22,7 +22,7 @@ export async function GET(req: Request) {
   }
 
   const { data, error } = await query;
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/subjects/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ subjects: data });
 }
 
@@ -46,6 +46,6 @@ export async function POST(req: Request) {
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase.from("subjects").insert(parsed.data).select().single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error("app/api/subjects/route.ts", error); return NextResponse.json({ error: "Internal error" }, { status: 500 }); }
   return NextResponse.json({ subject: data }, { status: 201 });
 }
