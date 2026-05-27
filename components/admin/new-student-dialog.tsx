@@ -29,7 +29,13 @@ import { PhotoUpload } from "@/components/admin/photo-upload";
 
 type Parent = { id: string; full_name: string; email: string | null; phone: string | null };
 
-export function NewStudentDialog() {
+export function NewStudentDialog({
+  defaultGrade,
+  defaultSection,
+}: {
+  defaultGrade?: string;
+  defaultSection?: string;
+} = {}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -38,8 +44,8 @@ export function NewStudentDialog() {
   const [fullName, setFullName] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "other" | "">("");
-  const [grade, setGrade] = useState("1");
-  const [section, setSection] = useState("A");
+  const [grade, setGrade] = useState(defaultGrade ?? "1");
+  const [section, setSection] = useState(defaultSection ?? "A");
   const [roll, setRoll] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const [address, setAddress] = useState("");
@@ -79,8 +85,8 @@ export function NewStudentDialog() {
     setFullName("");
     setDob("");
     setGender("");
-    setGrade("1");
-    setSection("A");
+    setGrade(defaultGrade ?? "1");
+    setSection(defaultSection ?? "A");
     setRoll("");
     setBloodGroup("");
     setAddress("");
@@ -173,9 +179,56 @@ export function NewStudentDialog() {
         </DialogHeader>
 
         <form onSubmit={submit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-1">
-          {/* Student basics */}
+          {/* Step 1 — Academic placement. Pre-filled when launched from a
+              class/section page so the admin can jump straight to details. */}
+          <section className="space-y-3 rounded-xl border border-slate-200/80 bg-slate-50/60 p-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-sm font-semibold text-slate-900">
+                Step 1 · Academic placement
+              </h3>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Class → Section
+              </span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <Label>Class</Label>
+                <Select value={grade} onValueChange={setGrade}>
+                  <SelectTrigger className="mt-1.5 bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["Nursery", "KG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))].map(
+                      (g) => (
+                        <SelectItem key={g} value={g}>
+                          {g}
+                        </SelectItem>
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Section</Label>
+                <Select value={section} onValueChange={setSection}>
+                  <SelectTrigger className="mt-1.5 bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["A", "B", "C", "D", "E"].map((s) => (
+                      <SelectItem key={s} value={s}>
+                        Section {s}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </section>
+
+          {/* Step 2 — Student basics */}
           <section className="space-y-4">
-            <h3 className="font-display text-sm font-semibold text-slate-900">Student</h3>
+            <h3 className="font-display text-sm font-semibold text-slate-900">Step 2 · Student details</h3>
             <PhotoUpload value={photoUrl} onChange={setPhotoUrl} folder="students" label="Photo" />
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
@@ -213,38 +266,6 @@ export function NewStudentDialog() {
                 </Select>
               </div>
               <div>
-                <Label>Class</Label>
-                <Select value={grade} onValueChange={setGrade}>
-                  <SelectTrigger className="mt-1.5">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["Nursery", "KG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))].map(
-                      (g) => (
-                        <SelectItem key={g} value={g}>
-                          {g}
-                        </SelectItem>
-                      ),
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Section</Label>
-                <Select value={section} onValueChange={setSection}>
-                  <SelectTrigger className="mt-1.5">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["A", "B", "C", "D", "E"].map((s) => (
-                      <SelectItem key={s} value={s}>
-                        Section {s}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
                 <Label htmlFor="s-roll">Roll number</Label>
                 <Input
                   id="s-roll"
@@ -276,9 +297,11 @@ export function NewStudentDialog() {
             </div>
           </section>
 
-          {/* Parent */}
+          {/* Step 3 — Parent / guardian */}
           <section className="space-y-3">
-            <h3 className="font-display text-sm font-semibold text-slate-900">Parent / Guardian</h3>
+            <h3 className="font-display text-sm font-semibold text-slate-900">
+              Step 3 · Parent / guardian
+            </h3>
             <Tabs value={parentMode} onValueChange={(v) => setParentMode(v as "existing" | "new")}>
               <TabsList>
                 <TabsTrigger value="new">Add new parent</TabsTrigger>

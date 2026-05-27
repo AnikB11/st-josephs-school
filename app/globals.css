@@ -176,12 +176,21 @@
   animation: fade-in-up 0.6s cubic-bezier(.22,1,.36,1) forwards;
 }
 
-@keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
+/* Opacity-only attention pulse for the hero scroll indicator. We
+   deliberately avoid any transform here: the hero image runs a long
+   slow-zoom transform, which promotes the entire hero section to its
+   own compositor layer and made a transform-based bounce on the
+   chevron jitter on every cycle. Opacity is composited cheaply and
+   never triggers a layout/paint. */
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
 }
 .scroll-bounce {
-  animation: scroll-bounce 1.8s ease-in-out infinite;
+  animation: scroll-pulse 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-bounce { animation: none; opacity: 0.7; }
 }
 
 /* ── Reveal-on-scroll: CSS classes toggled by tiny IO islands ──

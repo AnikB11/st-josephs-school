@@ -22,6 +22,7 @@ export function TopLoader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [phase, setPhase] = useState<Phase>("idle");
+  const [mountedScale, setMountedScale] = useState(0);
 
   const loadingUrl = useRef<string | null>(null);
   const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,13 +71,31 @@ export function TopLoader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams]);
 
+  // Drive the scaleX target so the bar transitions from 0 instead of
+  // snapping to its final value on first mount.
+  useEffect(() => {
+    if (phase === "loading") {
+      setMountedScale(0);
+      const raf = requestAnimationFrame(() => setMountedScale(0.85));
+      return () => cancelAnimationFrame(raf);
+    }
+    if (phase === "complete") {
+      setMountedScale(1);
+    } else {
+      setMountedScale(0);
+    }
+  }, [phase]);
+
   useEffect(() => () => {
     if (fadeTimer.current) clearTimeout(fadeTimer.current);
   }, []);
 
   if (phase === "idle") return null;
 
-  const scaleX = phase === "loading" ? 0.85 : 1;
+  // mountedScale starts at 0 so the first paint shows an empty bar, then
+  // an effect flips it to the target value on the next frame — without this
+  // the bar appears at 85% instantly (CSS transitions only run on property
+  // *changes*, not on initial mount), which reads as a jolt every nav.
   const opacity = phase === "complete" ? 0 : 1;
 
   return (
@@ -92,7 +111,7 @@ export function TopLoader() {
         className="h-full w-full origin-left"
         style={{
           background: BAR_COLOR,
-          transform: `scaleX(${scaleX})`,
+          transform: `scaleX(${mountedScale})`,
           // Slow ease while loading (1.5s to 85%), snappy finish (150ms).
           transition:
             phase === "loading"

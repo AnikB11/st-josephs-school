@@ -81,15 +81,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${jakarta.variable} ${fraunces.variable}`}
       suppressHydrationWarning
     >
-      <body>
-        {/* Arm scroll-reveal hiding before body content paints — if JS is
-            blocked or hydration fails, .reveal elements stay visible. */}
+      <head>
+        {/* Arm scroll-reveal hiding before <body> content paints — without
+            this, .reveal elements render visible for one frame, then snap
+            to hidden, then animate back in (visible jitter on first load).
+            Running it in <head> means the attribute is set before paint.
+            If JS is blocked, .reveal elements stay visible by design. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
               "document.documentElement.setAttribute('data-js','ready');",
           }}
         />
+      </head>
+      <body>
         <Suspense fallback={null}>
           <TopLoader />
         </Suspense>

@@ -127,18 +127,20 @@ export default async function GalleryPage() {
   const cms = await getCmsSections([
     "gallery_intro",
     "gallery_hero_image",
-    "home_campus_image",
-    "campus_sports_image",
-    "campus_cultural_image",
-    "campus_events_image",
-    "campus_student_image",
+    "gallery_events_image",
+    "gallery_campus_image",
+    "gallery_sports_image",
+    "gallery_cultural_image",
+    "gallery_celebrations_image",
+    "gallery_student_image",
   ]);
   const HERO_IMG = resolveImage("gallery_hero_image", cms.gallery_hero_image);
-  const CAMPUS_IMG = resolveImage("home_campus_image", cms.home_campus_image);
-  const SPORTS_IMG = resolveImage("campus_sports_image", cms.campus_sports_image);
-  const CULTURAL_IMG = resolveImage("campus_cultural_image", cms.campus_cultural_image);
-  const EVENTS_IMG = resolveImage("campus_events_image", cms.campus_events_image);
-  const STUDENT_IMG = resolveImage("campus_student_image", cms.campus_student_image);
+  const CAMPUS_IMG = resolveImage("gallery_campus_image", cms.gallery_campus_image);
+  const SPORTS_IMG = resolveImage("gallery_sports_image", cms.gallery_sports_image);
+  const CULTURAL_IMG = resolveImage("gallery_cultural_image", cms.gallery_cultural_image);
+  const EVENTS_IMG = resolveImage("gallery_events_image", cms.gallery_events_image);
+  const CELEBRATIONS_IMG = resolveImage("gallery_celebrations_image", cms.gallery_celebrations_image);
+  const STUDENT_IMG = resolveImage("gallery_student_image", cms.gallery_student_image);
 
   const buckets: Record<AlbumCategory, GalleryAlbum[]> = {
     events: [], campus: [], sports: [], cultural: [], celebrations: [], "student-life": [],
@@ -260,7 +262,7 @@ export default async function GalleryPage() {
             icon={PartyPopper}
           />
           <div className="mt-12 relative aspect-[16/7] overflow-hidden rounded-[28px] bg-[hsl(var(--primary))]">
-            <Image src={EVENTS_IMG} alt="School celebrations" fill sizes="100vw" className="object-cover opacity-90" />
+            <Image src={CELEBRATIONS_IMG} alt="School celebrations" fill sizes="100vw" className="object-cover opacity-90" />
             <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--primary))]/80 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8 text-[hsl(var(--ivory))]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]">

@@ -115,16 +115,19 @@ export function Hero({
         </p>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — wrapper uses justify-center (no -translate-x-1/2)
+          and the bouncing element is a block <div> so its translate3d
+          animation doesn't stack with a parent transform on half-pixel
+          positions (the prior subpixel jitter source). */}
       <div
-        className="pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-[hsl(var(--ink-soft))]/60"
+        className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center text-[hsl(var(--ink-soft))]/60"
         aria-hidden
       >
         <div className="flex flex-col items-center gap-2">
           <span className="text-[10px] font-semibold uppercase tracking-[0.28em]">Scroll</span>
-          <span className="scroll-bounce">
+          <div className="scroll-bounce">
             <ChevronDown className="h-4 w-4" />
-          </span>
+          </div>
         </div>
       </div>
     </section>

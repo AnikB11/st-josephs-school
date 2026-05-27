@@ -16,6 +16,7 @@ import {
   UserCircle,
   BookOpen,
   Briefcase,
+  Layers,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export const ADMIN_NAV: SidebarItem[] = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: UserCircle },
   { href: "/admin/students", label: "Students", icon: Users },
+  { href: "/admin/classes", label: "Classes", icon: Layers },
   { href: "/admin/teachers", label: "Teachers", icon: Briefcase },
   { href: "/admin/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/admin/results", label: "Results", icon: FileBarChart },

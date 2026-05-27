@@ -237,6 +237,42 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
         fallback:
           "https://res.cloudinary.com/dwzn69084/image/upload/v1779811288/website/fallbacks/gallery_hero_image.jpg",
       },
+      {
+        key: "gallery_events_image",
+        label: "Events tab · hero",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811260/website/fallbacks/campus_events_image.jpg",
+      },
+      {
+        key: "gallery_campus_image",
+        label: "Campus tab · feature",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811210/website/fallbacks/home_campus_image.jpg",
+      },
+      {
+        key: "gallery_sports_image",
+        label: "Sports tab · hero",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811257/website/fallbacks/campus_sports_image.jpg",
+      },
+      {
+        key: "gallery_cultural_image",
+        label: "Cultural tab · feature",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811271/website/fallbacks/campus_cultural_image.jpg",
+      },
+      {
+        key: "gallery_celebrations_image",
+        label: "Celebrations tab · hero",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811260/website/fallbacks/campus_events_image.jpg",
+      },
+      {
+        key: "gallery_student_image",
+        label: "Student Life tab · feature",
+        fallback:
+          "https://res.cloudinary.com/dwzn69084/image/upload/v1779811274/website/fallbacks/campus_student_image.jpg",
+      },
     ],
   },
   {
