@@ -4,18 +4,32 @@ import { TopNav } from "@/components/dashboard/topnav";
 import { Badge } from "@/components/ui/badge";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
-import type { Notice } from "@/types/database";
+
+type NoticeListItem = {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  is_pinned: boolean;
+  published_at: string;
+  pdf_url: string | null;
+};
 
 async function getNotices() {
   try {
     const supabase = await createSupabaseServerClient();
+    // List view doesn't need the body text — that's only loaded on
+    // /notices/[slug]. Skipping it keeps the payload tiny when there
+    // are dozens of long notices.
     const { data } = await supabase
       .from("notices")
-      .select("*")
+      .select("id,title,slug,category,is_pinned,published_at,pdf_url")
       .is("archived_at", null)
       .in("audience", ["all", "students"])
-      .order("published_at", { ascending: false });
-    return (data as Notice[]) ?? [];
+      .order("is_pinned", { ascending: false })
+      .order("published_at", { ascending: false })
+      .limit(100);
+    return (data as NoticeListItem[]) ?? [];
   } catch {
     return [];
   }

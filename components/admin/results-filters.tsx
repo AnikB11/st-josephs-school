@@ -11,16 +11,18 @@ import {
 
 type Option = { id: string; label: string };
 
+/**
+ * Exam + class picker for the PDF-upload results flow. (Subject is intentionally
+ * not in the picker: one PDF per (student, exam) holds all subjects already.)
+ */
 export function ResultsFilters({
   exams,
   classes,
-  subjects,
   selected,
 }: {
   exams: Option[];
   classes: Option[];
-  subjects: Option[];
-  selected: { exam_id?: string; class_id?: string; subject_id?: string };
+  selected: { exam_id?: string; class_id?: string };
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -30,12 +32,11 @@ export function ResultsFilters({
     const next = { ...selected, ...patch };
     if (next.exam_id) params.set("exam_id", next.exam_id);
     if (next.class_id) params.set("class_id", next.class_id);
-    if (next.subject_id) params.set("subject_id", next.subject_id);
     router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2">
       <Select value={selected.exam_id} onValueChange={(v) => update({ exam_id: v })}>
         <SelectTrigger>
           <SelectValue placeholder={exams.length ? "Select exam" : "No exams yet"} />
@@ -56,18 +57,6 @@ export function ResultsFilters({
           {classes.map((c) => (
             <SelectItem key={c.id} value={c.id}>
               {c.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={selected.subject_id} onValueChange={(v) => update({ subject_id: v })}>
-        <SelectTrigger>
-          <SelectValue placeholder={subjects.length ? "Select subject" : "No subjects yet"} />
-        </SelectTrigger>
-        <SelectContent>
-          {subjects.map((s) => (
-            <SelectItem key={s.id} value={s.id}>
-              {s.label}
             </SelectItem>
           ))}
         </SelectContent>

@@ -26,6 +26,8 @@ import { SCHOOL } from "@/lib/constants";
 import { getCmsSections } from "@/lib/cms";
 import { resolveImage } from "@/lib/cms-images";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Contact",
   description: `Get in touch with ${SCHOOL.name}. Phone, email, departments, and support.`,

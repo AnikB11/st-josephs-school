@@ -38,7 +38,11 @@ export function TabbedPage({ tabs }: { tabs: TabItem[] }) {
     return () => window.removeEventListener("hashchange", apply);
   }, [tabs]);
 
-  // Position the active indicator under the active tab.
+  // Position the active indicator under the active tab. Pure measurement —
+  // never touches page scroll. (scrollIntoView with block:"nearest" was here
+  // before and would jump the page on initial hydration when the tab bar
+  // was below the fold; the active-tab horizontal scroll is handled in
+  // onPick instead so it only fires on user action.)
   const measure = useCallback(() => {
     const bar = barRef.current;
     const btn = buttonRefs.current.get(activeId);
@@ -49,8 +53,6 @@ export function TabbedPage({ tabs }: { tabs: TabItem[] }) {
       left: btnRect.left - barRect.left + bar.scrollLeft,
       width: btnRect.width,
     });
-    // Scroll the active tab into view on mobile.
-    btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
   }, [activeId]);
 
   useLayoutEffect(() => {
@@ -73,6 +75,21 @@ export function TabbedPage({ tabs }: { tabs: TabItem[] }) {
     if (typeof history !== "undefined") {
       history.replaceState(null, "", `#${id}`);
     }
+    // Bring the active tab into view by scrolling the BAR horizontally only —
+    // never the page. Using scrollIntoView here would let the browser scroll
+    // the document if the bar were partially below the fold.
+    requestAnimationFrame(() => {
+      const bar = barRef.current;
+      const btn = buttonRefs.current.get(id);
+      if (!bar || !btn) return;
+      const barRect = bar.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      const targetLeft =
+        bar.scrollLeft +
+        (btnRect.left - barRect.left) -
+        (barRect.width - btnRect.width) / 2;
+      bar.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+    });
   }, []);
 
   const active = tabs.find((t) => t.id === activeId) ?? tabs[0];

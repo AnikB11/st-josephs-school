@@ -152,7 +152,7 @@ export default async function TeacherDetailPage({
             </CardTitle>
             <CardDescription>
               Assign subjects in classes this teacher will teach. Mark one as class teacher per
-              class for attendance privileges.
+              class for administrative responsibilities.
             </CardDescription>
           </CardHeader>
           <CardContent>

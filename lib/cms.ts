@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseStaticClient } from "@/lib/supabase/static";
 
 export type CmsContent = {
   title: string | null;
@@ -13,17 +13,22 @@ const EMPTY: CmsContent = { title: null, body: null, image_url: null };
  * Fetch a single website_content section. Returns nulls if missing — callers
  * should provide their own fallback strings.
  *
- * Uses React's `cache()` for per-request deduplication. We deliberately avoid
- * `unstable_cache` here because the function reads cookies (via the server
- * Supabase client), which violates `unstable_cache`'s "pure function" contract
- * and makes `revalidateTag` invalidation unreliable. Each request hits the DB
- * once; subsequent calls within the same request are deduped.
+ * Uses the **static (anon) Supabase client** — no cookies, no auth headers.
+ * That's the load-bearing detail: a Server Component that reaches into
+ * `cookies()` is forced into per-request dynamic rendering, defeating any
+ * `revalidate` / ISR on the calling page. With the cookie-less client, the
+ * call participates in Next's data cache and the page can be cached at the
+ * edge between revalidations. RLS policy `wc_select_public` grants `select`
+ * on `website_content` to `anon`, so this is the right access level.
+ *
+ * Per-request deduplication via React's `cache()` is still useful when one
+ * render calls `getCmsSection` repeatedly for the same key.
  */
 export const getCmsSection = cache(async function getCmsSection(
   key: string,
 ): Promise<CmsContent> {
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = createSupabaseStaticClient();
     const { data } = await supabase
       .from("website_content")
       .select("title,body,image_url")
@@ -45,7 +50,7 @@ export const getCmsSections = cache(async function getCmsSections(
   const map: Record<string, CmsContent> = {};
   keys.forEach((k) => (map[k] = { ...EMPTY }));
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = createSupabaseStaticClient();
     const { data } = await supabase
       .from("website_content")
       .select("section_key,title,body,image_url")

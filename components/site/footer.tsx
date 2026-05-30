@@ -1,8 +1,20 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone, Facebook, Instagram, Youtube } from "lucide-react";
 import { SCHOOL, NAV_LINKS } from "@/lib/constants";
+import { getCmsSections } from "@/lib/cms";
 
-export function Footer() {
+export async function Footer() {
+  const cms = await getCmsSections([
+    "footer_social_facebook",
+    "footer_social_instagram",
+    "footer_social_youtube",
+  ]);
+  const social = {
+    facebook: cms.footer_social_facebook?.body?.trim() || SCHOOL.social.facebook,
+    instagram: cms.footer_social_instagram?.body?.trim() || SCHOOL.social.instagram,
+    youtube: cms.footer_social_youtube?.body?.trim() || SCHOOL.social.youtube,
+  };
+
   return (
     <footer className="relative isolate overflow-hidden bg-[hsl(var(--primary))] text-[hsl(var(--ivory))]">
       {/* hairline gold rule at the top */}
@@ -32,21 +44,21 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <a
               aria-label="Facebook"
-              href={SCHOOL.social.facebook}
+              href={social.facebook}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-all hover:bg-[hsl(var(--gold))] hover:text-[hsl(var(--primary))]"
             >
               <Facebook className="h-4 w-4" />
             </a>
             <a
               aria-label="Instagram"
-              href={SCHOOL.social.instagram}
+              href={social.instagram}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-all hover:bg-[hsl(var(--gold))] hover:text-[hsl(var(--primary))]"
             >
               <Instagram className="h-4 w-4" />
             </a>
             <a
               aria-label="YouTube"
-              href={SCHOOL.social.youtube}
+              href={social.youtube}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-all hover:bg-[hsl(var(--gold))] hover:text-[hsl(var(--primary))]"
             >
               <Youtube className="h-4 w-4" />

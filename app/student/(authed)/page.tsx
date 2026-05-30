@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  ClipboardCheck,
+  GraduationCap,
   FileBarChart,
   Megaphone,
   BookOpen,
@@ -25,26 +25,17 @@ type NoticeRow = {
   published_at: string;
 };
 
-async function getAttendanceSummary(studentId: string) {
+async function getPublishedResultsCount(studentId: string): Promise<number> {
   try {
     const supabase = createSupabaseAdminClient();
-    const now = new Date();
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      .toISOString()
-      .slice(0, 10);
-    const { data } = await supabase
-      .from("attendance")
-      .select("status")
+    const { count } = await supabase
+      .from("results")
+      .select("id", { count: "exact", head: true })
       .eq("student_id", studentId)
-      .gte("date", firstOfMonth);
-
-    const rows = data ?? [];
-    const present = rows.filter((r: { status: string }) => r.status === "present" || r.status === "late").length;
-    const total = rows.length;
-    const rate = total > 0 ? Math.round((present / total) * 100) : 0;
-    return { present, absent: total - present, total, rate };
+      .eq("status", "published");
+    return count ?? 0;
   } catch {
-    return { present: 0, absent: 0, total: 0, rate: 0 };
+    return 0;
   }
 }
 
@@ -103,8 +94,8 @@ async function getUpcomingEvents() {
 export default async function StudentDashboardPage() {
   const student = await getStudentForCurrentUser();
 
-  const [attendance, latestExam, notices, events] = await Promise.all([
-    student ? getAttendanceSummary(student.id) : Promise.resolve(null),
+  const [resultsCount, latestExam, notices, events] = await Promise.all([
+    student ? getPublishedResultsCount(student.id) : Promise.resolve(0),
     student ? getLatestExamName(student.id) : Promise.resolve("—"),
     getRecentNotices(),
     getUpcomingEvents(),
@@ -160,19 +151,16 @@ export default async function StudentDashboardPage() {
         {student && (
           <div className="grid gap-4 sm:grid-cols-3">
             <StatCard
-              label="Attendance · this month"
-              value={`${attendance?.rate ?? 0}%`}
-              icon={ClipboardCheck}
-              delta={{
-                value: `${attendance?.present ?? 0}/${attendance?.total ?? 0} days`,
-                positive: (attendance?.rate ?? 0) >= 75,
-              }}
+              label="Class"
+              value={student.classes ? `${student.classes.grade}-${student.classes.section}` : "—"}
+              icon={GraduationCap}
+              hint={student.classes ? "Current section" : "Not assigned"}
             />
             <StatCard
-              label="Latest result"
-              value={latestExam !== "—" ? "Published" : "Pending"}
+              label="Published results"
+              value={resultsCount}
               icon={FileBarChart}
-              hint={latestExam}
+              hint={latestExam !== "—" ? `Latest: ${latestExam}` : "No exams yet"}
             />
             <StatCard
               label="New notices"
@@ -265,10 +253,10 @@ export default async function StudentDashboardPage() {
             <CardContent>
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  { href: "/student/attendance", label: "My Attendance", icon: ClipboardCheck },
                   { href: "/student/results", label: "My Results", icon: FileBarChart },
+                  { href: "/student/assignments", label: "Assignments", icon: BookOpen },
                   { href: "/student/notices", label: "Notices", icon: Megaphone },
-                  { href: "/student/profile", label: "My Profile", icon: BookOpen },
+                  { href: "/student/profile", label: "My Profile", icon: GraduationCap },
                 ].map((link) => (
                   <Link
                     key={link.href}

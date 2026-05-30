@@ -1,16 +1,8 @@
-import { Download } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { TopNav } from "@/components/dashboard/topnav";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { PdfPagesPreview } from "@/components/site/pdf-pages-preview";
 import { getStudentForCurrentUser } from "@/lib/student";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { formatDate } from "@/lib/utils";
@@ -24,13 +16,9 @@ type Child = {
   classes: { grade: string; section: string } | null;
 };
 
-type ResultDetail = {
-  marks_obtained: number;
-  max_marks: number;
-  grade: string | null;
-  pdf_url: string | null;
+type ResultRow = {
+  pdf_url: string;
   published_at: string | null;
-  subjects: { name: string; code: string | null } | null;
   exams: { id: string; name: string } | null;
 };
 
@@ -47,35 +35,44 @@ async function getChildren(): Promise<Child[]> {
   ];
 }
 
-async function getPublishedResults(studentId: string): Promise<ResultDetail[]> {
+/**
+ * Fetch published PDFs for ALL children in one round-trip. Today `getChildren`
+ * returns a single child, but the moment that helper expands to support
+ * multiple linked students per parent, the previous `Promise.all(children.map(...))`
+ * pattern would become a classic N+1. Batching now keeps it at one query.
+ */
+async function getPublishedPdfsForStudents(
+  studentIds: string[],
+): Promise<Map<string, ResultRow[]>> {
+  const grouped = new Map<string, ResultRow[]>();
+  studentIds.forEach((id) => grouped.set(id, []));
+  if (studentIds.length === 0) return grouped;
   try {
     const supabase = createSupabaseAdminClient();
     const { data } = await supabase
       .from("results")
-      .select(
-        "marks_obtained,max_marks,grade,pdf_url,published_at,exams(id,name),subjects(name,code)",
-      )
-      .eq("student_id", studentId)
+      .select("student_id,pdf_url,published_at,exams(id,name)")
+      .in("student_id", studentIds)
       .eq("status", "published")
+      .not("pdf_url", "is", null)
       .order("published_at", { ascending: false });
-    return (data as unknown as ResultDetail[] | null) ?? [];
+    const rows =
+      (data as unknown as (ResultRow & { student_id: string })[] | null) ?? [];
+    for (const r of rows) {
+      const list = grouped.get(r.student_id);
+      if (list) list.push(r);
+    }
+    return grouped;
   } catch {
-    return [];
+    return grouped;
   }
-}
-
-function groupByExam(rows: ResultDetail[]) {
-  const map = new Map<string, { name: string; rows: ResultDetail[] }>();
-  for (const r of rows) {
-    if (!r.exams) continue;
-    if (!map.has(r.exams.id)) map.set(r.exams.id, { name: r.exams.name, rows: [] });
-    map.get(r.exams.id)!.rows.push(r);
-  }
-  return Array.from(map.values());
 }
 
 export default async function ParentResultsPage() {
   const children = await getChildren();
+  const resultsByStudent = await getPublishedPdfsForStudents(
+    children.map((c) => c.id),
+  );
 
   return (
     <>
@@ -83,16 +80,15 @@ export default async function ParentResultsPage() {
       <div className="space-y-8 px-6 py-8">
         {children.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center text-sm text-slate-500">
-            We couldn't find any children linked to your account yet. Please contact the office to link your student.
+            We couldn&apos;t find any children linked to your account yet. Please contact the
+            office to link your student.
           </div>
         ) : (
-          await Promise.all(
-            children.map(async (child) => {
-              const rows = await getPublishedResults(child.id);
-              const exams = groupByExam(rows);
+          children.map((child) => {
+            const rows = resultsByStudent.get(child.id) ?? [];
 
-              return (
-                <section key={child.id} className="space-y-4">
+            return (
+              <section key={child.id} className="space-y-4">
                   <div>
                     <h2 className="font-display text-lg font-semibold text-slate-900">
                       {child.full_name}
@@ -103,93 +99,48 @@ export default async function ParentResultsPage() {
                     </p>
                   </div>
 
-                  {exams.length === 0 ? (
+                  {rows.length === 0 ? (
                     <Card>
                       <CardContent className="py-10 text-center text-sm text-slate-500">
                         No published results yet for this child.
                       </CardContent>
                     </Card>
                   ) : (
-                    exams.map((exam) => {
-                      const total = exam.rows.reduce((a, r) => a + Number(r.marks_obtained), 0);
-                      const max = exam.rows.reduce((a, r) => a + Number(r.max_marks), 0);
-                      const pct = max > 0 ? Math.round((total / max) * 100) : 0;
-                      const pdfUrl = exam.rows.find((r) => r.pdf_url)?.pdf_url;
-                      const publishedAt = exam.rows[0]?.published_at;
-
-                      return (
-                        <Card key={exam.name}>
-                          <CardHeader>
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                              <div>
-                                <CardTitle>{exam.name}</CardTitle>
-                                {publishedAt && (
-                                  <CardDescription>
-                                    Published {formatDate(publishedAt)}
-                                  </CardDescription>
-                                )}
+                    <div className="space-y-6">
+                      {rows.map((r) => (
+                        <Card key={`${r.exams?.id}-${r.published_at}`}>
+                          <CardContent className="space-y-6 pt-6">
+                            <div className="flex flex-wrap items-start justify-between gap-3">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                                  <FileText className="h-5 w-5" />
+                                </span>
+                                <div className="min-w-0">
+                                  <h3 className="font-display truncate text-base font-semibold text-slate-900">
+                                    {r.exams?.name ?? "Exam"}
+                                  </h3>
+                                  {r.published_at && (
+                                    <p className="text-xs text-slate-500">
+                                      Published {formatDate(r.published_at)}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Badge variant={pct >= 40 ? "success" : "destructive"}>
-                                  {pct}% · {total}/{max}
-                                </Badge>
-                                {pdfUrl && (
-                                  <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
-                                    <Button size="sm" variant="outline">
-                                      <Download className="h-4 w-4" /> Download PDF
-                                    </Button>
-                                  </a>
-                                )}
-                              </div>
+                              <a href={r.pdf_url} target="_blank" rel="noopener noreferrer">
+                                <Button size="sm">
+                                  <Download className="h-4 w-4" /> Download PDF
+                                </Button>
+                              </a>
                             </div>
-                          </CardHeader>
-                          <CardContent>
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Subject</TableHead>
-                                  <TableHead className="text-right">Marks</TableHead>
-                                  <TableHead className="text-right">Max</TableHead>
-                                  <TableHead className="text-right">Grade</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {exam.rows.map((r, i) => (
-                                  <TableRow key={i}>
-                                    <TableCell className="font-medium text-slate-900">
-                                      {r.subjects?.name ?? "—"}
-                                      {r.subjects?.code && (
-                                        <span className="ml-2 font-mono text-xs text-slate-400">
-                                          {r.subjects.code}
-                                        </span>
-                                      )}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                      {Number(r.marks_obtained)}
-                                    </TableCell>
-                                    <TableCell className="text-right text-slate-500">
-                                      {Number(r.max_marks)}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                      {r.grade ? (
-                                        <Badge variant="default">{r.grade}</Badge>
-                                      ) : (
-                                        "—"
-                                      )}
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
+                            <PdfPagesPreview pdfUrl={r.pdf_url} />
                           </CardContent>
                         </Card>
-                      );
-                    })
+                      ))}
+                    </div>
                   )}
-                </section>
-              );
-            }),
-          )
+              </section>
+            );
+          })
         )}
       </div>
     </>

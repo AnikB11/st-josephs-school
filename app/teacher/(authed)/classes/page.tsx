@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClipboardCheck, FileBarChart, Users } from "lucide-react";
+import { FileBarChart, Users } from "lucide-react";
 import { TopNav } from "@/components/dashboard/topnav";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -125,19 +125,11 @@ export default async function TeacherClassesPage() {
                   </div>
 
                   <div className="flex gap-2 pt-1">
-                    {s.isClassTeacher && (
-                      <Link
-                        href={`/teacher/attendance?class_id=${s.classId}`}
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-                      >
-                        <ClipboardCheck className="h-3.5 w-3.5" /> Attendance
-                      </Link>
-                    )}
                     <Link
                       href={`/teacher/results?class_id=${s.classId}`}
-                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-primary/40 hover:text-primary"
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
                     >
-                      <FileBarChart className="h-3.5 w-3.5" /> Marks
+                      <FileBarChart className="h-3.5 w-3.5" /> Results
                     </Link>
                   </div>
                 </CardContent>

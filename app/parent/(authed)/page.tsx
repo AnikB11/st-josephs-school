@@ -1,4 +1,4 @@
-import { ClipboardCheck, FileBarChart, Megaphone, RefreshCw } from "lucide-react";
+import { FileBarChart, Megaphone, RefreshCw, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { TopNav } from "@/components/dashboard/topnav";
 import { StatCard } from "@/components/dashboard/stat-card";
@@ -9,20 +9,15 @@ import { initials } from "@/lib/utils";
 import { getStudentForCurrentUser } from "@/lib/student";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
-async function getMonthAttendanceRate(studentId: string) {
+async function getPublishedResultsCount(studentId: string): Promise<number> {
   try {
     const supabase = createSupabaseAdminClient();
-    const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      .toISOString()
-      .slice(0, 10);
-    const { data } = await supabase
-      .from("attendance")
-      .select("status")
+    const { count } = await supabase
+      .from("results")
+      .select("id", { count: "exact", head: true })
       .eq("student_id", studentId)
-      .gte("date", firstOfMonth);
-    const rows = data ?? [];
-    const present = rows.filter((r: { status: string }) => r.status === "present" || r.status === "late").length;
-    return rows.length ? Math.round((present / rows.length) * 100) : 0;
+      .eq("status", "published");
+    return count ?? 0;
   } catch {
     return 0;
   }
@@ -77,8 +72,8 @@ export default async function ParentDashboardPage() {
     );
   }
 
-  const [attendanceRate, latestExam, noticeCount] = await Promise.all([
-    getMonthAttendanceRate(student.id),
+  const [resultsCount, latestExam, noticeCount] = await Promise.all([
+    getPublishedResultsCount(student.id),
     getLatestExamName(student.id),
     getRecentNoticeCount(),
   ]);
@@ -92,16 +87,16 @@ export default async function ParentDashboardPage() {
       <div className="space-y-8 px-6 py-8">
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
-            label="Attendance · this month"
-            value={`${attendanceRate}%`}
-            icon={ClipboardCheck}
-            delta={{ value: attendanceRate >= 75 ? "On track" : "Below target", positive: attendanceRate >= 75 }}
+            label="Class"
+            value={student.classes ? `${student.classes.grade}-${student.classes.section}` : "—"}
+            icon={GraduationCap}
+            hint={student.classes ? "Current section" : "Not assigned"}
           />
           <StatCard
-            label="Latest result"
-            value={latestExam !== "—" ? "Published" : "Pending"}
+            label="Published results"
+            value={resultsCount}
             icon={FileBarChart}
-            hint={latestExam}
+            hint={latestExam !== "—" ? `Latest: ${latestExam}` : "No exams yet"}
           />
           <StatCard
             label="New notices · 7 days"

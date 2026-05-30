@@ -15,18 +15,25 @@ export function getCloudinary() {
   return cloudinary;
 }
 
-const MAX_BYTES = 10 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
 const ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp"];
 const ALLOWED_VIDEO = ["video/mp4", "video/webm"];
 const ALLOWED_DOC = ["application/pdf"];
 
 export function validateUpload(file: { type: string; size: number }) {
-  if (file.size > MAX_BYTES) {
-    return { ok: false, error: "File exceeds 10MB limit" };
-  }
-  const allowed = [...ALLOWED_IMAGE, ...ALLOWED_VIDEO, ...ALLOWED_DOC];
-  if (!allowed.includes(file.type)) {
+  const isVideo = ALLOWED_VIDEO.includes(file.type);
+  const isImage = ALLOWED_IMAGE.includes(file.type);
+  const isDoc = ALLOWED_DOC.includes(file.type);
+  if (!isVideo && !isImage && !isDoc) {
     return { ok: false, error: `Unsupported type: ${file.type}` };
+  }
+  // Videos get a bigger ceiling — a 15s hero loop at 1080p H.264 lands
+  // around 12-20 MB before Cloudinary's `q_auto` re-encodes on delivery.
+  const max = isVideo ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+  if (file.size > max) {
+    const mb = max / (1024 * 1024);
+    return { ok: false, error: `File exceeds ${mb}MB limit` };
   }
   return { ok: true as const };
 }

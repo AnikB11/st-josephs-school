@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   Users,
-  ClipboardCheck,
+  Layers,
   FileBarChart,
   Megaphone,
   TrendingUp,
@@ -16,24 +16,20 @@ import { formatDate } from "@/lib/utils";
 async function getStats() {
   try {
     const supabase = createSupabaseAdminClient();
-    const [students, notices, results, attendanceToday] = await Promise.all([
+    const [students, notices, results, classes] = await Promise.all([
       supabase.from("students").select("id", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("notices").select("id", { count: "exact", head: true }).is("archived_at", null),
       supabase.from("results").select("id", { count: "exact", head: true }).eq("status", "published"),
-      supabase
-        .from("attendance")
-        .select("id", { count: "exact", head: true })
-        .eq("date", new Date().toISOString().slice(0, 10))
-        .eq("status", "present"),
+      supabase.from("classes").select("id", { count: "exact", head: true }),
     ]);
     return {
       students: students.count ?? 0,
       notices: notices.count ?? 0,
       results: results.count ?? 0,
-      presentToday: attendanceToday.count ?? 0,
+      classes: classes.count ?? 0,
     };
   } catch {
-    return { students: 812, notices: 18, results: 1240, presentToday: 762 };
+    return { students: 812, notices: 18, results: 1240, classes: 24 };
   }
 }
 
@@ -63,7 +59,6 @@ async function getRecentNotices(): Promise<RecentNotice[]> {
 
 export default async function AdminDashboardPage() {
   const [stats, notices] = await Promise.all([getStats(), getRecentNotices()]);
-  const attendancePct = Math.round((stats.presentToday / Math.max(stats.students, 1)) * 100);
 
   return (
     <>
@@ -77,10 +72,10 @@ export default async function AdminDashboardPage() {
             delta={{ value: "+12 this term", positive: true }}
           />
           <StatCard
-            label="Present today"
-            value={stats.presentToday}
-            icon={ClipboardCheck}
-            hint={`${attendancePct}% of active students`}
+            label="Classes"
+            value={stats.classes}
+            icon={Layers}
+            hint="Across all grades"
           />
           <StatCard
             label="Results published"
@@ -144,8 +139,7 @@ export default async function AdminDashboardPage() {
             <ul className="mt-4 space-y-2 text-sm">
               {[
                 { href: "/admin/students", label: "Add a new student" },
-                { href: "/admin/attendance", label: "Mark attendance" },
-                { href: "/admin/results", label: "Enter marks" },
+                { href: "/admin/results", label: "Upload result PDFs" },
                 { href: "/admin/notices", label: "Publish a notice" },
                 { href: "/admin/gallery", label: "Upload to gallery" },
               ].map((a) => (

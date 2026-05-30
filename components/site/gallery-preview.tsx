@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Button } from "@/components/ui/button";
-import { Reveal } from "@/components/motion/reveal";
+import { GallerySlider } from "@/components/site/gallery-slider";
 
 // TODO: Swap with real campus photography as it becomes available.
 const PLACEHOLDER = [
@@ -37,30 +36,7 @@ export function GalleryPreview({ images }: { images?: (string | null)[] } = {}) 
         </Link>
       </div>
 
-      <div className="mt-14 columns-1 gap-5 space-y-5 sm:columns-2 lg:columns-3">
-        {slides.map((img, i) => (
-          <Reveal key={i} delay={i * 0.06} className="block break-inside-avoid">
-            <div
-              className="group relative w-full overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--sand))] shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_50px_-30px_rgba(15,23,42,0.3)]"
-              style={{ aspectRatio: i === 0 ? "4/3" : i % 2 === 0 ? "3/4" : "1/1" }}
-            >
-              <div className="absolute inset-0 z-10 bg-gradient-to-t from-[hsl(var(--ink))]/60 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute bottom-5 left-5 z-20 translate-y-2 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="rounded-full bg-white/20 border border-white/15 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
-                  {img.alt}
-                </span>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+      <GallerySlider slides={slides} />
     </section>
   );
 }

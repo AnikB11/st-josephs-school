@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
-  ClipboardCheck,
   FileBarChart,
   Megaphone,
   Images,
@@ -34,7 +33,6 @@ export const ADMIN_NAV: SidebarItem[] = [
   { href: "/admin/students", label: "Students", icon: Users },
   { href: "/admin/classes", label: "Classes", icon: Layers },
   { href: "/admin/teachers", label: "Teachers", icon: Briefcase },
-  { href: "/admin/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/admin/results", label: "Results", icon: FileBarChart },
   { href: "/admin/notices", label: "Notices", icon: Megaphone },
   { href: "/admin/gallery", label: "Gallery", icon: Images },
@@ -47,21 +45,18 @@ export const ADMIN_NAV: SidebarItem[] = [
 export const TEACHER_NAV: SidebarItem[] = [
   { href: "/teacher", label: "Overview", icon: LayoutDashboard },
   { href: "/teacher/classes", label: "My Classes", icon: Users },
-  { href: "/teacher/attendance", label: "Attendance", icon: ClipboardCheck },
-  { href: "/teacher/results", label: "Marks Entry", icon: FileBarChart },
+  { href: "/teacher/results", label: "Results", icon: FileBarChart },
   { href: "/teacher/assignments", label: "Assignments", icon: BookOpen },
 ];
 
 export const PARENT_NAV: SidebarItem[] = [
   { href: "/parent", label: "Overview", icon: LayoutDashboard },
-  { href: "/parent/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/parent/results", label: "Results", icon: FileBarChart },
   { href: "/parent/notices", label: "Notices", icon: Megaphone },
 ];
 
 export const STUDENT_NAV: SidebarItem[] = [
   { href: "/student", label: "Overview", icon: LayoutDashboard },
-  { href: "/student/attendance", label: "Attendance", icon: ClipboardCheck },
   { href: "/student/results", label: "Results", icon: FileBarChart },
   { href: "/student/assignments", label: "Assignments", icon: BookOpen },
   { href: "/student/notices", label: "Notices", icon: Megaphone },

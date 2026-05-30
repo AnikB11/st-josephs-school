@@ -82,6 +82,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
+        {/* Eager TLS/handshake to the image CDNs we use everywhere — saves
+            one round-trip per host on the first paint. Browsers ignore
+            duplicates so it's safe even when next/image / next/font emit
+            their own. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
         {/* Arm scroll-reveal hiding before <body> content paints — without
             this, .reveal elements render visible for one frame, then snap
             to hidden, then animate back in (visible jitter on first load).

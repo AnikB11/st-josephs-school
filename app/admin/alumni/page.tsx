@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { TopNav } from "@/components/dashboard/topnav";
 import { Input } from "@/components/ui/input";
@@ -16,44 +17,118 @@ import { AlumniDialog, type AlumniInput } from "@/components/admin/alumni-dialog
 import { AlumniActions } from "@/components/admin/alumni-actions";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { initials } from "@/lib/utils";
+import type { AlumniStatus } from "@/types/database";
 
 export const dynamic = "force-dynamic";
 
-async function getAlumni(): Promise<AlumniInput[]> {
+type AdminAlumnus = AlumniInput & {
+  status: AlumniStatus;
+  requested_at: string | null;
+  rejection_reason: string | null;
+};
+
+const TABS: { key: AlumniStatus | "all"; label: string }[] = [
+  { key: "pending", label: "Pending" },
+  { key: "approved", label: "Approved" },
+  { key: "rejected", label: "Rejected" },
+  { key: "all", label: "All" },
+];
+
+async function getAlumni(status: AlumniStatus | "all"): Promise<AdminAlumnus[]> {
   try {
     const supabase = createSupabaseAdminClient();
-    const { data } = await supabase
+    let query = supabase
       .from("alumni")
       .select(
-        "id,full_name,graduation_year,current_position,current_company,bio,photo_url,linkedin_url,email,is_public",
+        "id,full_name,graduation_year,current_position,current_company,bio,photo_url,linkedin_url,email,is_public,status,requested_at,rejection_reason",
       )
+      .order("requested_at", { ascending: false, nullsFirst: false })
       .order("graduation_year", { ascending: false })
       .limit(200);
-    return ((data as AlumniInput[] | null) ?? []);
+    if (status !== "all") query = query.eq("status", status);
+    const { data } = await query;
+    return ((data as AdminAlumnus[] | null) ?? []);
   } catch {
     return [];
   }
 }
 
-export default async function AlumniAdminPage() {
-  const alumni = await getAlumni();
+async function getCounts(): Promise<Record<AlumniStatus | "all", number>> {
+  const supabase = createSupabaseAdminClient();
+  const { data } = await supabase.from("alumni").select("status");
+  const rows = (data as { status: AlumniStatus }[] | null) ?? [];
+  return {
+    pending: rows.filter((r) => r.status === "pending").length,
+    approved: rows.filter((r) => r.status === "approved").length,
+    rejected: rows.filter((r) => r.status === "rejected").length,
+    all: rows.length,
+  };
+}
+
+function statusBadge(status: AlumniStatus) {
+  if (status === "pending") return <Badge variant="secondary">Pending</Badge>;
+  if (status === "approved") return <Badge variant="success">Approved</Badge>;
+  return <Badge variant="destructive">Rejected</Badge>;
+}
+
+export default async function AlumniAdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
+  const { status: statusParam } = await searchParams;
+  const status: AlumniStatus | "all" =
+    statusParam === "approved" || statusParam === "rejected" || statusParam === "all"
+      ? statusParam
+      : "pending";
+
+  const [alumni, counts] = await Promise.all([getAlumni(status), getCounts()]);
 
   return (
     <>
-      <TopNav title="Alumni" subtitle="Manage alumni profiles and visibility" />
+      <TopNav title="Alumni" subtitle="Review access requests and manage alumni profiles" />
       <div className="space-y-6 px-6 py-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <Input placeholder="Search alumni" className="h-10 w-80 pl-9" />
+          <div className="flex flex-wrap items-center gap-2">
+            {TABS.map((tab) => {
+              const active = tab.key === status;
+              const count = counts[tab.key] ?? 0;
+              return (
+                <Link
+                  key={tab.key}
+                  href={`/admin/alumni?status=${tab.key}`}
+                  className={
+                    "rounded-full border px-3 py-1.5 text-xs font-medium transition " +
+                    (active
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50")
+                  }
+                >
+                  {tab.label}
+                  <span className={"ml-1.5 " + (active ? "text-slate-300" : "text-slate-400")}>
+                    {count}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
-          <AlumniDialog mode="create" />
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Input placeholder="Search alumni" className="h-10 w-72 pl-9" />
+            </div>
+            <AlumniDialog mode="create" />
+          </div>
         </div>
 
         <section className="overflow-hidden rounded-2xl border border-slate-200/70 bg-white">
           {alumni.length === 0 ? (
             <div className="p-12 text-center text-sm text-slate-500">
-              No alumni records yet. Click <span className="font-medium text-slate-700">Add alumnus</span> to create the first profile, or run the promotion engine on Class 12 with "Create alumni records" enabled.
+              {status === "pending"
+                ? "No pending alumni requests."
+                : status === "rejected"
+                  ? "No rejected requests."
+                  : "No alumni records yet. Click Add alumnus to create one, or wait for self-service requests."}
             </div>
           ) : (
             <Table>
@@ -61,9 +136,9 @@ export default async function AlumniAdminPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Batch</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Company</TableHead>
-                  <TableHead>Visibility</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role / Company</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="w-12" />
                 </TableRow>
               </TableHeader>
@@ -93,13 +168,11 @@ export default async function AlumniAdminPage() {
                       </div>
                     </TableCell>
                     <TableCell>{a.graduation_year}</TableCell>
-                    <TableCell className="text-slate-600">{a.current_position ?? "—"}</TableCell>
-                    <TableCell className="text-slate-600">{a.current_company ?? "—"}</TableCell>
-                    <TableCell>
-                      <Badge variant={a.is_public ? "success" : "secondary"}>
-                        {a.is_public ? "Public" : "Hidden"}
-                      </Badge>
+                    <TableCell className="text-slate-600">{a.email ?? "—"}</TableCell>
+                    <TableCell className="text-slate-600">
+                      {[a.current_position, a.current_company].filter(Boolean).join(" · ") || "—"}
                     </TableCell>
+                    <TableCell>{statusBadge(a.status)}</TableCell>
                     <TableCell>
                       <AlumniActions alumnus={a} />
                     </TableCell>

@@ -19,6 +19,7 @@ export function CinematicHero({
   height = "tall",
   align = "left",
   className,
+  cta,
 }: {
   eyebrow?: string;
   title: string | React.ReactNode;
@@ -29,6 +30,7 @@ export function CinematicHero({
   height?: "tall" | "short";
   align?: "left" | "center";
   className?: string;
+  cta?: React.ReactNode;
 }) {
   return (
     <section
@@ -104,6 +106,12 @@ export function CinematicHero({
           <p className="hero-entrance hero-entrance-d3 mt-6 max-w-2xl font-sans text-base leading-relaxed text-white/80 sm:text-lg">
             {description}
           </p>
+        )}
+
+        {cta && (
+          <div className="hero-entrance hero-entrance-d3 mt-8 flex flex-wrap items-center gap-3">
+            {cta}
+          </div>
         )}
       </div>
     </section>

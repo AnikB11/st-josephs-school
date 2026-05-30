@@ -30,12 +30,12 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 const PLACEHOLDER: Alumnus[] = [
-  { id: "1", user_id: null, student_id: null, full_name: "Anika Sharma",     graduation_year: 2014, current_position: "Product Manager",     current_company: "Stripe",       bio: "Built payment products for emerging markets.",                  photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
-  { id: "2", user_id: null, student_id: null, full_name: "Rohan Sen",        graduation_year: 2011, current_position: "Founder",             current_company: "Helix Bio",    bio: "Graduated IIT-B, MIT. Pioneering synthetic biology platforms.", photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
-  { id: "3", user_id: null, student_id: null, full_name: "Dr. Priya Kapoor", graduation_year: 2008, current_position: "Pediatric Surgeon",   current_company: "AIIMS Delhi",  bio: "Specializes in neonatal cardiac care.",                         photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
-  { id: "4", user_id: null, student_id: null, full_name: "Karan Iyer",       graduation_year: 2017, current_position: "Software Engineer",   current_company: "Google",       bio: "Search infrastructure team.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
-  { id: "5", user_id: null, student_id: null, full_name: "Meera Joshi",      graduation_year: 2019, current_position: "PhD Candidate",       current_company: "Stanford",     bio: "Quantum information theory.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
-  { id: "6", user_id: null, student_id: null, full_name: "Aditya Roy",       graduation_year: 2005, current_position: "Author & Journalist", current_company: "The Hindu",    bio: "Reports on climate and policy.",                                photo_url: null, linkedin_url: "#", email: null, is_public: true, created_at: new Date().toISOString() },
+  { id: "1", user_id: null, student_id: null, full_name: "Anika Sharma",     graduation_year: 2014, current_position: "Product Manager",     current_company: "Stripe",       bio: "Built payment products for emerging markets.",                  photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
+  { id: "2", user_id: null, student_id: null, full_name: "Rohan Sen",        graduation_year: 2011, current_position: "Founder",             current_company: "Helix Bio",    bio: "Graduated IIT-B, MIT. Pioneering synthetic biology platforms.", photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
+  { id: "3", user_id: null, student_id: null, full_name: "Dr. Priya Kapoor", graduation_year: 2008, current_position: "Pediatric Surgeon",   current_company: "AIIMS Delhi",  bio: "Specializes in neonatal cardiac care.",                         photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
+  { id: "4", user_id: null, student_id: null, full_name: "Karan Iyer",       graduation_year: 2017, current_position: "Software Engineer",   current_company: "Google",       bio: "Search infrastructure team.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
+  { id: "5", user_id: null, student_id: null, full_name: "Meera Joshi",      graduation_year: 2019, current_position: "PhD Candidate",       current_company: "Stanford",     bio: "Quantum information theory.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
+  { id: "6", user_id: null, student_id: null, full_name: "Aditya Roy",       graduation_year: 2005, current_position: "Author & Journalist", current_company: "The Hindu",    bio: "Reports on climate and policy.",                                photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
 ];
 
 const ACHIEVEMENTS = [
@@ -385,7 +385,7 @@ export default async function AlumniPage() {
                 Sign in to update your profile, RSVP to events, and join alumni-only spaces.
               </p>
               <div className="mt-7">
-                <Link href="/login">
+                <Link href="/alumni-portal/login">
                   <Button
                     size="lg"
                     className="h-12 rounded-full bg-[hsl(var(--ivory))] px-7 text-[14px] font-semibold tracking-wide text-[hsl(var(--primary))] hover:bg-[hsl(var(--ivory))]/90"
@@ -414,6 +414,27 @@ export default async function AlumniPage() {
         image={HERO_IMG}
         imageAlt="Alumni of St. Joseph's"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Alumni" }]}
+        cta={
+          <>
+            <Link href="/alumni-portal/login">
+              <Button
+                size="lg"
+                className="h-12 rounded-full bg-[hsl(var(--ivory))] px-7 text-[14px] font-semibold tracking-wide text-[hsl(var(--primary))] hover:bg-[hsl(var(--ivory))]/90"
+              >
+                Sign in to alumni portal
+              </Button>
+            </Link>
+            <Link href="/alumni-portal/login">
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-full border-white/40 bg-transparent px-7 text-[14px] font-semibold tracking-wide text-white hover:bg-white/10 hover:text-white"
+              >
+                Create alumni profile
+              </Button>
+            </Link>
+          </>
+        }
       />
       <TabbedPage tabs={tabs} />
     </>

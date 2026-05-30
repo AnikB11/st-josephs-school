@@ -1,5 +1,11 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/site/hero";
+
+// Edge-cached for 60s; CMS publishes invalidate via revalidateTag from the
+// admin write paths. First request rebuilds in the background; everyone else
+// serves the cached HTML in ~50ms instead of paying a full SSR + Supabase
+// round-trip per visit.
+export const revalidate = 60;
 import { Stats } from "@/components/site/stats";
 import { PrincipalMessage } from "@/components/site/principal-message";
 import { SectionSkeleton } from "@/components/site/section-skeleton";

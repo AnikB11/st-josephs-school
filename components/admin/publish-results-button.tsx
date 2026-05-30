@@ -24,8 +24,8 @@ export function PublishResultsButton({
     const confirmMsg = unpublish
       ? "Unpublish results? Parents will no longer see them."
       : classId
-        ? "Publish all draft marks for this class? Parents will see results immediately."
-        : "Publish all draft marks for this exam (every class)?";
+        ? "Publish all uploaded result PDFs for this class? Parents will see them immediately."
+        : "Publish all uploaded result PDFs for this exam (every class)?";
     if (!confirm(confirmMsg)) return;
 
     setBusy(true);

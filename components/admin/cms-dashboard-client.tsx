@@ -12,11 +12,15 @@ import {
   Users,
   Trophy,
   Sparkles,
+  Globe,
+  Link2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CmsSectionForm } from "@/components/admin/cms-section-form";
 import { CmsImageUploader } from "@/components/admin/cms-image-uploader";
+import { CmsMediaUploader } from "@/components/admin/cms-media-uploader";
+import { SiteLinksForm } from "@/components/admin/site-links-form";
 import { IMAGE_PAGES } from "@/lib/cms-images";
 
 type CmsRow = {
@@ -37,6 +41,7 @@ const PAGES = [
   { id: "alumni", label: "Alumni Page", icon: Users },
   { id: "contact", label: "Contact Page", icon: Phone },
   { id: "results", label: "Results Page", icon: Trophy },
+  { id: "site-wide", label: "Site-wide (Footer & WhatsApp)", icon: Globe },
 ];
 
 const PAGE_SECTIONS: Record<string, { key: string; title: string; placeholder?: string }[]> = {
@@ -169,21 +174,53 @@ export function CmsDashboardClient({ initialData }: { initialData: Record<string
           </CardHeader>
           <CardContent className="pt-5">
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {imageSlots.map((slot) => (
-                <CmsImageUploader
-                  key={slot.key}
-                  sectionKey={slot.key}
-                  label={slot.label}
-                  currentUrl={initialData[slot.key]?.image_url ?? null}
-                  fallbackUrl={slot.fallback}
-                />
-              ))}
+              {imageSlots.map((slot) => {
+                const common = {
+                  sectionKey: slot.key,
+                  label: slot.label,
+                  currentUrl: initialData[slot.key]?.image_url ?? null,
+                  fallbackUrl: slot.fallback,
+                };
+                return slot.mediaType === "media" ? (
+                  <CmsMediaUploader key={slot.key} {...common} />
+                ) : (
+                  <CmsImageUploader key={slot.key} {...common} />
+                );
+              })}
             </div>
           </CardContent>
         </Card>
       )}
 
-      {activeSections.length === 0 && imageSlots.length === 0 && (
+      {selectedPage === "site-wide" && (
+        <Card className="border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+          <CardHeader className="border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <Link2 className="h-4 w-4 text-blue-600" />
+              <CardTitle className="text-sm font-bold text-slate-900">
+                Footer social links & floating WhatsApp
+              </CardTitle>
+            </div>
+            <CardDescription className="text-xs">
+              Edit the social links shown in the footer and configure the
+              floating WhatsApp chat button that appears on every public page.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-5">
+            <SiteLinksForm
+              initial={{
+                facebook: initialData["footer_social_facebook"]?.body ?? "",
+                instagram: initialData["footer_social_instagram"]?.body ?? "",
+                youtube: initialData["footer_social_youtube"]?.body ?? "",
+                whatsappNumber: initialData["whatsapp_number"]?.body ?? "",
+                whatsappMessage: initialData["whatsapp_message"]?.body ?? "",
+              }}
+            />
+          </CardContent>
+        </Card>
+      )}
+
+      {activeSections.length === 0 && imageSlots.length === 0 && selectedPage !== "site-wide" && (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center text-sm text-slate-400">
           No editable content configured for this page.
         </div>

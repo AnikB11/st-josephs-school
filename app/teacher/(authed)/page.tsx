@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   Users,
-  ClipboardCheck,
   FileBarChart,
   BookOpen,
   ArrowUpRight,
@@ -127,8 +126,7 @@ export default async function TeacherDashboardPage() {
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 { href: "/teacher/classes", label: "My classes", icon: Users },
-                { href: "/teacher/attendance", label: "Mark attendance", icon: ClipboardCheck },
-                { href: "/teacher/results", label: "Enter marks", icon: FileBarChart },
+                { href: "/teacher/results", label: "Upload results", icon: FileBarChart },
                 { href: "/teacher/assignments", label: "Assignments", icon: BookOpen },
               ].map((l) => (
                 <Link

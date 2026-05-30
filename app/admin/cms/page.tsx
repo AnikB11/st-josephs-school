@@ -21,6 +21,11 @@ const TEXT_SECTION_KEYS = [
   "contact_intro",
   "gallery_intro",
   "notices_intro",
+  "footer_social_facebook",
+  "footer_social_instagram",
+  "footer_social_youtube",
+  "whatsapp_number",
+  "whatsapp_message",
 ];
 
 const SECTION_KEYS = [...TEXT_SECTION_KEYS, ...ALL_IMAGE_KEYS];

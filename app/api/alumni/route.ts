@@ -13,7 +13,15 @@ export async function GET(req: Request) {
   const q = searchParams.get("q")?.trim();
 
   const supabase = createSupabaseAdminClient();
-  let query = supabase.from("alumni").select("*").order("graduation_year", { ascending: false });
+  // List view skips `bio` (up to 2000 chars) and `email`. They're only
+  // needed on the detail view / edit dialog. Drops payload size 5-10x
+  // once we have hundreds of alumni.
+  let query = supabase
+    .from("alumni")
+    .select(
+      "id,full_name,graduation_year,current_position,current_company,photo_url,linkedin_url,is_public",
+    )
+    .order("graduation_year", { ascending: false });
   if (q) {
     query = query.or(`full_name.ilike.%${q}%,current_company.ilike.%${q}%,current_position.ilike.%${q}%`);
   }

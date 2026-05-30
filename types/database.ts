@@ -83,6 +83,8 @@ export interface GalleryMedia {
   created_at: string;
 }
 
+export type AlumniStatus = "pending" | "approved" | "rejected";
+
 export interface Alumnus {
   id: string;
   user_id: string | null;
@@ -96,6 +98,11 @@ export interface Alumnus {
   linkedin_url: string | null;
   email: string | null;
   is_public: boolean;
+  status: AlumniStatus;
+  requested_at: string | null;
+  approved_at: string | null;
+  rejected_at: string | null;
+  rejection_reason: string | null;
   created_at: string;
 }
 
@@ -306,6 +313,7 @@ export interface Database {
       notice_audience: NoticeAudience;
       notice_category: NoticeCategory;
       result_status: ResultStatus;
+      alumni_status: AlumniStatus;
     };
     CompositeTypes: Record<string, never>;
   };

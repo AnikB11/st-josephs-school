@@ -51,41 +51,13 @@ async function getStudent(id: string): Promise<StudentDetail | null> {
   }
 }
 
-type AttendanceSummary = { present: number; absent: number; late: number; excused: number };
-
-async function getAttendanceSummary(studentId: string): Promise<AttendanceSummary> {
-  try {
-    const supabase = createSupabaseAdminClient();
-    const since = new Date();
-    since.setDate(since.getDate() - 30);
-    const { data } = await supabase
-      .from("attendance")
-      .select("status")
-      .eq("student_id", studentId)
-      .gte("date", since.toISOString().slice(0, 10));
-    const rows = (data as { status: string }[] | null) ?? [];
-    return rows.reduce<AttendanceSummary>(
-      (acc, r) => {
-        if (r.status in acc) acc[r.status as keyof AttendanceSummary]++;
-        return acc;
-      },
-      { present: 0, absent: 0, late: 0, excused: 0 },
-    );
-  } catch {
-    return { present: 0, absent: 0, late: 0, excused: 0 };
-  }
-}
-
 export default async function StudentDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [student, attendance] = await Promise.all([
-    getStudent(id),
-    getAttendanceSummary(id),
-  ]);
+  const student = await getStudent(id);
   if (!student) notFound();
 
   return (
@@ -209,40 +181,6 @@ export default async function StudentDetailPage({
                 ) : (
                   <p className="text-sm text-slate-500">No parent linked.</p>
                 )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Attendance · last 30 days</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-4 gap-3 text-center">
-                  <div className="rounded-xl bg-emerald/5 p-4">
-                    <p className="text-xs text-slate-500">Present</p>
-                    <p className="font-display text-2xl font-semibold text-emerald">
-                      {attendance.present}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-red-50 p-4">
-                    <p className="text-xs text-slate-500">Absent</p>
-                    <p className="font-display text-2xl font-semibold text-red-500">
-                      {attendance.absent}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-amber-50 p-4">
-                    <p className="text-xs text-slate-500">Late</p>
-                    <p className="font-display text-2xl font-semibold text-amber-600">
-                      {attendance.late}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs text-slate-500">Excused</p>
-                    <p className="font-display text-2xl font-semibold text-slate-700">
-                      {attendance.excused}
-                    </p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
 

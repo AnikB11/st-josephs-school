@@ -14,6 +14,15 @@ export type ImageSlot = {
   key: string;
   label: string;
   fallback: string;
+  /**
+   * - "image" (default): admin uploads still images only.
+   * - "media": slot accepts either an image OR a short video. The hero
+   *   uses this so the same CMS row can hold a JPG today and an MP4
+   *   tomorrow without a schema change. Detection at render time is
+   *   URL-based (Cloudinary's `/video/upload/` segment or a .mp4/.webm
+   *   extension).
+   */
+  mediaType?: "image" | "media";
 };
 
 export type ImagePageGroup = {
@@ -29,7 +38,8 @@ export const IMAGE_PAGES: ImagePageGroup[] = [
     slots: [
       {
         key: "home_hero_image",
-        label: "Hero background",
+        label: "Hero background (image or video)",
+        mediaType: "media",
         fallback:
           "https://res.cloudinary.com/dwzn69084/image/upload/v1779811206/website/fallbacks/home_hero_image.jpg",
       },
@@ -358,4 +368,37 @@ export function resolveImage(
 /** Look up the fallback URL for a key (no DB read). */
 export function imageFallback(key: string): string {
   return FALLBACK_MAP[key] || "";
+}
+
+/**
+ * True when `url` points at a video asset. Two signals:
+ *  - Cloudinary always exposes the resource type in the path
+ *    (`/image/upload/` vs `/video/upload/`), so that's the most
+ *    reliable hint for assets we uploaded ourselves.
+ *  - Falls back to a file-extension check for any externally-pasted URL.
+ */
+export function isVideoUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  if (/\/video\/upload\//.test(url)) return true;
+  return /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(url);
+}
+
+/**
+ * Insert delivery transforms tuned for a hero background loop:
+ *  - `du_15` — clamps the clip to 15 s so a long upload still loops cleanly.
+ *  - `f_auto,vc_auto` — Cloudinary serves WebM/AV1 to browsers that support
+ *    it, MP4/H.264 otherwise.
+ *  - `q_auto` — auto bitrate. Visible quality stays high; bandwidth drops.
+ *  - `w_1920,c_limit` — caps width at 1920px (no upscale on smaller sources).
+ *
+ * No-op for non-Cloudinary URLs (just returns the input).
+ */
+export function heroVideoUrl(url: string): string {
+  if (!/\/video\/upload\//.test(url)) return url;
+  // Don't double-apply if the URL already has our transform chain.
+  if (/\/video\/upload\/[^/]*du_15[^/]*\//.test(url)) return url;
+  return url.replace(
+    /\/video\/upload\//,
+    "/video/upload/f_auto,vc_auto,q_auto,du_15,w_1920,c_limit/",
+  );
 }

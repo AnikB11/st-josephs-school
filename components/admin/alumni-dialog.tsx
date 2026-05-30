@@ -30,6 +30,7 @@ export type AlumniInput = {
   linkedin_url: string | null;
   email: string | null;
   is_public: boolean;
+  status?: "pending" | "approved" | "rejected";
 };
 
 export function AlumniDialog({

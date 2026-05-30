@@ -4,10 +4,11 @@ import { verifyStudentSessionToken, STUDENT_SESSION_COOKIE } from "@/lib/student
 
 type CookieSet = { name: string; value: string; options?: CookieOptions };
 
-// Routes that require a Supabase Auth session (admin / teacher).
+// Routes that require a Supabase Auth session (admin / teacher / alumni).
 const SUPABASE_AUTH_PREFIXES = [
   "/admin",
   "/teacher",
+  "/alumni-portal",
   "/api/admin",
 ];
 
@@ -17,7 +18,6 @@ const STUDENT_SESSION_PREFIXES = [
   "/parent",
 ];
 
-// Future: alumni portal will be added here once Google OAuth is wired up.
 const OTHER_PROTECTED_PREFIXES: string[] = [];
 
 const PUBLIC_API_PREFIXES = [
@@ -33,6 +33,8 @@ const PUBLIC_PORTAL_PAGES = new Set<string>([
   "/teacher/login",
   "/student/login",
   "/parent/login",
+  "/alumni-portal/login",
+  "/alumni-portal/request",
 ]);
 
 function startsWithPrefix(pathname: string, prefixes: string[]): boolean {
@@ -43,6 +45,7 @@ function loginPathFor(pathname: string): string {
   if (pathname === "/teacher" || pathname.startsWith("/teacher/")) return "/teacher/login";
   if (pathname === "/student" || pathname.startsWith("/student/")) return "/student/login";
   if (pathname === "/parent" || pathname.startsWith("/parent/")) return "/parent/login";
+  if (pathname === "/alumni-portal" || pathname.startsWith("/alumni-portal/")) return "/alumni-portal/login";
   return "/login";
 }
 

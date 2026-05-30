@@ -9,6 +9,8 @@ import { SCHOOL } from "@/lib/constants";
 import { getCmsSections } from "@/lib/cms";
 import { resolveImage } from "@/lib/cms-images";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "About",
   description: `About ${SCHOOL.name}: our story, principal, mission, facilities and leadership.`,
