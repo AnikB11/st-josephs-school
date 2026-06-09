@@ -21,11 +21,15 @@ export function UserMenu({
   email,
   avatarUrl,
   sessionType = "supabase",
+  settingsHref,
+  signOutRedirect = "/",
 }: {
   name: string;
   email: string;
   avatarUrl: string | null;
   sessionType?: SessionType;
+  settingsHref?: string | null;
+  signOutRedirect?: string;
 }) {
   const router = useRouter();
 
@@ -36,7 +40,7 @@ export function UserMenu({
       const supabase = createSupabaseBrowserClient();
       await supabase.auth.signOut();
     }
-    router.replace("/");
+    router.replace(signOutRedirect);
     router.refresh();
   }
 
@@ -66,13 +70,15 @@ export function UserMenu({
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {sessionType === "supabase" && (
-          <DropdownMenuItem onSelect={() => router.push("/admin/settings")}>
-            <UserIcon className="mr-2 h-4 w-4" />
-            Account settings
-          </DropdownMenuItem>
+        {settingsHref && (
+          <>
+            <DropdownMenuItem onSelect={() => router.push(settingsHref)}>
+              <UserIcon className="mr-2 h-4 w-4" />
+              Account settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
         )}
-        {sessionType === "supabase" && <DropdownMenuSeparator />}
         <DropdownMenuItem onSelect={onSignOut} className="text-red-600 focus:text-red-600">
           <LogOut className="mr-2 h-4 w-4" />
           Sign out

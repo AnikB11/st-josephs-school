@@ -3,6 +3,22 @@ import { Input } from "@/components/ui/input";
 import { UserMenu } from "@/components/dashboard/user-menu";
 import { getAuthUser } from "@/lib/auth";
 import { getStudentSession } from "@/lib/student-session";
+import type { Role } from "@/lib/constants";
+
+// Each portal has its own landing/settings surface. We use the role to pick
+// where the "Account settings" menu item should go, so an alumnus never gets
+// kicked into /admin/settings (and so on for other roles). Roles without a
+// dedicated settings page get no menu item.
+const SETTINGS_HREF: Partial<Record<Role, string>> = {
+  admin: "/admin/settings",
+  alumni: "/alumni-portal",
+  // teacher/parent/student have no dedicated settings surface yet
+};
+
+const SIGN_OUT_REDIRECT: Partial<Record<Role, string>> = {
+  alumni: "/alumni-portal/login",
+  teacher: "/teacher/login",
+};
 
 export async function TopNav({ title, subtitle }: { title: string; subtitle?: string }) {
   // Resolve whichever session is active. Student/parent portals run on a
@@ -11,21 +27,34 @@ export async function TopNav({ title, subtitle }: { title: string; subtitle?: st
   // check first and short-circuit when present.
   const studentSession = await getStudentSession();
 
-  let display: { name: string; email: string; avatarUrl: string | null; sessionType: "supabase" | "student" };
+  let display: {
+    name: string;
+    email: string;
+    avatarUrl: string | null;
+    sessionType: "supabase" | "student";
+    settingsHref: string | null;
+    signOutRedirect: string;
+  };
+
   if (studentSession) {
     display = {
       name: studentSession.fullName || "Account",
       email: studentSession.admissionNumber,
       avatarUrl: null,
       sessionType: "student",
+      settingsHref: null,
+      signOutRedirect: "/",
     };
   } else {
     const user = await getAuthUser();
+    const role = (user?.dbUser?.role as Role | undefined) ?? undefined;
     display = {
       name: user?.dbUser?.full_name ?? user?.email ?? "Account",
       email: user?.email ?? "",
       avatarUrl: user?.dbUser?.avatar_url ?? null,
       sessionType: "supabase",
+      settingsHref: role ? SETTINGS_HREF[role] ?? null : null,
+      signOutRedirect: role ? SIGN_OUT_REDIRECT[role] ?? "/" : "/",
     };
   }
 
@@ -57,6 +86,8 @@ export async function TopNav({ title, subtitle }: { title: string; subtitle?: st
           email={display.email}
           avatarUrl={display.avatarUrl}
           sessionType={display.sessionType}
+          settingsHref={display.settingsHref}
+          signOutRedirect={display.signOutRedirect}
         />
       </div>
     </header>
