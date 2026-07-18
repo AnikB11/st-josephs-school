@@ -22,9 +22,9 @@ export function GalleryPreview({ images }: { images?: (string | null)[] } = {}) 
     <section className="container-wide py-24 sm:py-32">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <SectionHeading
-          eyebrow="Campus life"
-          title="Moments from this year"
-          description="A peek into classrooms, fields, festivals, and the quiet corners between."
+          eyebrow="Life on campus"
+          title="Moments from Kingston"
+          description="From assembly to the last bell — glimpses of classrooms, chapel, sports grounds, and the everyday rhythm of school life at Rhenock."
         />
         <Link href="/gallery">
           <Button

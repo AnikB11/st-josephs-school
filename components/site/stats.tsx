@@ -1,12 +1,16 @@
 import { Reveal } from "@/components/motion/reveal";
 import { CountUp } from "@/components/motion/count-up";
 
-const STATS = [
-  { value: 800, suffix: "+", label: "Students", hint: "Pre-K through Grade XII" },
-  { value: 60,  suffix: "+", label: "Years", hint: "Of community trust" },
-  { value: 32,  suffix: ":1", label: "Class size", hint: "Personal attention" },
-  { value: 98,  suffix: "%", label: "Pass rate", hint: "Class XII 2026" },
-] as const;
+type Stat =
+  | { value: number; suffix?: string; label: string; hint: string }
+  | { display: string; label: string; hint: string };
+
+const STATS: Stat[] = [
+  { value: 1996, label: "Established", hint: "Under the Diocese of Darjeeling–Sikkim" },
+  { display: "Nursery–XII", label: "Classes offered", hint: "Co-educational, Science at senior level" },
+  { display: "CISCE", label: "Affiliation", hint: "Council for the ICSE, New Delhi" },
+  { value: 1030, suffix: " m", label: "Altitude", hint: "Above mean sea level at Rhenock" },
+];
 
 export function Stats() {
   return (
@@ -16,7 +20,11 @@ export function Stats() {
           {STATS.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.06} className="flex flex-col">
               <p className="font-display text-5xl font-semibold text-[hsl(var(--ink))] tabular-nums sm:text-6xl">
-                <CountUp to={s.value} suffix={s.suffix} duration={1.4} />
+                {"value" in s ? (
+                  <CountUp to={s.value} suffix={s.suffix ?? ""} duration={1.4} />
+                ) : (
+                  <span>{s.display}</span>
+                )}
               </p>
               <span className="mt-3 h-px w-8 bg-[hsl(var(--gold))]" />
               <p className="mt-3 font-display text-sm font-semibold tracking-wide text-[hsl(var(--ink))]">

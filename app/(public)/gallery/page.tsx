@@ -12,7 +12,7 @@ import { resolveImage } from "@/lib/cms-images";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Moments from the school year — events, classrooms, sports, and arts.",
+  description: "Photographs from school life at St. Joseph's, Kingston — events, campus, sports, cultural programmes, and everyday moments.",
 };
 
 export const revalidate = 60;
@@ -178,9 +178,9 @@ export default async function GalleryPage() {
       content: (
         <section className="container-wide py-20 sm:py-24">
           <CategoryIntro
-            eyebrow="14-acre grounds"
-            title="The spaces our students call home."
-            description="Quiet libraries, sunlit labs, the chapel courtyard, and the long verandahs students walk every day."
+            eyebrow="Kingston, Rhenock"
+            title="The spaces our students call school."
+            description="Classrooms, corridors, chapel, and the hillside views — the everyday setting of school life at Kingston."
             icon={MapPin}
           />
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
@@ -266,10 +266,10 @@ export default async function GalleryPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--primary))]/80 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8 text-[hsl(var(--ivory))]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]">
-                <span className="gold-rule">Since 1965</span>
+                <span className="gold-rule">Since 1996</span>
               </p>
               <h3 className="font-display mt-3 max-w-2xl text-3xl font-semibold sm:text-4xl">
-                Six decades of shared milestones.
+                The days the school stops for — together.
               </h3>
             </div>
           </div>
@@ -317,15 +317,17 @@ export default async function GalleryPage() {
         eyebrow="Gallery"
         title={
           <>
-            A year in <span className="italic">pictures.</span>
+            The school year,
+            <br />
+            <span className="italic">as we lived it.</span>
           </>
         }
         description={
           cms.gallery_intro.body ??
-          "Albums from every term — events, milestones, and the small moments that make up a school year."
+          "Photographs from feasts, meets, cultural evenings, and everyday classrooms at St. Joseph's, Kingston — added through the term."
         }
         image={HERO_IMG}
-        imageAlt="St. Joseph's campus gallery"
+        imageAlt="Life at St. Joseph's School, Kingston — Rhenock, Sikkim"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Gallery" }]}
       />
       <TabbedPage tabs={tabs} />

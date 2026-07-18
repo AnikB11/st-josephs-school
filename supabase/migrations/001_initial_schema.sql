@@ -469,10 +469,10 @@ values ('2026-27', '2026-04-01', '2027-03-31', true)
 on conflict (year_label) do nothing;
 
 insert into public.website_content (section_key, title, body) values
-  ('hero_headline', 'Where Tradition Meets Tomorrow',
-   'St. Joseph''s School has nurtured generations of curious, compassionate, and capable young people.'),
-  ('principal_message', 'A Message from the Principal',
-   'Education is not the filling of a pail, but the lighting of a fire. At St. Joseph''s we strive every day to ignite curiosity, build character, and prepare our students for the world ahead.'),
-  ('about_intro', 'Our Story',
-   'Founded in 1965, St. Joseph''s School has served the community for six decades with a commitment to academic rigor and holistic development.')
+  ('hero_headline', 'Rooted in faith. Raised for love and service.',
+   'An ICSE co-educational school in the hills of Rhenock, Sikkim — where academic excellence, moral values, and a spirit of service have shaped young people since 1996.'),
+  ('principal_message', 'An education rooted in love and service.',
+   'St. Joseph''s School, Kingston has been shaped, since 1996, by a simple conviction — that true education must form the mind, the heart, and the conscience together. We prepare our students for examinations and for life; for career and for community; for excellence and for service.'),
+  ('about_intro', 'A school built on faith, learning, and service.',
+   'St. Joseph''s School, Kingston was established in February 1996 by the Roman Catholic Diocese of Darjeeling–Sikkim. Set at 1,030 metres above mean sea level in Rhenock, Pakyong District, Sikkim, the school is affiliated with the CISCE, New Delhi, and offers classes from Nursery to XII (Science) in English medium.')
 on conflict (section_key) do nothing;

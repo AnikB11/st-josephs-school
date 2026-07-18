@@ -13,34 +13,35 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About",
-  description: `About ${SCHOOL.name}: our story, principal, mission, facilities and leadership.`,
+  description: `${SCHOOL.name} is a co-educational ICSE school in Kingston, Rhenock, Pakyong District, Sikkim — established in 1996 under the Roman Catholic Diocese of Darjeeling–Sikkim.`,
 };
 
 
 const MILESTONES = [
-  { year: "1965", text: "School founded by the Sisters of St. Joseph" },
-  { year: "1982", text: "Class XII batch graduates with state-topping results" },
-  { year: "2001", text: "New senior wing and science labs inaugurated" },
-  { year: "2019", text: "Sports complex and 200-seat auditorium" },
-  { year: "2024", text: "Digital classrooms across all grades" },
+  { year: "1996", text: "Founded in February by the Roman Catholic Diocese of Darjeeling–Sikkim, in the quiet hills of Kingston, Rhenock." },
+  { year: "2000s", text: "Classes gradually expanded across primary, middle, and secondary levels, with English medium and a strong CISCE foundation." },
+  { year: "2010s", text: "Senior secondary Science stream introduced; sporting, cultural, and service activities become part of daily school life." },
+  { year: "Today", text: "A co-educational ICSE school of Nursery to Class XII, serving families across Sikkim and beyond." },
 ];
 
 const FACILITIES = [
-  { icon: Library,      title: "Library & Reading Halls", body: "30,000 titles, periodicals, digital archives, and dedicated study halls for senior students." },
-  { icon: FlaskConical, title: "Science & Tech Labs",     body: "Physics, chemistry, biology, robotics, and a dedicated computer lab — refreshed in 2024." },
-  { icon: Trophy,       title: "Sports Complex",          body: "Athletics track, football, basketball, swimming pool, indoor courts, and a yoga studio." },
-  { icon: Music,        title: "Auditorium & Studios",    body: "A 200-seat auditorium plus dedicated music, dance, and visual-art studios." },
-  { icon: Utensils,     title: "Dining & Cafeteria",      body: "Nutritionist-planned menus, allergen tracking, and an open-plan dining hall." },
-  { icon: Building2,    title: "Pastoral & Counselling",  body: "On-campus counsellors, infirmary, and a confidential pastoral-care programme." },
+  { icon: Library,      title: "Library & reading room",     body: "A well-stocked library that grows every year — supporting reading, research, and independent study from primary onwards." },
+  { icon: FlaskConical, title: "Science & computer labs",    body: "Dedicated Physics, Chemistry, Biology, and computer laboratories that support the CISCE curriculum from middle school upward." },
+  { icon: Trophy,       title: "Sports & athletics",         body: "Grounds and courts for cricket, football, basketball, volleyball, badminton, table tennis, and athletics — for every pupil, every year." },
+  { icon: Music,        title: "Chapel & assembly hall",     body: "Spaces that anchor daily assembly, prayer, cultural programmes, and school-wide gatherings across the year." },
+  { icon: Utensils,     title: "Hostel & dining",            body: "Separate hostels for boys and girls, run by the school management and the Cluny Sisters, with wholesome, home-style meals." },
+  { icon: Building2,    title: "Pastoral care",              body: "A community shaped by Christian values, with class teachers, wardens, and counsellors who know each child by name." },
 ];
 
+// Leadership names are deliberately generic until published by the school; the
+// Governing Body is chaired by the Bishop of Darjeeling–Sikkim.
 const LEADERSHIP = [
-  { name: "Mrs. Margaret Rosario",   role: "Principal",                  since: "2014" },
-  { name: "Mr. Sandeep Iyer",        role: "Vice Principal · Academics", since: "2017" },
-  { name: "Ms. Anjali Verma",        role: "Vice Principal · Pastoral",  since: "2019" },
-  { name: "Mr. Faisal Ahmed",        role: "Director of Sport",          since: "2020" },
-  { name: "Dr. Reena Kapoor",        role: "Head of Sciences",           since: "2012" },
-  { name: "Ms. Lara D'Souza",        role: "Head of Humanities",         since: "2015" },
+  { name: "Bishop of Darjeeling–Sikkim", role: "President, Governing Body",           since: "Ex officio" },
+  { name: "Diocesan Board of Education", role: "School Management",                    since: "Since 1996" },
+  { name: "The Principal",               role: "Head of School",                       since: "Kingston, Rhenock" },
+  { name: "The Vice Principal",          role: "Academic & Pastoral Oversight",        since: "" },
+  { name: "The Cluny Sisters",           role: "Girls' Hostel & Pastoral Support",       since: "" },
+  { name: "Faculty & House Staff",       role: "Class Teachers, Wardens, Coordinators", since: "" },
 ];
 
 export default async function AboutPage() {
@@ -66,20 +67,21 @@ export default async function AboutPage() {
       content: (
         <>
           <TabSplit
-            eyebrow="Six decades"
-            title={cms.about_intro.title ?? "A school built on character, curiosity, and care."}
+            eyebrow="Since 1996"
+            title={cms.about_intro.title ?? "A school built on faith, learning, and service."}
             image={STORY_IMG}
-            imageAlt="Students in the historic main quad"
+            imageAlt="St. Joseph's School, Kingston — Rhenock, Sikkim"
           >
             <p>
               {cms.about_intro.body ??
-                `${SCHOOL.name} was founded in ${SCHOOL.founded} with a simple idea — that every child deserves to be known. Six decades on, that idea still shapes everything we do.`}
+                `${SCHOOL.name} was established in February ${SCHOOL.founded} by the Roman Catholic Diocese of Darjeeling–Sikkim. Set at 1,030 metres above mean sea level in Kingston, Rhenock, the school opened its doors with a simple purpose — to educate the young people of Sikkim in the spirit of Love & Service.`}
             </p>
             <p>
-              From a single classroom in the parish hall to today&apos;s 14-acre
-              campus, the school has grown into a community of more than 800
-              students, 70 teachers, and over 12,000 alumni — without losing the
-              warmth of its earliest days.
+              The school is under the religious jurisdiction of the Diocese, and the Bishop
+              of Darjeeling–Sikkim serves as President of the Governing Body. From its
+              first classrooms to today&apos;s ICSE-affiliated campus, St. Joseph&apos;s
+              has grown steadily while holding on to the warmth and discipline of its
+              earliest years.
             </p>
           </TabSplit>
 
@@ -90,7 +92,7 @@ export default async function AboutPage() {
                 <span className="gold-rule">Our journey</span>
               </p>
               <h3 className="font-display mt-4 text-3xl font-semibold text-[hsl(var(--ink))] sm:text-4xl">
-                Six decades, in moments.
+                A quiet journey, in moments.
               </h3>
               <ol className="relative mx-auto mt-12 max-w-3xl">
                 <span
@@ -131,7 +133,7 @@ export default async function AboutPage() {
               <div className="relative aspect-[5/6] overflow-hidden rounded-[28px] bg-[hsl(var(--sand))]">
                 <Image
                   src={PRINCIPAL_IMG}
-                  alt="Mrs. Margaret Rosario — Principal"
+                  alt="The Principal — St. Joseph's School, Kingston"
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover"
@@ -140,14 +142,14 @@ export default async function AboutPage() {
             </div>
             <div className="lg:col-span-5">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-                <span className="gold-rule">From the Principal</span>
+                <span className="gold-rule">From the Principal&apos;s desk</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-4xl font-semibold leading-tight tracking-tight text-[hsl(var(--ink))] sm:text-5xl">
-                {cms.principal_message.title ?? "An education that lights a fire."}
+                {cms.principal_message.title ?? "An education rooted in love and service."}
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
                 {cms.principal_message.body ??
-                  "Education is not the filling of a pail but the lighting of a fire. At St. Joseph's, we strive every day to ignite curiosity, build character, and prepare students for the world ahead — academically, ethically, and personally."}
+                  "St. Joseph's School, Kingston has been shaped, since 1996, by a simple conviction — that true education must form the mind, the heart, and the conscience together. We prepare our students for examinations and for life; for career and for community; for excellence and for service. Every child here is known, guided, and challenged to grow into a whole human being."}
               </p>
               <figure className="mt-8 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-6">
                 <svg
@@ -159,19 +161,19 @@ export default async function AboutPage() {
                   <path d="M9.17 6C7.4 6 6 7.4 6 9.17v8.83h6V12H8.5c0-1.93 1.57-3.5 3.5-3.5V6H9.17Zm9 0c-1.77 0-3.17 1.4-3.17 3.17v8.83h6V12h-3.5c0-1.93 1.57-3.5 3.5-3.5V6h-2.83Z" />
                 </svg>
                 <blockquote className="font-display mt-2 text-xl italic leading-snug text-[hsl(var(--ink))]">
-                  We don&apos;t just teach subjects — we shape the people who study them.
+                  Love of God, and service of people — this is what we teach, and what we hope every child will carry home.
                 </blockquote>
               </figure>
               <div className="mt-6 flex items-center gap-4">
                 <div className="grid h-12 w-12 place-items-center rounded-full bg-[hsl(var(--primary))] font-display text-sm font-semibold text-[hsl(var(--ivory))]">
-                  MR
+                  SJK
                 </div>
                 <div>
                   <p className="font-display text-[15px] font-semibold text-[hsl(var(--ink))]">
-                    Mrs. Margaret Rosario
+                    The Principal
                   </p>
                   <p className="text-xs text-[hsl(var(--ink-soft))]">
-                    Principal · serving since 2014
+                    St. Joseph&apos;s School, Kingston · Rhenock, Sikkim
                   </p>
                 </div>
               </div>
@@ -189,28 +191,30 @@ export default async function AboutPage() {
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="rounded-[28px] border border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-10">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-                  <span className="gold-rule">Mission</span>
+                  <span className="gold-rule">Our Mission</span>
                 </p>
                 <h3 className="font-display mt-4 text-3xl font-semibold leading-tight text-[hsl(var(--ink))]">
-                  To educate the whole child — head, heart, and hand.
+                  To form young people who are intellectually competent, morally sound, and open to growth.
                 </h3>
                 <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                  We commit to academic rigour balanced by character formation,
-                  and to learning experiences that are intellectually
-                  demanding, ethically grounded, and personally meaningful.
+                  We seek to nurture individuals who are psychologically whole, imbued with a sense
+                  of the divine, and committed to the cause of justice, love, and peace. Together
+                  with parents and well-wishers, we work to build a humane society free from
+                  prejudice and discrimination — one that upholds the dignity of every human person.
                 </p>
               </div>
               <div className="rounded-[28px] border border-[hsl(var(--border))] bg-[hsl(var(--primary))] p-10 text-[hsl(var(--ivory))]">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]">
-                  <span className="gold-rule">Vision</span>
+                  <span className="gold-rule">Our Vision</span>
                 </p>
                 <h3 className="font-display mt-4 text-3xl font-semibold leading-tight">
-                  A school known for its graduates, not its gates.
+                  Love of God. Service of people.
                 </h3>
                 <p className="mt-5 leading-relaxed text-white/80">
-                  To be the school whose students are recognisable in any room
-                  they walk into — by their curiosity, their kindness, and their
-                  willingness to do hard things well.
+                  Our motto — <em>Love &amp; Service</em> — points to the kind of graduates we hope
+                  to send into the world: thoughtful, principled, and generous with their gifts.
+                  Especially attentive to the underprivileged, and unafraid to work for a fairer,
+                  kinder Sikkim.
                 </p>
               </div>
             </div>
@@ -222,13 +226,13 @@ export default async function AboutPage() {
                 <span className="gold-rule">What we believe</span>
               </p>
               <h3 className="font-display mt-4 max-w-3xl text-3xl font-semibold text-[hsl(var(--ink))] sm:text-4xl">
-                Three values that shape every decision.
+                The values that shape every decision.
               </h3>
               <div className="mt-12 grid gap-6 md:grid-cols-3">
                 {[
-                  { t: "Academic rigour",         b: "A curriculum that challenges and supports — designed to graduate students who can think, not just recite." },
-                  { t: "Whole-child education",   b: "Sports, arts, service, and reflection sit alongside academics, not behind them." },
-                  { t: "Community first",         b: "Small classes, known students, and parents who are partners — not customers." },
+                  { t: "Academic excellence",       b: "A CISCE curriculum taught with depth and care — English medium, with Hindi and Nepali as second languages." },
+                  { t: "Moral & spiritual formation", b: "Christian values open to every faith — daily assembly, reflection, and a school life anchored in dignity and respect." },
+                  { t: "Service to society",        b: "A commitment to justice, love, and peace — especially in service of the underprivileged in our community." },
                 ].map((v) => (
                   <div key={v.t} className="border-l-2 border-[hsl(var(--gold))]/60 pl-5">
                     <h4 className="font-display text-xl font-semibold text-[hsl(var(--ink))]">{v.t}</h4>
@@ -248,14 +252,15 @@ export default async function AboutPage() {
         <>
           <section className="container-wide py-20 sm:py-24 lg:py-28">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-              <span className="gold-rule">14-acre campus</span>
+              <span className="gold-rule">Our campus</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              The spaces where the learning happens.
+              A campus built for study, sport, and service.
             </h2>
             <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
-              Every facility is built around a single test — does it help students
-              learn better, more deeply, more joyfully?
+              Set high in the hills of Rhenock, the school offers well-equipped classrooms,
+              laboratories, sports grounds, and residential facilities — everything students need
+              for a rounded ICSE education.
             </p>
 
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -282,7 +287,7 @@ export default async function AboutPage() {
             <div className="relative aspect-[16/7] overflow-hidden rounded-[28px] bg-[hsl(var(--sand))]">
               <Image
                 src={FACILITY_IMG}
-                alt="Science laboratory at St. Joseph's"
+                alt="Campus facilities at St. Joseph's School, Kingston"
                 fill
                 sizes="100vw"
                 className="object-cover"
@@ -298,14 +303,16 @@ export default async function AboutPage() {
       content: (
         <section className="container-wide py-20 sm:py-24 lg:py-28">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-            <span className="gold-rule">The leadership</span>
+            <span className="gold-rule">Governance & management</span>
           </p>
           <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-            The people who keep the school running.
+            A school entrusted to the Diocese.
           </h2>
           <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
-            Most of our leadership has come up through the classroom. They lead
-            because they teach — not the other way around.
+            St. Joseph&apos;s School, Kingston is managed by the Roman Catholic Diocese of
+            Darjeeling–Sikkim. The Bishop of Darjeeling–Sikkim is the President of the
+            Governing Body, and the school is administered by the Principal, Vice Principal,
+            faculty, and the Cluny Sisters who care for our residential students.
           </p>
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -326,9 +333,11 @@ export default async function AboutPage() {
                     {p.name}
                   </p>
                   <p className="text-sm text-[hsl(var(--ink-soft))]">{p.role}</p>
-                  <p className="mt-0.5 text-xs text-[hsl(var(--ink-soft))]/70">
-                    Serving since {p.since}
-                  </p>
+                  {p.since && (
+                    <p className="mt-0.5 text-xs text-[hsl(var(--ink-soft))]/70">
+                      {p.since}
+                    </p>
+                  )}
                 </div>
               </article>
             ))}
@@ -341,15 +350,17 @@ export default async function AboutPage() {
   return (
     <>
       <CinematicHero
-        eyebrow="About us"
+        eyebrow="About the school"
         title={
           <>
-            Six decades of <span className="italic">becoming.</span>
+            A quiet school in the hills,
+            <br />
+            <span className="italic">founded in 1996.</span>
           </>
         }
-        description="Our story, our people, our mission — and the campus where it all happens."
+        description="Our story, our mission, and the community we have built together in Rhenock — from the first classroom to today."
         image={HERO_IMG}
-        imageAlt="St. Joseph's campus"
+        imageAlt="St. Joseph's School, Kingston — Rhenock, Sikkim"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
       />
 

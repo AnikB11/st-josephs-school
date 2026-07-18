@@ -21,7 +21,7 @@ import { resolveImage } from "@/lib/cms-images";
 
 export const metadata: Metadata = {
   title: "Notices",
-  description: "Announcements, academic notices, and events from the school office.",
+  description: "Official notices, circulars, and announcements from the office of St. Joseph's School, Kingston, Rhenock, Sikkim.",
 };
 
 export const revalidate = 60;
@@ -323,12 +323,14 @@ export default async function NoticesPage() {
         eyebrow="Notices"
         title={
           <>
-            School <span className="italic">announcements.</span>
+            From the school
+            <br />
+            <span className="italic">office.</span>
           </>
         }
-        description="Academic, administrative, and event notices — pinned items appear first."
+        description="Circulars, academic notices, examination updates, and holiday announcements — pinned items appear first."
         image={HERO_IMG}
-        imageAlt="School notice board"
+        imageAlt="Notice board — St. Joseph's School, Kingston"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Notices" }]}
       />
       <TabbedPage tabs={tabs} />

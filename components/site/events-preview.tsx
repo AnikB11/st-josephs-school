@@ -4,9 +4,9 @@ import { Reveal } from "@/components/motion/reveal";
 import { formatDate } from "@/lib/utils";
 
 const EVENTS = [
-  { title: "Annual Sports Day",          date: "2026-06-08T09:00:00Z", location: "Main Field" },
-  { title: "Inter-school Science Fair",  date: "2026-06-22T10:00:00Z", location: "Auditorium" },
-  { title: "Founder's Day",              date: "2026-07-04T16:30:00Z", location: "Chapel & Lawn" },
+  { title: "Feast of St. Joseph",        date: "2027-03-19T09:00:00Z", location: "School Chapel" },
+  { title: "Annual Sports Meet",         date: "2027-02-15T09:00:00Z", location: "Main Ground" },
+  { title: "Christmas Carol Service",    date: "2026-12-19T17:00:00Z", location: "Chapel & Assembly Hall" },
 ];
 
 export function EventsPreview() {
@@ -14,9 +14,9 @@ export function EventsPreview() {
     <section className="surface-cream py-24 sm:py-32">
       <div className="container-wide">
         <SectionHeading
-          eyebrow="Calendar"
-          title="What's coming up"
-          description="Plan ahead — here's what's on the school calendar this term."
+          eyebrow="School calendar"
+          title="Marking the year together"
+          description="Feasts, meets, and gatherings that shape life on campus. Exact dates are confirmed in the school circulars each term."
         />
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {EVENTS.map((e, i) => {

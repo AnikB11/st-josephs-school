@@ -85,7 +85,9 @@
       "PowerShell(winget *)",
       "Bash(npx supabase *)",
       "Bash(git reset *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git log *)",
+      "Bash(Get-Content *)"
     ]
   },
   "enabledMcpjsonServers": [

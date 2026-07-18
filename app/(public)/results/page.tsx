@@ -18,7 +18,7 @@ import { resolveImage } from "@/lib/cms-images";
 export const metadata: Metadata = {
   title: "Check Result",
   description:
-    "Download your published report card with admission number and date of birth.",
+    "Look up your published report card at St. Joseph's School, Kingston with your admission number and date of birth.",
 };
 
 type ResultRow = {
@@ -262,8 +262,8 @@ export default async function ResultsPage({
     <>
       <PageHero
         eyebrow="Examination results"
-        title="Check your published result."
-        description="Enter your admission number and date of birth. Only report cards officially published by the office are visible here."
+        title="Look up your published result."
+        description="Enter your admission number and date of birth to download your report card. Only results officially published by the school office are visible here."
         image={HERO_IMG}
       />
 
@@ -280,7 +280,7 @@ export default async function ResultsPage({
                   <Input
                     id="admission_number"
                     name="admission_number"
-                    placeholder="SJR-2026-0001"
+                    placeholder="SJK-2026-0001"
                     required
                     className="mt-1.5"
                     autoComplete="off"

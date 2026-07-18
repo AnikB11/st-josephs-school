@@ -12,72 +12,77 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Campus Life",
   description:
-    "Sports, events, clubs, activities, cultural programmes, and student life at St. Joseph's.",
+    "Sports, events, clubs, service, and cultural life at St. Joseph's School, Kingston — a co-educational ICSE school in Rhenock, Sikkim.",
 };
 
 const SPORTS = [
-  { name: "Athletics",       blurb: "Sprints, distance, throws, jumps — annual inter-house meet." },
-  { name: "Football",        blurb: "Boys' and girls' teams across U-12, U-14, U-17 brackets." },
-  { name: "Basketball",      blurb: "Indoor and outdoor courts; competitive in state-level leagues." },
-  { name: "Cricket",         blurb: "Two grounds, four nets, coaching from senior school onward." },
-  { name: "Swimming",        blurb: "25m pool; squad training and learn-to-swim for primary." },
-  { name: "Badminton",       blurb: "Six indoor courts; year-round inter-house and external fixtures." },
-  { name: "Table tennis",    blurb: "Eight tables in the indoor centre; popular at every grade." },
-  { name: "Yoga & wellness", blurb: "Daily morning sessions plus dedicated wellness electives." },
+  { name: "Cricket",       blurb: "One of the school's favourite sports — with coaching, inter-house matches, and regular practice sessions." },
+  { name: "Football",      blurb: "Played on the main ground through most of the year, with house teams for boys and girls at every level." },
+  { name: "Basketball",    blurb: "Practised on the school court, with regular inter-house tournaments and friendly fixtures." },
+  { name: "Volleyball",    blurb: "A staple of school games — teamwork, timing, and the everyday joy of an evening match." },
+  { name: "Badminton",     blurb: "Played year-round in the school hall; popular across primary, middle, and senior classes." },
+  { name: "Table tennis",  blurb: "An indoor favourite, with tables set up for practice, doubles, and friendly matches." },
+  { name: "Athletics",     blurb: "Sprints, middle-distance, and field events — leading up to the Annual Sports Meet each year." },
+  { name: "Games & drill", blurb: "Physical education, morning drill, and games as part of the timetable for every pupil." },
 ];
 
+// Dates below are the recurring day/month for events that mark the school year.
+// The office publishes the actual year's schedule through the notices system.
 const EVENTS = [
-  { title: "Founder's Day",            date: "04 Jul 2026", where: "Chapel & main lawn" },
-  { title: "Annual Sports Day",        date: "08 Jun 2026", where: "Main field" },
-  { title: "Inter-school Science Fair",date: "22 Jun 2026", where: "Auditorium" },
-  { title: "Cultural Fest · Voltaire", date: "12 Sep 2026", where: "Campus-wide" },
-  { title: "Christmas Carol Service",  date: "20 Dec 2026", where: "Chapel" },
-  { title: "Annual Day · Class XII",   date: "17 Feb 2027", where: "Auditorium" },
+  { title: "School Anniversary",       date: "12 Feb", where: "School grounds" },
+  { title: "Feast of St. Joseph",      date: "19 Mar", where: "School Chapel" },
+  { title: "Annual Sports Meet",       date: "Nov",    where: "Main Ground" },
+  { title: "Independence Day",         date: "15 Aug", where: "Assembly Ground" },
+  { title: "Teachers' Day",            date: "05 Sep", where: "Assembly Hall" },
+  { title: "Christmas Carol Service",  date: "Dec",    where: "Chapel & Assembly Hall" },
 ];
 
 const CLUBS = [
-  { name: "Robotics Club",   tag: "STEM",    body: "FTC- and FRC-format builds, year-round." },
-  { name: "Model UN",        tag: "Civic",   body: "Three inter-school MUNs hosted on campus." },
-  { name: "Debate Society",  tag: "Speech",  body: "British and Asian parliamentary formats." },
-  { name: "Quiz Circle",     tag: "Trivia",  body: "Weekly drills; inter-school circuit team." },
-  { name: "Photography",     tag: "Arts",    body: "Darkroom, digital workflow, and exhibitions." },
-  { name: "Coding Club",     tag: "STEM",    body: "From Scratch in primary to web apps in senior." },
-  { name: "Eco Club",        tag: "Service", body: "Campus composting, waste audit, tree planting." },
-  { name: "School Newspaper",tag: "Writing", body: "Student-edited quarterly, in print and online." },
+  { name: "Literary & Debate",  tag: "Speech",   body: "English elocution, debate, and creative writing — with inter-class and inter-house rounds." },
+  { name: "Quiz Circle",        tag: "Knowledge", body: "General knowledge and current-affairs quizzes for middle and senior classes." },
+  { name: "Eco Club",           tag: "Service",  body: "Tree planting, campus clean-ups, and awareness drives across the school year." },
+  { name: "Art & Craft",        tag: "Arts",     body: "Drawing, painting, and craft — with student work displayed at school events." },
+  { name: "Music & Choir",      tag: "Music",    body: "Choir practice for morning assembly, carol services, and school celebrations." },
+  { name: "Dance",              tag: "Culture",  body: "Folk, traditional, and contemporary — performed at Annual Day and cultural programmes." },
+  { name: "Science Club",       tag: "STEM",     body: "Small experiments, models, and science exhibitions for middle school onwards." },
+  { name: "Sports Committee",   tag: "Games",    body: "Student-led team that helps organise inter-house tournaments and the Annual Sports Meet." },
 ];
 
 const ACTIVITIES = [
-  { name: "Service learning",     body: "50 hours / year for senior students — old-age homes, neighbourhood schools, environment drives." },
-  { name: "Trekking & adventure", body: "Annual Himalayan trek for Class IX–XII; adventure camps for younger grades." },
-  { name: "Field trips",          body: "Subject-linked trips every term — museums, factories, courts, and farms." },
-  { name: "Exchange programmes",  body: "Two-week exchange with partner schools in Bhutan and the UK for senior students." },
-  { name: "Visiting speakers",    body: "Authors, scientists, athletes, and alumni — at least one per term." },
+  { name: "Service to society",   body: "Small acts of service in and around Rhenock — visits, drives, and outreach that live out the school motto." },
+  { name: "Educational visits",   body: "Subject-linked trips and outings that take learning outside the classroom and into the surrounding hills." },
+  { name: "Assembly & guest speakers", body: "Morning assembly opens the day with reflection, notices, and, from time to time, visiting speakers." },
+  { name: "Inter-house competitions", body: "Debates, quizzes, sports meets, and cultural events across the school year." },
+  { name: "Faith formation",      body: "A gentle programme of prayer, moral science, and reflection — open to students of every faith." },
 ];
 
 const CULTURAL = [
-  { name: "Choir",          body: "Junior, senior, and chamber choirs — perform at school and city events." },
-  { name: "Orchestra",      body: "Strings, woodwind, brass and percussion; rehearses twice a week." },
-  { name: "Drama Society",  body: "One full production every year, plus inter-house drama festival." },
-  { name: "Dance",          body: "Bharatanatyam, contemporary, and folk — performed at Annual Day." },
-  { name: "Visual arts",    body: "Studio access for all senior students; annual exhibition in March." },
+  { name: "Choir",           body: "The school choir sings at morning assembly, the Christmas Carol Service, and cultural programmes throughout the year." },
+  { name: "Drama",           body: "Class and inter-house plays, staged at Annual Day and other school events." },
+  { name: "Dance",           body: "Folk, traditional, and contemporary dance — a valued part of school celebrations and cultural evenings." },
+  { name: "Music",           body: "Vocal and instrumental music practice, encouraged from primary onwards." },
+  { name: "Visual arts",     body: "Drawing, painting, and craft, with student work displayed at school events and exhibitions." },
 ];
 
+// A shared rhythm of school life — assembly, prayer, activity, and reflection.
+// Kept as four generic pillars (not specific house names, which are the school's
+// to name) so the layout works without inventing details.
 const HOUSES = [
-  { name: "Loyola",   color: "Crimson",  motto: "Strength through service" },
-  { name: "Xavier",   color: "Indigo",   motto: "Reach further" },
-  { name: "Aquinas",  color: "Forest",   motto: "Think well, do well" },
-  { name: "Aloysius", color: "Saffron",  motto: "Courage and grace" },
+  { name: "Assembly",         color: "Every morning",  motto: "A shared start to the day, with reflection and prayer." },
+  { name: "Chapel",           color: "Weekly",         motto: "A quiet space at the centre of school life." },
+  { name: "Games & sport",    color: "Daily",          motto: "Part of the timetable, not an afterthought." },
+  { name: "Moral Science",    color: "Weekly",         motto: "Character and conscience, alongside academics." },
 ];
 
 const DAY = [
-  { time: "07:50", text: "Gates open" },
-  { time: "08:10", text: "Assembly & reflection" },
-  { time: "08:30", text: "Period 1" },
-  { time: "10:50", text: "Mid-morning break" },
-  { time: "13:00", text: "Lunch in the dining hall" },
-  { time: "14:00", text: "Afternoon periods" },
-  { time: "15:30", text: "Clubs, sport & rehearsals" },
-  { time: "16:30", text: "Day ends · buses depart" },
+  { time: "07:30", text: "School gates open" },
+  { time: "08:00", text: "Morning assembly & prayer" },
+  { time: "08:30", text: "First period begins" },
+  { time: "10:30", text: "Mid-morning break" },
+  { time: "12:30", text: "Lunch" },
+  { time: "13:15", text: "Afternoon classes" },
+  { time: "15:00", text: "Games, choir, and co-curricular activities" },
+  { time: "15:45", text: "Day ends · dismissal" },
 ];
 
 function ImageBand({ src, alt }: { src: string; alt: string }) {
@@ -119,12 +124,12 @@ export default async function CampusLifePage() {
               <span className="gold-rule">Sport for all</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              Every body. Every term. Every year.
+              Games and sport, for every pupil.
             </h2>
             <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
-              Athletics is part of the timetable, not an extra — and our teams
-              compete in district, state, and national fixtures across eight
-              disciplines.
+              Sports, games, and co-curricular activity are treated as inseparable parts of an
+              integral education. The school provides ample opportunity for physical development
+              across cricket, basketball, volleyball, football, badminton, table tennis, and athletics.
             </p>
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {SPORTS.map((s) => (
@@ -156,7 +161,7 @@ export default async function CampusLifePage() {
               <span className="gold-rule">The calendar</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              Dates that mark the year.
+              The days that mark our year.
             </h2>
             <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {EVENTS.map((e) => (
@@ -201,7 +206,7 @@ export default async function CampusLifePage() {
               <span className="gold-rule">Student-led</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              Find your people. Build your thing.
+              A place to find your voice — and your team.
             </h2>
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {CLUBS.map((c) => (
@@ -236,7 +241,7 @@ export default async function CampusLifePage() {
               <span className="gold-rule">Beyond the gates</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              The school doesn&apos;t end at the bell.
+              School is more than the timetable.
             </h2>
             <div className="mt-14 grid gap-5 lg:grid-cols-2">
               {ACTIVITIES.map((a) => (
@@ -268,7 +273,7 @@ export default async function CampusLifePage() {
               <span className="gold-rule">The cultural calendar</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              Music, drama, dance, art — every day.
+              Music, drama, dance, and art — part of school life.
             </h2>
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {CULTURAL.map((c) => (
@@ -297,14 +302,14 @@ export default async function CampusLifePage() {
         <>
           <section className="container-wide py-20 sm:py-24 lg:py-28">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-              <span className="gold-rule">The houses</span>
+              <span className="gold-rule">A shared rhythm</span>
             </p>
             <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-              Four houses, one campus.
+              The everyday shape of school life.
             </h2>
             <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
-              Every student is assigned a house on their first day — and stays
-              in it through Class XII.
+              A few things anchor every school day at Kingston — a shared assembly, a quiet chapel,
+              time for games, and space for moral formation alongside academics.
             </p>
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {HOUSES.map((h) => (
@@ -334,11 +339,11 @@ export default async function CampusLifePage() {
                     <span className="gold-rule">A day on campus</span>
                   </p>
                   <h3 className="font-display mt-4 text-balance text-3xl font-semibold text-[hsl(var(--ink))] sm:text-4xl">
-                    From assembly to the last bus home.
+                    From morning assembly to the final bell.
                   </h3>
                   <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                    A typical school day — academic in the morning, expressive
-                    in the afternoon.
+                    A typical day at Kingston — a steady rhythm of study in the morning,
+                    activity in the afternoon, and a quiet close before dismissal.
                   </p>
                 </div>
                 <div className="lg:col-span-7">
@@ -381,12 +386,14 @@ export default async function CampusLifePage() {
         eyebrow="Campus life"
         title={
           <>
-            What happens <span className="italic">between the bells.</span>
+            The life between
+            <br />
+            <span className="italic">the lessons.</span>
           </>
         }
-        description="An education at St. Joseph's is more than what's on the timetable — it's a community, built every day."
+        description="Sport, service, prayer, and play — the daily rhythm that turns a school into a community. Set in the quiet hills of Rhenock, Sikkim."
         image={HERO_IMG}
-        imageAlt="Students at St. Joseph's"
+        imageAlt="Life on campus at St. Joseph's School, Kingston"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Campus Life" }]}
       />
 

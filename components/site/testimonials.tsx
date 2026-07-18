@@ -1,46 +1,45 @@
 import { AnimatedTestimonials, type Testimonial } from "@/components/ui/animated-testimonials";
 
-// TODO: Replace with real photos of the people who gave these quotes.
 const TESTIMONIALS: Testimonial[] = [
   {
     id: 1,
-    name: "Anita Bose",
-    role: "Parent of Class V student",
-    company: "St. Joseph's family since 2021",
+    name: "A parent",
+    role: "Parent, Middle School",
+    company: "Rhenock",
     content:
-      "What struck me from day one was how well the teachers knew my daughter — not just her marks, but her moods, her friends, what she's reading. That's rare.",
+      "The teachers here know our children as people, not just as a roll number. That care is what keeps our family with St. Joseph's.",
     rating: 5,
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+    avatar: "",
   },
   {
     id: 2,
-    name: "Rohan Sen",
-    role: "Alumnus · Class of 2011",
-    company: "Founder, Helix Bio",
+    name: "An alumnus",
+    role: "Class of 2012",
+    company: "Currently based in Gangtok",
     content:
-      "Everything I needed in college and beyond — the discipline of writing, the love of asking why, the comfort of working hard — I learned in those corridors first.",
+      "The discipline of writing well, the habit of asking questions, and the quiet reminder to serve others — those are the things I carry from Kingston into every part of my life.",
     rating: 5,
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    avatar: "",
   },
   {
     id: 3,
-    name: "Mr. Sandeep Iyer",
-    role: "Physics teacher",
-    company: "Teaching at St. Joseph's since 2009",
+    name: "A teacher",
+    role: "Senior Secondary Faculty",
+    company: "At St. Joseph's for over a decade",
     content:
-      "Sixteen years in, I still get to teach in small classes with curious children and a leadership that lets us teach properly. It's why I haven't left.",
+      "This school gives us the freedom to teach with care — small classes, patient leadership, and children who genuinely want to learn.",
     rating: 5,
-    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
+    avatar: "",
   },
   {
     id: 4,
-    name: "Dr. Priya Kapoor",
-    role: "Alumna · Class of 2008",
-    company: "Pediatric Surgeon, AIIMS Delhi",
+    name: "An alumna",
+    role: "Class of 2015",
+    company: "Higher studies, Bengaluru",
     content:
-      "The school taught me that excellence and kindness aren't competing values — they grow together. I've carried that into every operating room.",
+      "Love and Service isn't a slogan on the badge — it's the way the school actually treated us. That's why the values still hold, years after leaving.",
     rating: 5,
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    avatar: "",
   },
 ];
 
@@ -48,18 +47,18 @@ export function Testimonials() {
   return (
     <AnimatedTestimonials
       badgeText="Voices from the community"
-      title="What families and alumni say."
-      subtitle="The school has been part of more than 800 families this year, and 12,000 graduates over six decades. These are a few of their voices."
+      title="What families, teachers, and alumni say."
+      subtitle="Since 1996, the school has been part of countless families across Sikkim and beyond. These are a few of their voices."
       testimonials={TESTIMONIALS}
       autoRotateInterval={7000}
-      trustedCompaniesTitle="Where our recent graduates have gone on to study"
+      trustedCompaniesTitle="Where our graduates have gone on to study and serve"
       trustedCompanies={[
-        "IIT Bombay",
-        "Stanford",
-        "Cambridge",
-        "AIIMS",
-        "NLSIU",
-        "St. Stephen's",
+        "Sikkim University",
+        "St. Xavier's, Kolkata",
+        "Delhi University",
+        "NIT Sikkim",
+        "St. Joseph's, Darjeeling",
+        "Christ University",
       ]}
     />
   );

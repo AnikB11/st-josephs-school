@@ -12,7 +12,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Academics",
   description:
-    "Pre-Primary through Senior Secondary — curriculum, classroom, examinations.",
+    "Nursery to Class XII (Science) — the ICSE and ISC curriculum at St. Joseph's School, Kingston, Rhenock. Affiliated with the CISCE, New Delhi.",
 };
 
 type Stage = {
@@ -36,96 +36,98 @@ const STAGE_IMAGE_KEYS = {
 
 const STAGE_TEMPLATES: StageTemplate[] = [
   {
-    range: "Nursery – KG",
+    range: "Nursery – UKG",
     title: "Pre-Primary",
     intro:
-      "A play-based foundation built on language, motor skills, and social development. Children learn through movement, music, and structured play — not worksheets.",
+      "A gentle, play-based introduction to school life. Children learn through songs, stories, art, and structured activity — building early language, number sense, and social confidence.",
     pillars: [
-      "8:1 student-teacher ratio",
-      "Storytelling-led literacy",
-      "Outdoor play every day",
-      "Parent-included transition into Class I",
+      "English medium from the very first day",
+      "Songs, rhymes, and storytelling-led learning",
+      "Motor skills, art, music, and free play",
+      "A warm, unhurried transition into Class I",
     ],
-    subjects: ["Phonics", "Number sense", "Movement", "Music", "Art", "Free play"],
+    subjects: ["English", "Number work", "Rhymes & stories", "Art & craft", "Music & movement"],
     imageKey: "pre",
   },
   {
-    range: "Class I – V",
+    range: "Class I – IV",
     title: "Primary School",
     intro:
-      "Strong foundations in literacy, numeracy, and inquiry — the curiosity years. Subject specialists start joining the homeroom team from Class III.",
+      "The foundational years — building strong reading, writing, and reasoning habits. Lessons stay hands-on and grounded, with a steady rhythm of learning, activity, and reflection.",
     pillars: [
-      "Reading workshops daily",
-      "Mental-math and problem-solving",
-      "First exposure to lab sciences",
-      "Weekly arts and sport in the timetable",
+      "Reading and writing habits built daily",
+      "Concrete, hands-on mathematics",
+      "First encounters with Environmental Studies",
+      "Weekly art, music, moral science, and games",
     ],
-    subjects: ["English", "Hindi", "Mathematics", "EVS", "Computer", "Arts", "Sport"],
+    subjects: ["English", "Hindi / Nepali", "Mathematics", "EVS", "Computer", "Art", "Moral Science", "Games"],
     imageKey: "primary",
   },
   {
-    range: "Class VI – VIII",
+    range: "Class V – VIII",
     title: "Middle School",
     intro:
-      "Subject specialisation begins. Students learn to think critically, write well, and own their work. Project-based assessments sit alongside written exams.",
+      "Subject specialisation begins. Students move into full ICSE-aligned Science and Social Science, and take a third language — Hindi or Nepali — alongside their second language.",
     pillars: [
-      "Subject-specialist teaching",
-      "Annual research project",
-      "Inter-house debates and quizzes",
-      "Introduction to a second language",
+      "Subject-specialist teaching from Class V",
+      "Third language: Hindi or Nepali (Classes V–VII)",
+      "Introduction to laboratory work in Class VII",
+      "Project work, debates, quizzes, and reading circles",
     ],
-    subjects: ["English", "Hindi / Sanskrit", "Mathematics", "Science", "Social Studies", "Computer", "Arts", "Sport"],
+    subjects: ["English", "Hindi", "Nepali", "Mathematics", "Science", "History & Civics", "Geography", "Computer Applications", "Art"],
     imageKey: "middle",
   },
   {
     range: "Class IX – X",
-    title: "Secondary School",
+    title: "Secondary (ICSE)",
     intro:
-      "CBSE syllabus delivered with depth and care. The two years that shape the student's relationship with rigour, time-management, and self-direction.",
+      "The two years that prepare students for the Indian Certificate of Secondary Education. Concepts are taught with depth, and continuous assessment supports steady preparation for the ICSE Board examination.",
     pillars: [
-      "Topic-tested mastery framework",
-      "Continuous formative assessment",
-      "Career and stream counselling",
-      "Board-paper analysis & preparation",
+      "ICSE syllabus of the CISCE, New Delhi",
+      "Written examinations and internal assessments",
+      "Careful career and stream counselling",
+      "Regular practice papers and revision cycles",
     ],
-    subjects: ["English", "Hindi", "Mathematics", "Science", "Social Science", "Computer Applications"],
+    subjects: ["English", "Second Language (Hindi / Nepali)", "History, Civics & Geography", "Mathematics", "Science (Physics · Chemistry · Biology)", "Computer Applications"],
     imageKey: "secondary",
   },
   {
-    range: "Class XI – XII",
-    title: "Senior Secondary",
+    range: "Class XI – XII (Science)",
+    title: "Senior Secondary (ISC)",
     intro:
-      "Streams in Science, Commerce, and Humanities. Two-year capstone research projects, university-prep mentoring, and exposure to real-world problems.",
+      "The Science stream, leading to the Indian School Certificate examination. Students focus on Physics, Chemistry, Biology, Mathematics, and Computer Science — with strong preparation for higher studies and entrance examinations.",
     pillars: [
-      "Science · Commerce · Humanities streams",
-      "Independent capstone project",
-      "University and entrance-exam mentoring",
-      "Visiting lectures and industry visits",
+      "ISC syllabus of the CISCE, New Delhi",
+      "Science stream: Physics · Chemistry · Biology / Mathematics / Computer Science",
+      "Mentoring for higher studies and entrance tests",
+      "Independent practical work in the laboratories",
     ],
     subjects: [
-      "English Core",
-      "Stream majors (Physics / Accountancy / History etc.)",
-      "Optional applied subjects",
-      "Physical Education",
+      "English",
+      "Physics",
+      "Chemistry",
+      "Biology / Mathematics",
+      "Computer Science (optional)",
+      "Environmental Education & Physical Education",
     ],
     imageKey: "senior",
   },
 ];
 
 const CURRICULUM = [
-  { icon: BookOpen,     title: "English & literature",        body: "Daily reading, weekly writing, and a love-of-language that runs from Nursery to Class XII." },
-  { icon: Languages,    title: "Languages",                   body: "Hindi as the second language across all grades; Sanskrit and French as options from Class VI." },
-  { icon: Calculator,   title: "Mathematics",                 body: "Conceptual mastery before procedural fluency. Annual Olympiads from Class III." },
-  { icon: FlaskConical, title: "Sciences",                    body: "Hands-on labs from Class VI. Research projects in Physics, Chemistry, and Biology in senior years." },
-  { icon: Globe2,       title: "Social sciences",             body: "History, geography, civics and economics — taught with primary sources and current events." },
-  { icon: Palette,      title: "Arts & physical education",   body: "Studio art, music, drama, and sport — every term, every year, for every student." },
+  { icon: BookOpen,     title: "English",              body: "English is the medium of instruction throughout the school. Reading, writing, and clear expression are taught with care from the earliest years." },
+  { icon: Languages,    title: "Hindi & Nepali",       body: "Every student studies either Hindi or Nepali as the second language. In Classes V, VI, and VII, a third language is taught to strengthen fluency in both." },
+  { icon: Calculator,   title: "Mathematics",          body: "Conceptual understanding is built patiently, from arithmetic in the primary years to the deeper reasoning of the ICSE and ISC syllabi." },
+  { icon: FlaskConical, title: "Sciences",             body: "Physics, Chemistry, and Biology in laboratory-supported classes — leading into the ISC Science stream at senior secondary level." },
+  { icon: Globe2,       title: "History, Civics & Geography", body: "The social sciences are taught with attention to Sikkim, India, and the wider world — encouraging citizenship and civic awareness." },
+  { icon: Palette,      title: "Art, Music & Games",   body: "Art, music, moral science, and games remain part of the timetable throughout the school — not extras, but part of a rounded education." },
 ];
 
 const EXAMS = [
-  { name: "Formative checks",       cadence: "Continuous",          weight: "20%", notes: "Quizzes, in-class work, lab reports." },
-  { name: "Unit assessments",       cadence: "Every 4–5 weeks",     weight: "20%", notes: "Per-subject, short written paper." },
-  { name: "Mid-year examination",   cadence: "Term 1 close",        weight: "20%", notes: "Cumulative paper across all subjects." },
-  { name: "Annual / Board exam",    cadence: "Term 2 close",        weight: "40%", notes: "Internal annual (Class I–IX) / CBSE Board (Class X & XII)." },
+  { name: "Class work & internal assessment", cadence: "Continuous",     weight: "Formative",  notes: "Class exercises, projects, notebook work, and oral evaluation." },
+  { name: "Unit / cycle tests",               cadence: "Each term",      weight: "Formative",  notes: "Short written tests to consolidate learning between examinations." },
+  { name: "Half-yearly examination",          cadence: "Mid-session",    weight: "Summative",  notes: "Written papers across all subjects, aligned with the CISCE pattern." },
+  { name: "Annual / Board examination",       cadence: "End of session", weight: "Summative",  notes: "Internal annual (Nursery – IX, XI) or ICSE / ISC Board (Class X & XII)." },
 ];
 
 export default async function AcademicsPage() {
@@ -224,11 +226,11 @@ export default async function AcademicsPage() {
             <span className="gold-rule">The curriculum</span>
           </p>
           <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-            {cms.academics_intro.title ?? "A curriculum that grows with the student."}
+            {cms.academics_intro.title ?? "A CISCE curriculum, taught with depth and care."}
           </h2>
           <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
             {cms.academics_intro.body ??
-              "From the first day of nursery to the last day of Class XII, our academic program is built around depth, discipline, and discovery."}
+              "St. Joseph's School is affiliated with the Council for the Indian School Certificate Examinations, New Delhi. Instruction is in English, with Hindi and Nepali as second languages, from Nursery all the way to Class XII (Science)."}
           </p>
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -263,16 +265,17 @@ export default async function AcademicsPage() {
                 <span className="gold-rule">How we assess</span>
               </p>
               <h2 className="heading mt-4 text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-                Assessment as a teaching tool, not a verdict.
+                Assessment that supports the learning.
               </h2>
               <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Every test is built to give the student and teacher a clearer
-                map of what&apos;s understood and what isn&apos;t. Marks are a
-                consequence of learning, never the goal.
+                Our assessment pattern mirrors the CISCE framework — continuous class work and
+                unit tests through the term, followed by half-yearly and annual written examinations.
+                Marks are a signal of learning, not the purpose of it.
               </p>
               <p className="mt-4 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Class X and XII follow the CBSE board pattern; all other grades
-                follow the same architecture, internally administered.
+                Class X sits the ICSE Board examination and Class XII the ISC examination, both
+                conducted by the Council for the Indian School Certificate Examinations, New Delhi.
+                All other classes follow the same architecture, administered internally.
               </p>
             </div>
             <div className="lg:col-span-7">
@@ -282,7 +285,7 @@ export default async function AcademicsPage() {
                     <tr>
                       <th className="px-5 py-4 text-left font-semibold">Assessment</th>
                       <th className="px-5 py-4 text-left font-semibold">Cadence</th>
-                      <th className="px-5 py-4 text-right font-semibold">Weight</th>
+                      <th className="px-5 py-4 text-right font-semibold">Type</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -321,12 +324,14 @@ export default async function AcademicsPage() {
         eyebrow="Academics"
         title={
           <>
-            A curriculum that <span className="italic">grows with the student.</span>
+            The ICSE curriculum,
+            <br />
+            <span className="italic">taught with care.</span>
           </>
         }
-        description="From the first day of nursery to the last day of Class XII, our academic programme is built around depth, discipline, and discovery."
+        description="From Nursery to Class XII (Science), St. Joseph's follows the CISCE syllabus in English medium — with Hindi and Nepali as second languages."
         image={HERO_IMG}
-        imageAlt="A St. Joseph's classroom"
+        imageAlt="A classroom at St. Joseph's School, Kingston"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Academics" }]}
       />
 

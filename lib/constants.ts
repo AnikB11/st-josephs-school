@@ -1,16 +1,18 @@
 export const SCHOOL = {
-  name: process.env.NEXT_PUBLIC_SCHOOL_NAME ?? "St. Joseph's School",
+  name: process.env.NEXT_PUBLIC_SCHOOL_NAME ?? "St. Joseph's School, Kingston",
   shortName: "St. Joseph's",
-  tagline: "Where Tradition Meets Tomorrow",
-  founded: 1965,
-  address: "1 College Road, Hill Town, India",
-  phone: "+91 11 0000 0000",
-  email: "info@stjosephs.edu",
-  admissionPrefix: process.env.NEXT_PUBLIC_ADMISSION_PREFIX ?? "SJR",
+  tagline: "Love & Service",
+  founded: 1996,
+  address:
+    process.env.NEXT_PUBLIC_SCHOOL_ADDRESS ??
+    "Kingston, P.O. Rhenock, Pakyong District, Sikkim",
+  phone: process.env.NEXT_PUBLIC_SCHOOL_PHONE ?? "+91 3592 250 000",
+  email: process.env.NEXT_PUBLIC_SCHOOL_EMAIL ?? "office@stjosephskingston.edu.in",
+  admissionPrefix: process.env.NEXT_PUBLIC_ADMISSION_PREFIX ?? "SJK",
   social: {
-    facebook: "https://facebook.com/stjosephs",
-    instagram: "https://instagram.com/stjosephs",
-    youtube: "https://youtube.com/@stjosephs",
+    facebook: "https://facebook.com/stjosephskingston",
+    instagram: "https://instagram.com/stjosephskingston",
+    youtube: "https://youtube.com/@stjosephskingston",
   },
 } as const;
 

@@ -131,7 +131,7 @@ export function Hero({
             headline
           ) : (
             <>
-              An education for the
+              Rooted in faith.
               <br />
               <span
                 className={cn(
@@ -139,9 +139,9 @@ export function Hero({
                   isVideo ? "text-[hsl(var(--gold))]" : "text-[hsl(var(--primary))]",
                 )}
               >
-                curious, the kind
+                Raised for love
               </span>
-              {", and the brave."}
+              {" and service."}
             </>
           )}
         </h1>
@@ -153,7 +153,7 @@ export function Hero({
           )}
         >
           {subhead ??
-            `${SCHOOL.name} has nurtured generations of thoughtful, capable young people since ${SCHOOL.founded} — blending classical rigor with modern ideas.`}
+            `An ICSE co-educational school in the hills of Rhenock, Sikkim — where academic excellence, moral values, and a spirit of service have shaped young people since ${SCHOOL.founded}.`}
         </p>
 
         <div className="hero-entrance hero-entrance-d4 mt-10 flex flex-wrap items-center justify-center gap-4">

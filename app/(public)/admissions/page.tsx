@@ -18,65 +18,68 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Admissions",
   description:
-    "Admissions are open for 2026–27. Process, eligibility, required documents, FAQs, and enquiry form.",
+    "Admissions to St. Joseph's School, Kingston — process, eligibility, documents, FAQs, and enquiry. Nursery through Class XII (Science), CISCE affiliation.",
 };
 
 const PROCESS = [
-  { n: "01", title: "Online form",        body: "Fill the digital application — about 10 minutes." },
-  { n: "02", title: "Document upload",    body: "Upload scanned copies of the required documents." },
-  { n: "03", title: "Interaction",        body: "A short, friendly conversation with the child and parents." },
-  { n: "04", title: "Decision",           body: "Outcomes communicated within 10 working days." },
-  { n: "05", title: "Confirm seat",       body: "Pay the admission fee within 7 days to confirm the seat." },
+  { n: "01", title: "Enquiry",           body: "Get in touch through the school office or the enquiry form on this page." },
+  { n: "02", title: "Prospectus & form", body: "Collect the admission form and prospectus from the school office in Kingston." },
+  { n: "03", title: "Documents",         body: "Submit the completed form with the required certificates and previous records." },
+  { n: "04", title: "Interaction",       body: "A short interaction with the child and parents — friendly and unhurried." },
+  { n: "05", title: "Confirmation",      body: "On selection, the admission is confirmed by paying the prescribed admission fees at the office." },
 ];
 
 const ELIGIBILITY = [
-  { grade: "Nursery",       age: "Completed 3 years by 31 March",  notes: "No prior schooling required." },
-  { grade: "LKG / UKG",     age: "Age-appropriate by 31 March",     notes: "Prior nursery report card preferred." },
-  { grade: "Class I – V",   age: "Age-appropriate by 31 March",     notes: "Prior 2 years' report cards required." },
-  { grade: "Class VI – IX", age: "Age-appropriate by 31 March",     notes: "Transfer Certificate from prior school." },
-  { grade: "Class XI",      age: "Pass Class X (any board)",        notes: "Stream allocation based on Class X marks." },
+  { grade: "Nursery",          age: "Around 3 years of age at the start of the academic session", notes: "First entry into school — no prior schooling required." },
+  { grade: "LKG / UKG",        age: "Age-appropriate at session start",                            notes: "Nursery / LKG report from the previous school where applicable." },
+  { grade: "Class I – V",      age: "Age-appropriate at session start",                            notes: "Previous class report card and progress record required." },
+  { grade: "Class VI – IX",    age: "Age-appropriate at session start",                            notes: "Transfer Certificate and previous school report required." },
+  { grade: "Class XI (Science)", age: "Pass Class X (CISCE or equivalent)",                        notes: "Admission based on Class X marks; Science stream only." },
 ];
 
+// The school publishes the fee structure directly. Rather than list numbers
+// that go out of date, we point families to the admissions office for the
+// current session's fee schedule.
 const FEES = [
-  { stage: "Pre-Primary",       quarterly: "₹ 22,000" },
-  { stage: "Primary (I–V)",     quarterly: "₹ 28,000" },
-  { stage: "Middle (VI–VIII)",  quarterly: "₹ 32,000" },
-  { stage: "Senior (IX–XII)",   quarterly: "₹ 38,000" },
+  { stage: "Pre-Primary (Nursery – UKG)", quarterly: "Contact office" },
+  { stage: "Primary (I – IV)",            quarterly: "Contact office" },
+  { stage: "Middle (V – VIII)",           quarterly: "Contact office" },
+  { stage: "Secondary & Senior Secondary (IX – XII)", quarterly: "Contact office" },
 ];
 
 const DOCS = [
-  { icon: IdCard,     title: "Birth certificate",       body: "Issued by the municipality or hospital — original to be sighted." },
-  { icon: ScrollText, title: "Prior report card",       body: "Most recent academic year, all subjects, attendance record." },
-  { icon: Stamp,      title: "Transfer certificate",    body: "Required only for Class VI and above. Original required at admission." },
-  { icon: ImageIcon,  title: "Photographs",             body: "Two recent passport-size photographs of the child." },
-  { icon: FileText,   title: "Parent ID + address",     body: "Aadhaar / passport copies of both parents and proof of address." },
-  { icon: FileText,   title: "Medical record",          body: "Immunisation card and any relevant medical history." },
+  { icon: IdCard,     title: "Birth certificate",       body: "Original and a photocopy — issued by the municipality or hospital." },
+  { icon: ScrollText, title: "Previous report card",    body: "The most recent report card and progress record from the current school." },
+  { icon: Stamp,      title: "Transfer Certificate",    body: "Original Transfer Certificate from the previous school, for Class II and above." },
+  { icon: ImageIcon,  title: "Photographs",             body: "Recent passport-size photographs of the child and both parents." },
+  { icon: FileText,   title: "Parent identification",   body: "Photocopies of Aadhaar or valid ID of both parents / guardians." },
+  { icon: FileText,   title: "Medical & vaccination",   body: "Immunisation record and any relevant medical history of the child." },
 ];
 
 const FAQS = [
   {
-    q: "When does the admission window open?",
-    a: "Applications for the upcoming academic year open in early November and close in late January. Late applications are reviewed only if seats remain.",
+    q: "When does the admissions process open?",
+    a: "Enquiries are welcomed throughout the year. Admissions to the new academic session are typically announced through the school office and public notices — please contact us to know the current schedule.",
   },
   {
     q: "Is there an entrance test?",
-    a: "There is no written test for Nursery through Class V — admissions are based on a friendly interaction. Classes VI to XI involve a short written assessment in core subjects.",
+    a: "For Nursery and lower classes, admission is based on a short, friendly interaction with the child and parents. For higher classes, a brief written assessment in the core subjects may be conducted.",
   },
   {
-    q: "Are scholarships available?",
-    a: "Yes. Need-based scholarships cover up to 100% of tuition for select families each year. Merit scholarships are offered to top entrants in Classes IX and XI.",
+    q: "What is the medium of instruction?",
+    a: "The medium of instruction is English throughout the school. Students study Hindi or Nepali as a second language; a third language (Hindi or Nepali) is compulsory for Classes V, VI, and VII.",
   },
   {
-    q: "Do you offer transport?",
-    a: "Yes — bus routes cover most of the town across three primary corridors. Routes and stops are listed on the parent portal at the start of each session.",
+    q: "Does the school have a hostel?",
+    a: "Yes. Separate hostels for boys and girls are run by the school management with the Cluny Sisters. Outstation students are recommended to make use of the hostel facilities.",
   },
   {
-    q: "Is there sibling priority?",
-    a: "Yes. Younger siblings of current students receive priority consideration, subject to seat availability and meeting basic eligibility.",
+    q: "Which board is the school affiliated to?",
+    a: "St. Joseph's School, Kingston is affiliated with the Council for the Indian School Certificate Examinations, New Delhi. Class X sits the ICSE examination and Class XII sits the ISC (Science stream).",
   },
   {
-    q: "When can we visit the campus?",
-    a: "Open Days are held on the first Saturday of every month between October and February. Schedule a visit through the contact form on this page.",
+    q: "Can we visit the school before applying?",
+    a: "Yes — parents are welcome to visit the campus during office hours. Please call the school office to confirm a convenient time.",
   },
 ];
 
@@ -99,11 +102,11 @@ export default async function AdmissionsPage() {
             <span className="gold-rule">The process</span>
           </p>
           <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-            {cms.admissions_intro.title ?? "Five steps. Ten working days."}
+            {cms.admissions_intro.title ?? "A simple, transparent admissions process."}
           </h2>
           <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
             {cms.admissions_intro.body ??
-              "Our admissions process is designed to be transparent and respectful of families' time."}
+              "We welcome families who share our commitment to academic excellence, moral formation, and service to society. The process below is designed to be clear and respectful of your time."}
           </p>
 
           <ol className="relative mt-14 grid gap-4 lg:grid-cols-5">
@@ -155,20 +158,20 @@ export default async function AdmissionsPage() {
                 <span className="gold-rule">Who can apply</span>
               </p>
               <h2 className="heading mt-4 text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-                Age, ability, and a willingness to learn.
+                Age, readiness, and a willingness to grow.
               </h2>
               <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Age cutoffs are calculated as of <strong>31&nbsp;March</strong>{" "}
-                of the year admission is sought. We admit children based on
-                potential, not pedigree.
+                Age is calculated at the start of the academic session. Children are welcomed
+                on the basis of readiness and character, without discrimination of caste, creed,
+                or economic status.
               </p>
               <ul className="mt-7 space-y-3 text-sm text-[hsl(var(--ink))]">
                 {[
-                  "Age-appropriate readiness for the grade applied",
-                  "Genuine curiosity and willingness to engage",
-                  "A supportive home environment",
-                  "Prior academic record (where available)",
-                  "Fit with the school's values",
+                  "Age-appropriate readiness for the class applied for",
+                  "A supportive home environment and regular attendance",
+                  "Previous school record, where applicable",
+                  "Openness to English medium instruction",
+                  "Alignment with the school's motto — Love & Service",
                 ].map((t) => (
                   <li key={t} className="flex items-start gap-3">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-[hsl(var(--gold))]" />
@@ -201,7 +204,7 @@ export default async function AdmissionsPage() {
 
               <div className="mt-8 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-6">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-                  Fees · 2026–27
+                  Fee structure
                 </p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {FEES.map((f) => (
@@ -210,14 +213,15 @@ export default async function AdmissionsPage() {
                       className="flex items-center justify-between rounded-xl border border-[hsl(var(--border))] px-4 py-3"
                     >
                       <span className="text-sm text-[hsl(var(--ink-soft))]">{f.stage}</span>
-                      <span className="font-display text-base font-semibold text-[hsl(var(--ink))]">
+                      <span className="font-display text-sm font-semibold text-[hsl(var(--primary))]">
                         {f.quarterly}
                       </span>
                     </div>
                   ))}
                 </div>
                 <p className="mt-3 text-xs text-[hsl(var(--ink-soft))]">
-                  One-time admission fee of ₹ 25,000 applies. Need-based scholarships available.
+                  The current session&apos;s fee schedule and hostel charges are shared through the
+                  school office. Please contact us for details.
                 </p>
               </div>
             </div>
@@ -234,11 +238,11 @@ export default async function AdmissionsPage() {
             <span className="gold-rule">Documents checklist</span>
           </p>
           <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-            What to keep ready before you apply.
+            What to keep ready when you apply.
           </h2>
           <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
-            Scanned copies are sufficient at the application stage. Originals
-            are sighted at admission confirmation.
+            Please bring photocopies for the school office, along with the originals for
+            verification. The list below is standard for admission at each level.
           </p>
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -306,9 +310,9 @@ export default async function AdmissionsPage() {
                 Tell us about your child.
               </h2>
               <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Share a few details and our admissions office will get back
-                within two working days with the next steps — including a
-                campus visit invitation.
+                Share a few details and the school office will be in touch with the next steps —
+                including the current session&apos;s admission schedule and an invitation to visit
+                the campus in Rhenock.
               </p>
             </div>
             <div className="lg:col-span-3">
@@ -367,8 +371,8 @@ export default async function AdmissionsPage() {
                 Talk to a person, not a portal.
               </h2>
               <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Office hours: Mon – Fri · 9:00 AM – 2:00 PM. Open Days every
-                first Saturday between October and February.
+                Office hours: Monday – Friday, 9:00 AM – 2:00 PM. Saturdays by appointment.
+                Parents are welcome to visit the school campus during office hours.
               </p>
 
               <ul className="mt-8 space-y-5">
@@ -420,15 +424,17 @@ export default async function AdmissionsPage() {
   return (
     <>
       <CinematicHero
-        eyebrow="Admissions 2026–27"
+        eyebrow="Admissions"
         title={
           <>
-            Begin a journey that <span className="italic">lasts a lifetime.</span>
+            Join a school shaped by
+            <br />
+            <span className="italic">love and service.</span>
           </>
         }
-        description="Our admissions process is designed to be transparent and respectful of families' time."
+        description="Admissions to St. Joseph's School, Kingston follow a clear, unhurried process. Speak with our office to visit the campus and understand the next steps."
         image={HERO_IMG}
-        imageAlt="A St. Joseph's open day"
+        imageAlt="An open day at St. Joseph's School, Kingston"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Admissions" }]}
       />
 

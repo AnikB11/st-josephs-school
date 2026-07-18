@@ -13,12 +13,12 @@ export function CampusScroll({ image }: { image?: string | null } = {}) {
         titleComponent={
           <div className="px-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[hsl(var(--primary))]">
-              <span className="gold-rule">A campus that teaches</span>
+              <span className="gold-rule">A campus in the hills</span>
             </p>
             <h2 className="font-display mt-4 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-[hsl(var(--ink))] sm:text-5xl md:text-7xl">
-              Where students grow
+              Where children learn
               <br />
-              <span className="italic text-[hsl(var(--primary))]">in body, mind, and heart.</span>
+              <span className="italic text-[hsl(var(--primary))]">to think, to serve, to belong.</span>
             </h2>
           </div>
         }

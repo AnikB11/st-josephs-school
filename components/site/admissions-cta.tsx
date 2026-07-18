@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 
 const BENEFITS = [
-  "Holistic admissions — academic, character, and curiosity",
-  "Pre-K through Class XII",
-  "Need-based scholarships available",
+  "CISCE curriculum, English medium, Nursery through Class XII",
+  "Co-educational, with Science stream at senior secondary",
+  "Residential facilities for boys and girls from outstation",
 ];
 
 // TODO: Replace with a real campus photo (1200w+).
@@ -41,14 +41,14 @@ export function AdmissionsCta({ image }: { image?: string | null } = {}) {
                 <span className="gold-rule">Admissions 2026–27</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                Begin a journey that
+                Join a school shaped by
                 <br />
-                <span className="italic text-[hsl(var(--gold))]">lasts a lifetime.</span>
+                <span className="italic text-[hsl(var(--gold))]">love and service.</span>
               </h2>
               <p className="mt-5 text-base text-white/75">
-                Applications for the upcoming academic year are now open. The
-                process is simple, transparent, and reviewed by our admissions
-                committee within 10 working days.
+                Admissions for the next academic session are now open. Speak with our
+                office to visit the campus in Rhenock, understand the ICSE curriculum,
+                and begin your child&apos;s application.
               </p>
               <ul className="mt-7 space-y-2.5">
                 {BENEFITS.map((b) => (

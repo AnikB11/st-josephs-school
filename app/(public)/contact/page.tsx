@@ -30,7 +30,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Get in touch with ${SCHOOL.name}. Phone, email, departments, and support.`,
+  description: `Get in touch with ${SCHOOL.name} — office, admissions, hostel, and campus visits at Kingston, Rhenock, Pakyong District, Sikkim.`,
 };
 
 type ContactItem = {
@@ -44,16 +44,18 @@ const CONTACT_ITEMS: ContactItem[] = [
   { icon: MapPin, label: "Campus", value: SCHOOL.address },
   { icon: Phone,  label: "Phone",  value: SCHOOL.phone, href: `tel:${SCHOOL.phone}` },
   { icon: Mail,   label: "Email",  value: SCHOOL.email, href: `mailto:${SCHOOL.email}` },
-  { icon: Clock,  label: "Office hours", value: "Mon – Fri · 8:00 AM – 3:30 PM\nSat · 9:00 AM – 12:30 PM" },
+  { icon: Clock,  label: "Office hours", value: "Mon – Fri · 8:30 AM – 3:00 PM\nSat · by appointment" },
 ];
 
+// The school routes most enquiries through a single office. Rather than list
+// individuals (which change), we point families to the right function.
 const DEPARTMENTS = [
-  { icon: BookOpen,    name: "Academics",            head: "Mr. Sandeep Iyer",      title: "Vice Principal · Academics",  email: "academics@stjosephs.edu" },
-  { icon: FlaskConical,name: "Sciences",             head: "Dr. Reena Kapoor",      title: "Head of Sciences",             email: "sciences@stjosephs.edu" },
-  { icon: BookOpen,    name: "Humanities",           head: "Ms. Lara D'Souza",      title: "Head of Humanities",           email: "humanities@stjosephs.edu" },
-  { icon: Trophy,      name: "Sports",               head: "Mr. Faisal Ahmed",      title: "Director of Sport",            email: "sport@stjosephs.edu" },
-  { icon: Music,       name: "Arts & Music",         head: "Ms. Anjali Verma",      title: "Vice Principal · Pastoral",    email: "arts@stjosephs.edu" },
-  { icon: Briefcase,   name: "Administration",       head: "Mrs. Margaret Rosario", title: "Principal",                    email: "principal@stjosephs.edu" },
+  { icon: Briefcase,    name: "School Office",       head: "General enquiries & administration", title: "First point of contact for parents and visitors", email: SCHOOL.email },
+  { icon: BookOpen,     name: "Principal's Office",  head: "The Principal",                       title: "Academic leadership & school policy",              email: `principal@${SCHOOL.email.split("@")[1] ?? "stjosephskingston.edu.in"}` },
+  { icon: BookOpen,     name: "Academic Coordination", head: "The Vice Principal",                title: "Curriculum, examinations, and teacher liaison",    email: `academics@${SCHOOL.email.split("@")[1] ?? "stjosephskingston.edu.in"}` },
+  { icon: FlaskConical, name: "Admissions",          head: "Admissions in-charge",                title: "New admissions, prospectus, and campus visits",    email: `admissions@${SCHOOL.email.split("@")[1] ?? "stjosephskingston.edu.in"}` },
+  { icon: Music,        name: "Hostel & Boarders",   head: "The Warden / Cluny Sisters",          title: "Boys' & girls' hostels and residential care",      email: `hostel@${SCHOOL.email.split("@")[1] ?? "stjosephskingston.edu.in"}` },
+  { icon: Trophy,       name: "Sports & Activities", head: "Games & Sports in-charge",            title: "Sports, cultural events, and co-curricular",       email: `sports@${SCHOOL.email.split("@")[1] ?? "stjosephskingston.edu.in"}` },
 ];
 
 const SUPPORT_LINKS = [
@@ -161,11 +163,11 @@ export default async function ContactPage() {
                 <span className="gold-rule">Reach the school</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl">
-                Get in touch with the office.
+                Reach the school office.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))]">
-                Most general questions are answered within one school day. For anything time-sensitive,
-                the office phone line is the fastest route.
+                We are happy to hear from parents, prospective families, alumni, and well-wishers.
+                For anything time-sensitive, please call the school office directly.
               </p>
               <div className="mt-10">
                 <ContactList />
@@ -189,11 +191,12 @@ export default async function ContactPage() {
                 <span className="gold-rule">Admissions office</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl">
-                Considering St. Joseph's?
+                Considering St. Joseph&apos;s for your child?
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))]">
-                We respond to admissions enquiries within one working day. You can also start
-                the application straight from our admissions page.
+                Our admissions team will be glad to walk you through the process, share the current
+                fee structure, and arrange a visit to the campus. You can also start with the
+                enquiry form on the admissions page.
               </p>
               <div className="mt-10 space-y-7">
                 <div className="flex items-start gap-4">
@@ -205,10 +208,10 @@ export default async function ContactPage() {
                       Admissions email
                     </p>
                     <a
-                      href="mailto:admissions@stjosephs.edu"
+                      href={`mailto:${SCHOOL.email}`}
                       className="mt-0.5 block text-sm text-[hsl(var(--ink-soft))] hover:text-[hsl(var(--primary))]"
                     >
-                      admissions@stjosephs.edu
+                      {SCHOOL.email}
                     </a>
                   </div>
                 </div>
@@ -226,7 +229,7 @@ export default async function ContactPage() {
                     >
                       {SCHOOL.phone}
                     </a>
-                    <p className="mt-0.5 text-xs text-[hsl(var(--ink-soft))]/80">Mon – Sat, 9 AM – 1 PM</p>
+                    <p className="mt-0.5 text-xs text-[hsl(var(--ink-soft))]/80">Mon – Fri, 9 AM – 2 PM</p>
                   </div>
                 </div>
               </div>
@@ -263,11 +266,12 @@ export default async function ContactPage() {
                 <span className="gold-rule">Find us</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl">
-                Visit the campus.
+                Visit us in Rhenock.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))]">
-                The school is open to visitors during office hours. Prospective families are
-                welcome to book a guided campus tour through the admissions office.
+                The school sits at Kingston, above Rhenock town in Pakyong District, Sikkim —
+                at about 1,030 metres above mean sea level. Visitors are welcome during office
+                hours; please call ahead to arrange a campus tour.
               </p>
               <div className="mt-10 space-y-7">
                 <div className="flex items-start gap-4">
@@ -290,7 +294,7 @@ export default async function ContactPage() {
                       Visiting hours
                     </p>
                     <p className="mt-0.5 whitespace-pre-line text-sm text-[hsl(var(--ink-soft))]">
-                      Mon – Fri · 9:00 AM – 3:00 PM{"\n"}Sat · 9:30 AM – 12:00 PM
+                      Mon – Fri · 8:30 AM – 3:00 PM{"\n"}Sat · by appointment
                     </p>
                   </div>
                 </div>
@@ -319,7 +323,7 @@ export default async function ContactPage() {
                 <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4 text-white">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]">
-                      <span className="gold-rule">14-acre campus</span>
+                      <span className="gold-rule">Our campus</span>
                     </p>
                     <p className="font-display mt-2 text-2xl font-semibold">{SCHOOL.address}</p>
                   </div>
@@ -339,11 +343,11 @@ export default async function ContactPage() {
             <span className="gold-rule">Reach a department</span>
           </p>
           <h2 className="font-display mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-            The people you'd want to talk to.
+            Where to direct your enquiry.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-            Each department has a designated head of contact for parent and student questions.
-            Emails are answered within one school day.
+            Most enquiries can be routed through the school office. For specific matters, the
+            functional heads below will be happy to help.
           </p>
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {DEPARTMENTS.map((d) => (
@@ -382,11 +386,11 @@ export default async function ContactPage() {
                 <span className="gold-rule">Help</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl">
-                Looking for help with the website or a portal?
+                Help with logins, results, or notices?
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))]">
-                Most portal questions — parent logins, student results, missing notices — are
-                handled by the school office. Pick a route below.
+                Most portal and website questions — student logins, parent access, results,
+                and notices — are handled by the school office. Please pick a route below.
               </p>
             </div>
             <div className="lg:col-span-7 grid gap-5 sm:grid-cols-2">
@@ -426,15 +430,17 @@ export default async function ContactPage() {
         eyebrow="Contact"
         title={
           <>
-            We'd love to hear <span className="italic">from you.</span>
+            We would be glad
+            <br />
+            <span className="italic">to hear from you.</span>
           </>
         }
         description={
           cms.contact_intro.body ??
-          "Whether you're considering admission, an alumnus, or just curious — drop us a line."
+          "Whether you are looking at admission for your child, an alumnus wishing to reconnect, or a well-wisher — please write, call, or visit us at Kingston."
         }
         image={HERO_IMG}
-        imageAlt="St. Joseph's campus"
+        imageAlt="St. Joseph's School, Kingston — Rhenock, Sikkim"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact" }]}
       />
       <TabbedPage tabs={tabs} />

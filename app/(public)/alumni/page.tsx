@@ -24,49 +24,47 @@ import { resolveImage } from "@/lib/cms-images";
 
 export const metadata: Metadata = {
   title: "Alumni",
-  description: "Our alumni network — careers, achievements, and ways to stay connected.",
+  description: "The alumni community of St. Joseph's School, Kingston — reunions, stories, and ways to stay connected with the school in Rhenock, Sikkim.",
 };
 
 export const revalidate = 300;
 
-const PLACEHOLDER: Alumnus[] = [
-  { id: "1", user_id: null, student_id: null, full_name: "Anika Sharma",     graduation_year: 2014, current_position: "Product Manager",     current_company: "Stripe",       bio: "Built payment products for emerging markets.",                  photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-  { id: "2", user_id: null, student_id: null, full_name: "Rohan Sen",        graduation_year: 2011, current_position: "Founder",             current_company: "Helix Bio",    bio: "Graduated IIT-B, MIT. Pioneering synthetic biology platforms.", photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-  { id: "3", user_id: null, student_id: null, full_name: "Dr. Priya Kapoor", graduation_year: 2008, current_position: "Pediatric Surgeon",   current_company: "AIIMS Delhi",  bio: "Specializes in neonatal cardiac care.",                         photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-  { id: "4", user_id: null, student_id: null, full_name: "Karan Iyer",       graduation_year: 2017, current_position: "Software Engineer",   current_company: "Google",       bio: "Search infrastructure team.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-  { id: "5", user_id: null, student_id: null, full_name: "Meera Joshi",      graduation_year: 2019, current_position: "PhD Candidate",       current_company: "Stanford",     bio: "Quantum information theory.",                                   photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-  { id: "6", user_id: null, student_id: null, full_name: "Aditya Roy",       graduation_year: 2005, current_position: "Author & Journalist", current_company: "The Hindu",    bio: "Reports on climate and policy.",                                photo_url: null, linkedin_url: "#", email: null, is_public: true, status: "approved", requested_at: null, approved_at: null, rejected_at: null, rejection_reason: null, created_at: new Date().toISOString() },
-];
+// Anonymous fallback entries used only when the alumni table is empty in Supabase.
+// As alumni sign up and are approved by the admin portal, this list is replaced
+// with real profiles.
+const PLACEHOLDER: Alumnus[] = [];
 
 const ACHIEVEMENTS = [
-  { icon: Award,    title: "12,000+ alumni",      body: "Six decades of graduates, working across 40+ countries." },
-  { icon: BookOpen, title: "47 Rhodes & Fulbright scholars", body: "Among our most decorated academic alumni since 1970." },
-  { icon: Globe,    title: "Founders & researchers", body: "Helix Bio, Solver AI, Saraswati Labs — companies started by our alumni." },
-  { icon: Briefcase,title: "Public service",      body: "Alumni in the IAS, IFS, judiciary, and across India's civil service." },
+  { icon: Award,     title: "Since 1996",              body: "Batches of ICSE and ISC graduates who have gone on to college, career, and community life across Sikkim and beyond." },
+  { icon: BookOpen,  title: "Higher studies",          body: "Alumni pursuing under-graduate and post-graduate studies in Sikkim, West Bengal, and other parts of India." },
+  { icon: Globe,     title: "In many fields",          body: "Teachers, medical professionals, engineers, civil servants, entrepreneurs, and workers in the arts and social sectors." },
+  { icon: Briefcase, title: "Rooted at home",          body: "Many alumni continue to serve the people of Sikkim — in schools, hospitals, government, and small businesses." },
 ];
 
+// Approximate recurring dates. Actual dates for each year are shared through the
+// alumni portal and school notices.
 const ALUMNI_EVENTS = [
-  { date: "Sep 14, 2026", title: "Annual Alumni Reunion",        place: "Main lawn · 6:00 PM",      tag: "Open to all batches" },
-  { date: "Nov 22, 2026", title: "Class of 2001 — 25-year meet", place: "Senior Auditorium",        tag: "Class reunion" },
-  { date: "Jan 30, 2027", title: "Founders' Day & Alumni Mass",  place: "School Chapel · 9:00 AM",  tag: "Anniversary" },
-  { date: "Mar 18, 2027", title: "Careers Day with Alumni",      place: "Library Hall",             tag: "Students × alumni" },
+  { date: "Feb",          title: "School Anniversary & Alumni Meet", place: "School grounds",         tag: "Open to all batches" },
+  { date: "19 Mar",       title: "Feast of St. Joseph",              place: "School Chapel",           tag: "Community gathering" },
+  { date: "Dec",          title: "Christmas Carol & Reunion",        place: "Chapel & Assembly Hall",  tag: "Festive" },
+  { date: "Throughout year", title: "Alumni Talks & Careers Sharing", place: "On invitation from the school", tag: "Students × alumni" },
 ];
 
 const STORIES = [
   {
-    quote: "I came back to teach physics because my teachers gave me everything. I wanted to do the same.",
-    name: "Mr. Sandeep Iyer",
-    role: "Class of 1995 · Vice Principal, Academics",
+    quote: "The teachers at Kingston taught us to work hard, but more than that, to be kind. That has stayed with me longer than any lesson.",
+    name: "An alumnus",
+    role: "From an early ISC batch",
   },
   {
-    quote: "The school taught me that excellence and kindness aren't competing values — they grow together.",
-    name: "Dr. Priya Kapoor",
-    role: "Class of 2008 · Pediatric Surgeon, AIIMS Delhi",
+    quote: "St. Joseph's gave me confidence in English and a love for reading — two gifts I carry into every job I do.",
+    name: "An alumna",
+    role: "Currently in higher studies",
   },
   {
-    quote: "Twelve years on, I still pick up the phone and call my old principal when I have a hard decision to make.",
-    name: "Rohan Sen",
-    role: "Class of 2011 · Founder, Helix Bio",
+    quote: "Love and Service is not a slogan on the school badge — it is the compass we were quietly given, and it still guides my choices.",
+    name: "An alumnus",
+    role: "Working in the health sector",
   },
 ];
 
@@ -143,14 +141,15 @@ export default async function AlumniPage() {
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-                <span className="gold-rule">Six decades of graduates</span>
+                <span className="gold-rule">Since 1996</span>
               </p>
               <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-                Where our alumni are now.
+                Where our alumni are today.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-                Researchers, founders, teachers, doctors, artists, civil servants — a sample of the
-                graduates who continue to shape the world they walked into.
+                Teachers, doctors, engineers, civil servants, entrepreneurs, and community workers —
+                the former students of St. Joseph&apos;s, Kingston, quietly carrying love and service
+                into every part of their lives.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -158,12 +157,38 @@ export default async function AlumniPage() {
               <Badge variant="secondary" className="rounded-full">2020s</Badge>
               <Badge variant="secondary" className="rounded-full">2010s</Badge>
               <Badge variant="secondary" className="rounded-full">2000s</Badge>
+              <Badge variant="secondary" className="rounded-full">1990s</Badge>
             </div>
           </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {alumni.map((a) => (
-              <AlumnusCard key={a.id} a={a} />
-            ))}
+          <div className="mt-12">
+            {alumni.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-16 text-center">
+                <Users className="mx-auto h-10 w-10 text-[hsl(var(--ink-soft))]/40" />
+                <h4 className="font-display mt-5 text-lg font-semibold text-[hsl(var(--ink))]">
+                  Our alumni directory is growing.
+                </h4>
+                <p className="mx-auto mt-2 max-w-md text-sm text-[hsl(var(--ink-soft))]">
+                  As former students join the alumni portal and their profiles are approved, they
+                  will appear here. If you are an alumna or alumnus of St. Joseph&apos;s, Kingston —
+                  we would love to hear from you.
+                </p>
+                <div className="mt-6">
+                  <Link href="/alumni-portal/request">
+                    <Button
+                      className="rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--ivory))] hover:bg-[hsl(var(--primary))]/90"
+                    >
+                      Request an alumni profile
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {alumni.map((a) => (
+                  <AlumnusCard key={a.id} a={a} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       ),
@@ -175,14 +200,14 @@ export default async function AlumniPage() {
         <>
           <section className="container-wide py-20 sm:py-24">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-              <span className="gold-rule">By the numbers</span>
+              <span className="gold-rule">Where our alumni go</span>
             </p>
             <h2 className="font-display mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-              What our alumni go on to do.
+              What our former students go on to do.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-              A snapshot of where the years after school have taken our graduates — in research,
-              founding, public service, and beyond.
+              From colleges in Sikkim and neighbouring states, into varied careers and communities —
+              here is the shape of what school life at Kingston prepares students for.
             </p>
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {ACHIEVEMENTS.map((a) => (
@@ -217,15 +242,16 @@ export default async function AlumniPage() {
               </div>
               <div className="lg:col-span-6">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
-                  <span className="gold-rule">Recognition</span>
+                  <span className="gold-rule">Giving back</span>
                 </p>
                 <h3 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl">
-                  Honours and recognitions.
+                  A quiet, lasting connection.
                 </h3>
                 <p className="mt-5 text-base leading-relaxed text-[hsl(var(--ink-soft))]">
-                  Padma Shri awards, Olympic representation, national academic toppers, and
-                  industry honours — our alumni continue to bring distinction to the school
-                  that helped raise them.
+                  Our alumni return in many ways — visiting for the school anniversary, mentoring
+                  current students, sharing career stories, and supporting families in Rhenock.
+                  Every visit is a small act of the school&apos;s motto — <em>Love &amp; Service</em> —
+                  coming back home.
                 </p>
               </div>
             </div>
@@ -242,11 +268,11 @@ export default async function AlumniPage() {
             <span className="gold-rule">Calendar</span>
           </p>
           <h2 className="font-display mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-            Reunions, gatherings, and giving-back days.
+            Reunions, feast days, and moments to return.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-            We host four to five alumni events each year on campus. Sign in to the alumni portal
-            to RSVP or to see the smaller batch-specific meets.
+            A few gatherings anchor the alumni year. Actual dates for each session are shared
+            through the alumni portal and school notices — sign in to stay in touch.
           </p>
 
           <ol className="relative mx-auto mt-14 max-w-3xl">
@@ -290,11 +316,11 @@ export default async function AlumniPage() {
             <span className="gold-rule">In their own words</span>
           </p>
           <h2 className="font-display mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-            What the school still means, years later.
+            What Kingston still means, years on.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-            Stories from alumni about what they carry with them — the teachers, the lessons, and
-            the moments that have stayed.
+            A few voices from former students on what they took away from their years at St. Joseph&apos;s —
+            the teachers, the values, and the small moments that have stayed.
           </p>
           <div className="mt-14 grid gap-5 lg:grid-cols-3">
             {STORIES.map((s) => (
@@ -330,18 +356,18 @@ export default async function AlumniPage() {
                   <span className="gold-rule">Stay connected</span>
                 </p>
                 <h2 className="font-display mt-4 text-balance text-3xl font-semibold leading-[1.1] text-[hsl(var(--ink))] sm:text-4xl lg:text-5xl">
-                  A network that lasts a lifetime.
+                  Stay connected with Kingston.
                 </h2>
                 <p className="mt-5 max-w-xl text-base leading-relaxed text-[hsl(var(--ink-soft))] sm:text-lg">
-                  The alumni portal lets you update your profile, see batch-mates, RSVP to events,
-                  and find ways to give back — mentoring students, returning as a guest teacher, or
-                  contributing to the scholarship fund.
+                  The alumni portal helps former students of St. Joseph&apos;s, Kingston stay in touch,
+                  find batch-mates, hear about school events, and quietly give back — through
+                  mentoring, guest visits, or by simply keeping the school in their prayers.
                 </p>
                 <div className="mt-8 grid gap-5 sm:grid-cols-3">
                   {[
-                    { icon: Users,     t: "Mentor a student",  b: "30 minutes a term." },
-                    { icon: BookOpen,  t: "Guest teach a class", b: "Share your craft." },
-                    { icon: Award,     t: "Support a scholar", b: "Sponsor a year." },
+                    { icon: Users,     t: "Mentor a student",   b: "A conversation, a career story, a bit of guidance." },
+                    { icon: BookOpen,  t: "Speak at assembly",  b: "Share what school and life have taught you." },
+                    { icon: Award,     t: "Support the school", b: "Lend a hand to a project, event, or student in need." },
                   ].map((w) => (
                     <div key={w.t} className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-5">
                       <span className="grid h-10 w-10 place-items-center rounded-xl bg-[hsl(var(--primary))]/8 text-[hsl(var(--primary))]">
@@ -379,10 +405,11 @@ export default async function AlumniPage() {
                 <span className="gold-rule">Alumni portal</span>
               </p>
               <h3 className="font-display mt-4 text-balance text-3xl font-semibold sm:text-4xl">
-                Are you an alumna or alumnus?
+                Were you once a student here?
               </h3>
               <p className="mt-3 text-white/75">
-                Sign in to update your profile, RSVP to events, and join alumni-only spaces.
+                Sign in to update your profile, hear about school events, and stay connected with
+                the Kingston community.
               </p>
               <div className="mt-7">
                 <Link href="/alumni-portal/login">
@@ -407,10 +434,12 @@ export default async function AlumniPage() {
         eyebrow="Alumni"
         title={
           <>
-            A network that lasts <span className="italic">a lifetime.</span>
+            Once a Josephite,
+            <br />
+            <span className="italic">always at home in Kingston.</span>
           </>
         }
-        description="From researchers and founders to teachers and artists — our graduates are everywhere, doing remarkable things."
+        description="The former students of St. Joseph's, Kingston — quietly at work in Sikkim and across India, carrying with them the school's spirit of love and service."
         image={HERO_IMG}
         imageAlt="Alumni of St. Joseph's"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Alumni" }]}
