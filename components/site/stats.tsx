@@ -8,7 +8,7 @@ type Stat =
 const STATS: Stat[] = [
   { value: 1996, label: "Established", hint: "Under the Diocese of Darjeeling–Sikkim" },
   { display: "Nursery–XII", label: "Classes offered", hint: "Co-educational, Science at senior level" },
-  { display: "CISCE", label: "Affiliation", hint: "Council for the ICSE, New Delhi" },
+  { display: "ICSE", label: "Affiliation", hint: "Indian Certificate of Secondary Education" },
   { value: 1030, suffix: " m", label: "Altitude", hint: "Above mean sea level at Rhenock" },
 ];
 

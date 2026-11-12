@@ -14,7 +14,7 @@ const CARDS = [
     body: "Respect, compassion, integrity, responsibility, and concern for others form an important part of the school's educational philosophy.",
   },
   {
-    title: "CISCE Curriculum",
+    title: "ICSE Curriculum",
     body: "Affiliated with the Council for the Indian School Certificate Examinations, New Delhi, the school provides an English-medium educational framework.",
   },
   {
