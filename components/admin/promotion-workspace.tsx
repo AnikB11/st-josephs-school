@@ -65,6 +65,10 @@ export function PromotionWorkspace({
   const [running, setRunning] = useState(false);
   const [createAlumni, setCreateAlumni] = useState(true);
   const [override, setOverride] = useState("");
+  // Idempotency key for the current run attempt. Generated on first click,
+  // kept across retries so a network timeout doesn't double-promote, cleared
+  // once the server returns a terminal response.
+  const [runKey, setRunKey] = useState<string | null>(null);
 
   function pickClass(id: string) {
     const params = new URLSearchParams();
@@ -177,10 +181,12 @@ export function PromotionWorkspace({
     if (!confirm(confirmMsg)) return;
 
     setRunning(true);
+    const key = runKey ?? (globalThis.crypto?.randomUUID?.() ?? `run-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    if (!runKey) setRunKey(key);
     try {
       const res = await fetch("/api/promotions/run", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", "idempotency-key": key },
         body: JSON.stringify({
           source_class_id: preview.source_class.id,
           decisions: list,
@@ -196,8 +202,10 @@ export function PromotionWorkspace({
       // Clear and reload preview — students are no longer in this class
       setPreview(null);
       setDecisions({});
+      setRunKey(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed");
+      // Keep runKey so a retry replays against the same server-side slot.
     } finally {
       setRunning(false);
     }

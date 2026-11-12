@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { clientKey, hitRateLimit } from "@/lib/rate-limit";
+import { withIdempotency } from "@/lib/idempotency";
+import { log, requestIdFrom } from "@/lib/log";
 
 export const dynamic = "force-dynamic";
+
+const ROUTE = "api/alumni/request";
+const RATE_LIMIT = { max: 3, windowMs: 60_000 }; // 3 signups / minute / IP
 
 const schema = z.object({
   full_name: z.string().min(2).max(150),
@@ -17,69 +23,83 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  const requestId = requestIdFrom(req);
+
+  const ipKey = clientKey(req);
+  const rl = hitRateLimit(`alumni-request:${ipKey}`, RATE_LIMIT);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a minute and try again." },
+      { status: 429, headers: { "retry-after": String(Math.ceil(rl.resetMs / 1000)) } },
+    );
+  }
+
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
-  const { password, ...profile } = parsed.data;
-  const email = profile.email.toLowerCase();
 
-  const supabase = createSupabaseAdminClient();
+  return withIdempotency(req, ROUTE, async () => {
+    const { password, ...profile } = parsed.data;
+    const email = profile.email.toLowerCase();
 
-  const { data: existing } = await supabase
-    .from("alumni")
-    .select("id,status")
-    .ilike("email", email)
-    .maybeSingle();
-  if (existing) {
-    return NextResponse.json(
-      { error: "An alumni request with this email already exists." },
-      { status: 409 },
-    );
-  }
+    const supabase = createSupabaseAdminClient();
 
-  // Create the Supabase auth user up front so the password lives in
-  // auth.users (hashed by Supabase) and never in our schema. The user can
-  // technically sign in immediately, but the (authed) layout gates access
-  // on alumni.status = 'approved' and routes pending users to the wait page.
-  const { data: created, error: authError } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: { full_name: profile.full_name, intent: "alumni" },
-  });
-  if (authError || !created?.user) {
-    if ((authError?.message ?? "").toLowerCase().includes("already")) {
-      return NextResponse.json(
-        { error: "An account with this email already exists. Try signing in instead." },
-        { status: 409 },
-      );
+    const { data: existing } = await supabase
+      .from("alumni")
+      .select("id,status")
+      .ilike("email", email)
+      .maybeSingle();
+    if (existing) {
+      return {
+        status: 409,
+        body: { error: "An alumni request with this email already exists." },
+      };
     }
-    console.error("app/api/alumni/request/route.ts auth create", authError);
-    return NextResponse.json({ error: "Could not create account." }, { status: 500 });
-  }
 
-  const { error: insertError } = await supabase.from("alumni").insert({
-    ...profile,
-    email,
-    is_public: false,
-    status: "pending",
-    requested_at: new Date().toISOString(),
+    // Create the Supabase auth user up front so the password lives in
+    // auth.users (hashed by Supabase) and never in our schema. The user can
+    // technically sign in immediately, but the (authed) layout gates access
+    // on alumni.status = 'approved' and routes pending users to the wait page.
+    const { data: created, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { full_name: profile.full_name, intent: "alumni" },
+    });
+    if (authError || !created?.user) {
+      if ((authError?.message ?? "").toLowerCase().includes("already")) {
+        return {
+          status: 409,
+          body: { error: "An account with this email already exists. Try signing in instead." },
+        };
+      }
+      log.error({ route: ROUTE, event: "auth.create_failed", requestId, err: authError });
+      return { status: 500, body: { error: "Could not create account." } };
+    }
+
+    const { error: insertError } = await supabase.from("alumni").insert({
+      ...profile,
+      email,
+      is_public: false,
+      status: "pending",
+      requested_at: new Date().toISOString(),
+    });
+    if (insertError) {
+      await supabase.auth.admin.deleteUser(created.user.id).catch(() => {});
+      log.error({ route: ROUTE, event: "insert_failed", requestId, err: insertError });
+      return { status: 500, body: { error: "Could not submit request." } };
+    }
+
+    await supabase.from("audit_logs").insert({
+      actor_id: null,
+      action: "alumni.request",
+      entity_type: "alumni",
+      entity_id: null,
+      metadata: { email, request_id: requestId },
+    });
+
+    return { status: 201, body: { ok: true } };
   });
-  if (insertError) {
-    await supabase.auth.admin.deleteUser(created.user.id).catch(() => {});
-    console.error("app/api/alumni/request/route.ts insert", insertError);
-    return NextResponse.json({ error: "Could not submit request." }, { status: 500 });
-  }
-
-  await supabase.from("audit_logs").insert({
-    actor_id: null,
-    action: "alumni.request",
-    entity_type: "alumni",
-    entity_id: null,
-    metadata: { email },
-  });
-
-  return NextResponse.json({ ok: true }, { status: 201 });
 }

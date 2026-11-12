@@ -3,8 +3,12 @@ import { z } from "zod";
 import { requireRole } from "@/lib/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { nextAcademicYearLabel } from "@/lib/academic-year";
+import { withIdempotency } from "@/lib/idempotency";
+import { log, requestIdFrom } from "@/lib/log";
 
 export const dynamic = "force-dynamic";
+
+const ROUTE = "api/promotions/run";
 
 const runSchema = z.object({
   source_class_id: z.string().uuid(),
@@ -30,13 +34,29 @@ export async function POST(req: Request) {
   const user = await requireRole("admin");
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const requestId = requestIdFrom(req);
   const body = await req.json();
   const parsed = runSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { source_class_id, decisions, create_alumni } = parsed.data;
+  // Required: a bulk class rollover MUST be idempotent. A retry without a
+  // key would double-promote students to the next grade.
+  return withIdempotency(
+    req,
+    ROUTE,
+    () => runPromotion(parsed.data, user, requestId),
+    { required: true, ttlHours: 72 },
+  );
+}
+
+async function runPromotion(
+  input: z.infer<typeof runSchema>,
+  user: NonNullable<Awaited<ReturnType<typeof requireRole>>>,
+  requestId: string,
+): Promise<{ status: number; body: unknown }> {
+  const { source_class_id, decisions, create_alumni } = input;
   const supabase = createSupabaseAdminClient();
 
   // 1. Resolve source class + year
@@ -45,7 +65,7 @@ export async function POST(req: Request) {
     .select("id,grade,section,academic_year_id")
     .eq("id", source_class_id)
     .maybeSingle();
-  if (!srcRaw) return NextResponse.json({ error: "Class not found" }, { status: 404 });
+  if (!srcRaw) return { status: 404, body: { error: "Class not found" } };
   const src = srcRaw as ClassRow;
 
   const { data: srcYearRaw } = await supabase
@@ -54,7 +74,7 @@ export async function POST(req: Request) {
     .eq("id", src.academic_year_id)
     .maybeSingle();
   if (!srcYearRaw) {
-    return NextResponse.json({ error: "Source academic year missing" }, { status: 500 });
+    return { status: 500, body: { error: "Source academic year missing" } };
   }
   const srcYear = srcYearRaw as YearRow;
   const nextLabel = nextAcademicYearLabel(srcYear.year_label);
@@ -78,7 +98,7 @@ export async function POST(req: Request) {
       })
       .select("id,year_label,start_date,end_date")
       .single();
-    if (yearErr) return NextResponse.json({ error: yearErr.message }, { status: 500 });
+    if (yearErr) return { status: 500, body: { error: yearErr.message } };
     nextYearRaw = created;
   }
   const nextYear = nextYearRaw as YearRow;
@@ -176,7 +196,7 @@ export async function POST(req: Request) {
       else summary.retained++;
     } catch (err) {
       // continue with remaining decisions
-      console.error("[promotions] decision failed", d, err);
+      log.error({ route: ROUTE, event: "decision_failed", requestId, decision: d, err });
     }
   }
 
@@ -185,8 +205,16 @@ export async function POST(req: Request) {
     action: "promotions.run",
     entity_type: "class",
     entity_id: source_class_id,
-    metadata: { ...summary, next_year: nextYear.year_label, count: decisions.length },
+    metadata: {
+      ...summary,
+      next_year: nextYear.year_label,
+      count: decisions.length,
+      request_id: requestId,
+    },
   });
 
-  return NextResponse.json({ ok: true, summary, next_year: nextYear.year_label });
+  return {
+    status: 200,
+    body: { ok: true, summary, next_year: nextYear.year_label },
+  };
 }

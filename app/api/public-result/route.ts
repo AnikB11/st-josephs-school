@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { clientKey, hitRateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
+
+const RATE_LIMIT = { max: 10, windowMs: 60_000 }; // 10 lookups / minute / IP
 
 /**
  * Public result lookup.
@@ -10,6 +13,15 @@ export const dynamic = "force-dynamic";
  * Returns only PUBLISHED results.
  */
 export async function GET(req: Request) {
+  const ipKey = clientKey(req);
+  const rl = hitRateLimit(`public-result:${ipKey}`, RATE_LIMIT);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "Too many lookups. Please wait a minute and try again." },
+      { status: 429, headers: { "retry-after": String(Math.ceil(rl.resetMs / 1000)) } },
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const admission = searchParams.get("admission_number")?.trim();
   const dob = searchParams.get("dob")?.trim();
