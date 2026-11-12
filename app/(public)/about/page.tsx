@@ -19,14 +19,14 @@ export const metadata: Metadata = {
 
 const MILESTONES = [
   { year: "1996", text: "Founded in February by the Roman Catholic Diocese of Darjeeling–Sikkim, in the quiet hills of Kingston, Rhenock." },
-  { year: "2000s", text: "Classes gradually expanded across primary, middle, and secondary levels, with English medium and a strong CISCE foundation." },
+  { year: "2000s", text: "Classes gradually expanded across primary, middle, and secondary levels, with English medium and a strong ICSE foundation." },
   { year: "2010s", text: "Senior secondary Science stream introduced; sporting, cultural, and service activities become part of daily school life." },
   { year: "Today", text: "A co-educational ICSE school of Nursery to Class XII, serving families across Sikkim and beyond." },
 ];
 
 const FACILITIES = [
   { icon: Library,      title: "Library & reading room",     body: "A well-stocked library that grows every year — supporting reading, research, and independent study from primary onwards." },
-  { icon: FlaskConical, title: "Science & computer labs",    body: "Dedicated Physics, Chemistry, Biology, and computer laboratories that support the CISCE curriculum from middle school upward." },
+  { icon: FlaskConical, title: "Science & computer labs",    body: "Dedicated Physics, Chemistry, Biology, and computer laboratories that support the ICSE curriculum from middle school upward." },
   { icon: Trophy,       title: "Sports & athletics",         body: "Grounds and courts for cricket, football, basketball, volleyball, badminton, table tennis, and athletics — for every pupil, every year." },
   { icon: Music,        title: "Chapel & assembly hall",     body: "Spaces that anchor daily assembly, prayer, cultural programmes, and school-wide gatherings across the year." },
   { icon: Utensils,     title: "Hostel & dining",            body: "Separate hostels for boys and girls, run by the school management and the Cluny Sisters, with wholesome, home-style meals." },
@@ -230,7 +230,7 @@ export default async function AboutPage() {
               </h3>
               <div className="mt-12 grid gap-6 md:grid-cols-3">
                 {[
-                  { t: "Academic excellence",       b: "A CISCE curriculum taught with depth and care — English medium, with Hindi and Nepali as second languages." },
+                  { t: "Academic excellence",       b: "An ICSE curriculum taught with depth and care — English medium, with Hindi and Nepali as second languages." },
                   { t: "Moral & spiritual formation", b: "Christian values open to every faith — daily assembly, reflection, and a school life anchored in dignity and respect." },
                   { t: "Service to society",        b: "A commitment to justice, love, and peace — especially in service of the underprivileged in our community." },
                 ].map((v) => (

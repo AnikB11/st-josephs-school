@@ -12,7 +12,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Academics",
   description:
-    "Nursery to Class XII (Science) — the ICSE and ISC curriculum at St. Joseph's School, Kingston, Rhenock. Affiliated with the CISCE, New Delhi.",
+    "Nursery to Class XII (Science) — the ICSE and ISC curriculum at St. Joseph's School, Kingston, Rhenock. Affiliated with the ICSE, New Delhi.",
 };
 
 type Stage = {
@@ -83,7 +83,7 @@ const STAGE_TEMPLATES: StageTemplate[] = [
     intro:
       "The two years that prepare students for the Indian Certificate of Secondary Education. Concepts are taught with depth, and continuous assessment supports steady preparation for the ICSE Board examination.",
     pillars: [
-      "ICSE syllabus of the CISCE, New Delhi",
+      "ICSE syllabus, New Delhi",
       "Written examinations and internal assessments",
       "Careful career and stream counselling",
       "Regular practice papers and revision cycles",
@@ -97,7 +97,7 @@ const STAGE_TEMPLATES: StageTemplate[] = [
     intro:
       "The Science stream, leading to the Indian School Certificate examination. Students focus on Physics, Chemistry, Biology, Mathematics, and Computer Science — with strong preparation for higher studies and entrance examinations.",
     pillars: [
-      "ISC syllabus of the CISCE, New Delhi",
+      "ISC syllabus, New Delhi",
       "Science stream: Physics · Chemistry · Biology / Mathematics / Computer Science",
       "Mentoring for higher studies and entrance tests",
       "Independent practical work in the laboratories",
@@ -126,7 +126,7 @@ const CURRICULUM = [
 const EXAMS = [
   { name: "Class work & internal assessment", cadence: "Continuous",     weight: "Formative",  notes: "Class exercises, projects, notebook work, and oral evaluation." },
   { name: "Unit / cycle tests",               cadence: "Each term",      weight: "Formative",  notes: "Short written tests to consolidate learning between examinations." },
-  { name: "Half-yearly examination",          cadence: "Mid-session",    weight: "Summative",  notes: "Written papers across all subjects, aligned with the CISCE pattern." },
+  { name: "Half-yearly examination",          cadence: "Mid-session",    weight: "Summative",  notes: "Written papers across all subjects, aligned with the ICSE pattern." },
   { name: "Annual / Board examination",       cadence: "End of session", weight: "Summative",  notes: "Internal annual (Nursery – IX, XI) or ICSE / ISC Board (Class X & XII)." },
 ];
 
@@ -226,7 +226,7 @@ export default async function AcademicsPage() {
             <span className="gold-rule">The curriculum</span>
           </p>
           <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
-            {cms.academics_intro.title ?? "A CISCE curriculum, taught with depth and care."}
+            {cms.academics_intro.title ?? "An ICSE curriculum, taught with depth and care."}
           </h2>
           <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
             {cms.academics_intro.body ??
@@ -268,7 +268,7 @@ export default async function AcademicsPage() {
                 Assessment that supports the learning.
               </h2>
               <p className="mt-5 leading-relaxed text-[hsl(var(--ink-soft))]">
-                Our assessment pattern mirrors the CISCE framework — continuous class work and
+                Our assessment pattern mirrors the ICSE framework — continuous class work and
                 unit tests through the term, followed by half-yearly and annual written examinations.
                 Marks are a signal of learning, not the purpose of it.
               </p>
@@ -329,7 +329,7 @@ export default async function AcademicsPage() {
             <span className="italic">taught with care.</span>
           </>
         }
-        description="From Nursery to Class XII (Science), St. Joseph's follows the CISCE syllabus in English medium — with Hindi and Nepali as second languages."
+        description="From Nursery to Class XII (Science), St. Joseph's follows the ICSE syllabus in English medium — with Hindi and Nepali as second languages."
         image={HERO_IMG}
         imageAlt="A classroom at St. Joseph's School, Kingston"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Academics" }]}
