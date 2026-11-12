@@ -14,17 +14,9 @@ function newRequestId(): string {
   );
 }
 
-/**
- * Cheap same-origin check for unsafe methods. Browsers always send an
- * Origin header on cross-site POSTs, so a mismatch (or missing value on
- * a cross-site request) is a strong CSRF signal. This runs before auth
- * so an attacker can't burn session cookies via forged forms.
- */
 function failsOriginCheck(req: NextRequest): boolean {
   if (!UNSAFE_METHODS.has(req.method)) return false;
   const origin = req.headers.get("origin");
-  // Same-origin fetches from our own app pages always include Origin.
-  // No Origin on an unsafe method = suspicious cross-site form POST.
   if (!origin) return true;
   try {
     const originHost = new URL(origin).host;
@@ -34,7 +26,6 @@ function failsOriginCheck(req: NextRequest): boolean {
   }
 }
 
-// Routes that require a Supabase Auth session (admin / teacher / alumni).
 const SUPABASE_AUTH_PREFIXES = [
   "/admin",
   "/teacher",
@@ -42,7 +33,6 @@ const SUPABASE_AUTH_PREFIXES = [
   "/api/admin",
 ];
 
-// Routes that require a student-session JWT cookie (student / parent).
 const STUDENT_SESSION_PREFIXES = [
   "/student",
   "/parent",
@@ -57,8 +47,6 @@ const PUBLIC_API_PREFIXES = [
   "/api/access",
 ];
 
-// Portal-specific login pages that live under a protected prefix but
-// must be reachable without a session.
 const PUBLIC_PORTAL_PAGES = new Set<string>([
   "/teacher/login",
   "/student/login",
@@ -85,68 +73,73 @@ function isPublicApi(pathname: string) {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
-  // Inject a request id so downstream handlers + lib/log.ts can correlate.
   const requestId = req.headers.get(REQUEST_ID_HEADER) ?? newRequestId();
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set(REQUEST_ID_HEADER, requestId);
-  const passthrough = () =>
-    NextResponse.next({ request: { headers: requestHeaders } });
 
-  // CSRF: reject unsafe cross-origin requests to protected admin APIs.
-  // Public APIs (public-result, access/verify, alumni/request) are not
-  // matched by this middleware, so we only guard admin writes.
-  if (pathname.startsWith("/api/admin") && failsOriginCheck(req)) {
-    return NextResponse.json(
-      { error: "Cross-origin request blocked" },
-      { status: 403, headers: { [REQUEST_ID_HEADER]: requestId } },
-    );
-  }
+  // All request-id injection + routing lives inside the try. Any thrown
+  // exception (edge-runtime bug, missing env var, supabase network blip)
+  // falls through to the catch and we respond with a safe fallback
+  // instead of Vercel's generic MIDDLEWARE_INVOCATION_FAILED 500.
+  try {
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set(REQUEST_ID_HEADER, requestId);
+    const passthrough = () =>
+      NextResponse.next({ request: { headers: requestHeaders } });
 
-  // BYPASS AUTH FOR LOCAL DEV — matches the bypass in lib/auth.ts.
-  if (process.env.NODE_ENV === "development") return passthrough();
-
-  if (isPublicApi(pathname)) return passthrough();
-  if (PUBLIC_PORTAL_PAGES.has(pathname)) return passthrough();
-
-  const needsSupabase = startsWithPrefix(pathname, SUPABASE_AUTH_PREFIXES) ||
-    startsWithPrefix(pathname, OTHER_PROTECTED_PREFIXES);
-  const needsStudent = startsWithPrefix(pathname, STUDENT_SESSION_PREFIXES);
-
-  if (!needsSupabase && !needsStudent) return passthrough();
-
-  // ---------- Student / parent JWT path ----------
-  if (needsStudent) {
-    const token = req.cookies.get(STUDENT_SESSION_COOKIE)?.value;
-    const session = token ? await verifyStudentSessionToken(token) : null;
-    if (!session) {
-      const loginUrl = req.nextUrl.clone();
-      loginUrl.pathname = loginPathFor(pathname);
-      loginUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(loginUrl);
+    if (pathname.startsWith("/api/admin") && failsOriginCheck(req)) {
+      return NextResponse.json(
+        { error: "Cross-origin request blocked" },
+        { status: 403, headers: { [REQUEST_ID_HEADER]: requestId } },
+      );
     }
-    // Enforce audience: student session can't access /parent and vice versa.
-    if (pathname.startsWith("/parent") && session.audience !== "parent") {
-      return NextResponse.redirect(new URL("/student", req.url));
-    }
-    if (pathname.startsWith("/student") && session.audience !== "student") {
-      return NextResponse.redirect(new URL("/parent", req.url));
-    }
-    return passthrough();
-  }
 
-  // ---------- Supabase Auth path (admin / teacher) ----------
-  // `res` is `let` because the supabase-ssr pattern re-creates the response
-  // inside setAll after refreshing auth cookies. If we don't re-create it,
-  // the downstream handler sees stale cookies (because we also pass
-  // `request: { headers }` which snapshots headers at creation time), and
-  // getAuthUser on the server fails even though the user is signed in.
-  let res = NextResponse.next({ request: { headers: requestHeaders } });
-  res.headers.set(REQUEST_ID_HEADER, requestId);
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+    if (process.env.NODE_ENV === "development") return passthrough();
+
+    if (isPublicApi(pathname)) return passthrough();
+    if (PUBLIC_PORTAL_PAGES.has(pathname)) return passthrough();
+
+    const needsSupabase = startsWithPrefix(pathname, SUPABASE_AUTH_PREFIXES) ||
+      startsWithPrefix(pathname, OTHER_PROTECTED_PREFIXES);
+    const needsStudent = startsWithPrefix(pathname, STUDENT_SESSION_PREFIXES);
+
+    if (!needsSupabase && !needsStudent) return passthrough();
+
+    // ---------- Student / parent JWT path ----------
+    if (needsStudent) {
+      const token = req.cookies.get(STUDENT_SESSION_COOKIE)?.value;
+      const session = token ? await verifyStudentSessionToken(token) : null;
+      if (!session) {
+        const loginUrl = req.nextUrl.clone();
+        loginUrl.pathname = loginPathFor(pathname);
+        loginUrl.searchParams.set("next", pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+      if (pathname.startsWith("/parent") && session.audience !== "parent") {
+        return NextResponse.redirect(new URL("/student", req.url));
+      }
+      if (pathname.startsWith("/student") && session.audience !== "student") {
+        return NextResponse.redirect(new URL("/parent", req.url));
+      }
+      return passthrough();
+    }
+
+    // ---------- Supabase Auth path (admin / teacher / alumni / api/admin) ----------
+    // Fail loudly to the catch below if the project env is misconfigured
+    // (a missing anon key would otherwise produce a silent fetch to
+    // `undefined/auth/v1/user` and surface as a 500 to the user).
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseAnon) {
+      throw new Error(
+        `Missing supabase env in middleware (url=${!!supabaseUrl}, anon=${!!supabaseAnon}). Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY on this Vercel project.`,
+      );
+    }
+
+    // Standard @supabase/ssr middleware pattern: start with a response, let
+    // setAll mutate req.cookies + re-create the response so the refreshed
+    // auth cookies flow through to the downstream route handler.
+    let res = NextResponse.next({ request: { headers: requestHeaders } });
+    res.headers.set(REQUEST_ID_HEADER, requestId);
+    const supabase = createServerClient(supabaseUrl, supabaseAnon, {
       cookies: {
         getAll: () => req.cookies.getAll(),
         setAll: (toSet: CookieSet[]) => {
@@ -158,22 +151,53 @@ export async function middleware(req: NextRequest) {
           );
         },
       },
-    },
-  );
+    });
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      const loginUrl = req.nextUrl.clone();
+      loginUrl.pathname = loginPathFor(pathname);
+      loginUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return res;
+  } catch (err) {
+    // Log the full error to Vercel runtime logs so we can see what's
+    // actually failing (visible under the project's "Logs" tab, filterable
+    // by the request id echoed in the response header).
+    console.error(
+      JSON.stringify({
+        level: "error",
+        where: "middleware",
+        requestId,
+        pathname,
+        err: err instanceof Error
+          ? { name: err.name, message: err.message, stack: err.stack }
+          : { message: String(err) },
+      }),
+    );
+
+    // For API routes, return JSON with a request id so the client can
+    // surface a useful error. For pages, send the user to a login page
+    // (safer than a blank 500) with the request id as a query param.
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json(
+        { error: "Middleware error", requestId },
+        { status: 500, headers: { [REQUEST_ID_HEADER]: requestId } },
+      );
+    }
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = loginPathFor(pathname);
     loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    loginUrl.searchParams.set("err", "mw");
+    loginUrl.searchParams.set("rid", requestId);
+    const redirect = NextResponse.redirect(loginUrl);
+    redirect.headers.set(REQUEST_ID_HEADER, requestId);
+    return redirect;
   }
-
-  return res;
 }
 
-// Only run middleware on routes that may need auth. Public pages skip it entirely,
-// which avoids loading the jose/Supabase edge bundle on every public navigation.
 export const config = {
   matcher: [
     "/admin/:path*",
