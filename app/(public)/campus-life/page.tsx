@@ -15,6 +15,15 @@ export const metadata: Metadata = {
     "Sports, events, clubs, service, and cultural life at St. Joseph's School, Kingston — a co-educational ICSE school in Rhenock, Sikkim.",
 };
 
+const ACADEMIES = [
+  { name: "Music",   tag: "Creative", body: "Keyboard, guitar, and ukulele — group sessions and small-ensemble practice that build creativity, expression, and discipline." },
+  { name: "Dance",   tag: "Creative", body: "An opportunity to express rhythm and movement, building confidence and coordination through folk, traditional, and contemporary forms." },
+  { name: "Football",  tag: "Sport",  body: "Encouraging physical fitness, teamwork, sportsmanship, and discipline through regular coaching and inter-house matches." },
+  { name: "Basketball", tag: "Sport", body: "Developing coordination, concentration, teamwork, and competitive spirit on the school court." },
+  { name: "Badminton",  tag: "Sport", body: "Building agility, focus, and sporting discipline through year-round play in the school hall." },
+  { name: "Personal Development", tag: "Life skills", body: "Strengthening confidence, communication, leadership, and interpersonal abilities for life beyond the classroom." },
+];
+
 const SPORTS = [
   { name: "Cricket",       blurb: "One of the school's favourite sports — with coaching, inter-house matches, and regular practice sessions." },
   { name: "Football",      blurb: "Played on the main ground through most of the year, with house teams for boys and girls at every level." },
@@ -114,6 +123,47 @@ export default async function CampusLifePage() {
   const STUDENT_IMG = resolveImage("campus_student_image", cms.campus_student_image);
 
   const tabs: TabItem[] = [
+    {
+      id: "academies",
+      label: "Academies",
+      content: (
+        <>
+          <section className="container-wide py-20 sm:py-24 lg:py-28">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--primary))]">
+              <span className="gold-rule">Specialised academies</span>
+            </p>
+            <h2 className="heading mt-4 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl">
+              Every talent deserves an opportunity.
+            </h2>
+            <p className="mt-5 max-w-2xl text-base text-[hsl(var(--ink-soft))] sm:text-lg">
+              Children develop in different ways. Alongside the classroom,
+              specialised academies give students focused time to explore their
+              creativity, strengthen their confidence, and discover individual
+              strengths.
+            </p>
+            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {ACADEMIES.map((a) => (
+                <article
+                  key={a.name}
+                  className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--ivory))] p-6"
+                >
+                  <span className="inline-flex rounded-full bg-[hsl(var(--primary))]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[hsl(var(--primary))]">
+                    {a.tag}
+                  </span>
+                  <h3 className="font-display mt-3 text-lg font-semibold text-[hsl(var(--ink))]">
+                    {a.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--ink-soft))]">
+                    {a.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+          <ImageBand src={CULT_IMG} alt="Students at a specialised academy session" />
+        </>
+      ),
+    },
     {
       id: "sports",
       label: "Sports",

@@ -7,6 +7,7 @@ import { Hero } from "@/components/site/hero";
 // round-trip per visit.
 export const revalidate = 60;
 import { Stats } from "@/components/site/stats";
+import { WhyStJosephs } from "@/components/site/why-stjosephs";
 import { PrincipalMessage } from "@/components/site/principal-message";
 import { SectionSkeleton } from "@/components/site/section-skeleton";
 import { getCmsSections } from "@/lib/cms";
@@ -73,6 +74,7 @@ export default async function HomePage() {
         image={resolveImage("home_hero_image", cms.home_hero_image)}
       />
       <Stats />
+      <WhyStJosephs />
       <CampusScroll image={resolveImage("home_campus_image", cms.home_campus_image)} />
       <PrincipalMessage
         title={cms.principal_message.title}

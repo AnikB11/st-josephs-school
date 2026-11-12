@@ -66,7 +66,7 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           {/* Quick Links */}
           <div>
             <h4 className="font-display text-[12px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]/90 mb-5">
@@ -83,6 +83,19 @@ export async function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* School Information */}
+          <div>
+            <h4 className="font-display text-[12px] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--gold))]/90 mb-5">
+              School Information
+            </h4>
+            <ul className="space-y-3 text-[14px] font-sans">
+              <li><Link href="/about#mission" className="nav-underline text-white/80 hover:text-white">Mission &amp; Vision</Link></li>
+              <li><Link href="/about#management" className="nav-underline text-white/80 hover:text-white">Management</Link></li>
+              <li><Link href="/about#facilities" className="nav-underline text-white/80 hover:text-white">Boarding Facilities</Link></li>
+              <li><Link href="/campus-life#academies" className="nav-underline text-white/80 hover:text-white">Specialised Academies</Link></li>
             </ul>
           </div>
 
