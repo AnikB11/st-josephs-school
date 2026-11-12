@@ -18,7 +18,8 @@ export function currentAcademicYearLabel(today: Date = new Date()): string {
  */
 const GRADE_LADDER = [
   "Nursery",
-  "KG",
+  "LKG",
+  "UKG",
   "1",
   "2",
   "3",

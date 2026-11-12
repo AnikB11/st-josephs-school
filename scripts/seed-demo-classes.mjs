@@ -33,12 +33,12 @@ const supabase = createClient(
   { auth: { autoRefreshToken: false, persistSession: false } },
 );
 
-const GRADES = ["Nursery", "KG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))];
+const GRADES = ["Nursery", "LKG", "UKG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))];
 const SECTIONS = ["A", "B"];
 
 // Birth year per grade: rough Indian academic mapping.
 const BIRTH_YEAR_FOR_GRADE = {
-  "Nursery": 2022, "KG": 2021,
+  "Nursery": 2023, "LKG": 2022, "UKG": 2021,
   "1": 2020, "2": 2019, "3": 2018, "4": 2017, "5": 2016, "6": 2015,
   "7": 2014, "8": 2013, "9": 2012, "10": 2011, "11": 2010, "12": 2009,
 };
@@ -141,7 +141,7 @@ async function seed() {
   let createdStudents = 0;
 
   for (const grade of GRADES) {
-    const studentsPerSection = grade === "Nursery" || grade === "KG" ? 4 : 6;
+    const studentsPerSection = grade === "Nursery" || grade === "LKG" || grade === "UKG" ? 4 : 6;
     for (const section of SECTIONS) {
       const classId = await ensureClass(yearId, grade, section);
       createdClasses++;

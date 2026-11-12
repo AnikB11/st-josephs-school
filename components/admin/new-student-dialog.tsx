@@ -198,7 +198,7 @@ export function NewStudentDialog({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {["Nursery", "KG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))].map(
+                    {["Nursery", "LKG", "UKG", ...Array.from({ length: 12 }, (_, i) => String(i + 1))].map(
                       (g) => (
                         <SelectItem key={g} value={g}>
                           {g}

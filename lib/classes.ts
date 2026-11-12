@@ -23,7 +23,7 @@ export type SectionInfo = {
 };
 
 export type GradeGroup = {
-  grade: string;          // "10", "Nursery", "KG", ...
+  grade: string;          // "10", "Nursery", "LKG", "UKG", ...
   sections: SectionInfo[];
   studentCount: number;
   sectionCount: number;
@@ -32,7 +32,8 @@ export type GradeGroup = {
 
 const GRADE_ORDER = [
   "Nursery",
-  "KG",
+  "LKG",
+  "UKG",
   ...Array.from({ length: 12 }, (_, i) => String(i + 1)),
 ];
 
