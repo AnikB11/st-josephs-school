@@ -31,6 +31,8 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Contact",
   description: `Get in touch with ${SCHOOL.name} — office, admissions, hostel, and campus visits at Kingston, Rhenock, Pakyong District, Sikkim.`,
+  alternates: { canonical: "/contact" },
+  openGraph: { url: "/contact", type: "website" },
 };
 
 type ContactItem = {

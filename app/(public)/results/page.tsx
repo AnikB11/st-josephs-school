@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   title: "Check Result",
   description:
     "Look up your published report card at St. Joseph's School, Kingston with your admission number and date of birth.",
+  alternates: { canonical: "/results" },
+  openGraph: { url: "/results", type: "website" },
 };
 
 type ResultRow = {

@@ -18,7 +18,9 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Admissions",
   description:
-    "Admissions to St. Joseph's School, Kingston — process, eligibility, documents, FAQs, and enquiry. Nursery through Class XII (Science), CISCE affiliation.",
+    "Admissions to St. Joseph's School, Kingston — process, eligibility, documents, FAQs, and enquiry. Nursery through Class XII (Science), ICSE curriculum.",
+  alternates: { canonical: "/admissions" },
+  openGraph: { url: "/admissions", type: "website" },
 };
 
 const PROCESS = [

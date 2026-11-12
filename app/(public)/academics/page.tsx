@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   title: "Academics",
   description:
     "Nursery to Class XII (Science) — the ICSE and ISC curriculum at St. Joseph's School, Kingston, Rhenock. Affiliated with the ICSE, New Delhi.",
+  alternates: { canonical: "/academics" },
+  openGraph: { url: "/academics", type: "website" },
 };
 
 type Stage = {

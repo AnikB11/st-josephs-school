@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   },
   description: `${SCHOOL.name}, Rhenock — a co-educational ICSE school in Kingston, Pakyong District, Sikkim. Founded in ${SCHOOL.founded} under the Roman Catholic Diocese of Darjeeling–Sikkim, offering Nursery through Class XII (Science) in English medium.`,
   applicationName: SCHOOL.name,
+  // Default canonical points at the root. Per-page metadata extends this
+  // with alternates.canonical for self-referential tags.
+  alternates: { canonical: "/" },
   keywords: [
     "St. Joseph's School Kingston",
     "St. Joseph's School Rhenock",
@@ -76,6 +79,7 @@ export const viewport: Viewport = {
 
 import { Suspense } from "react";
 import { TopLoader } from "@/components/site/top-loader";
+import { EducationalOrganizationLd, WebSiteLd } from "@/components/seo/json-ld";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -109,6 +113,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Suspense fallback={null}>
           <TopLoader />
         </Suspense>
+        {/* Sitewide structured data. Rendered as ordinary <script
+            type="application/ld+json"> tags that every page serves. */}
+        <EducationalOrganizationLd />
+        <WebSiteLd />
         {children}
         <Toaster position="top-center" richColors />
       </body>

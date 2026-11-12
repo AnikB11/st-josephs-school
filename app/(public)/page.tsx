@@ -1,11 +1,30 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/site/hero";
+import { SCHOOL } from "@/lib/constants";
 
 // Edge-cached for 60s; CMS publishes invalidate via revalidateTag from the
 // admin write paths. First request rebuilds in the background; everyone else
 // serves the cached HTML in ~50ms instead of paying a full SSR + Supabase
 // round-trip per visit.
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  // Keep the default title (set in root layout's `title.default`) rather
+  // than overriding here — the homepage benefits from the full school
+  // name + tagline as its tab/search title.
+  title: {
+    absolute: `${SCHOOL.name} — ${SCHOOL.tagline} | ICSE School in Rhenock, Sikkim`,
+  },
+  description: `${SCHOOL.name} — a co-educational ICSE school in Kingston, Rhenock, Sikkim. Nursery through Class XII (Science), English medium, under the Roman Catholic Diocese of Darjeeling–Sikkim. Admissions open.`,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: `${SCHOOL.name} — ${SCHOOL.tagline}`,
+    description: `A co-educational ICSE school in the hills of Rhenock, Sikkim — Nursery to Class XII (Science), English medium, since ${SCHOOL.founded}.`,
+    url: "/",
+    type: "website",
+  },
+};
 import { Stats } from "@/components/site/stats";
 import { WhyStJosephs } from "@/components/site/why-stjosephs";
 import { PrincipalMessage } from "@/components/site/principal-message";

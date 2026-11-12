@@ -13,6 +13,8 @@ import { resolveImage } from "@/lib/cms-images";
 export const metadata: Metadata = {
   title: "Gallery",
   description: "Photographs from school life at St. Joseph's, Kingston — events, campus, sports, cultural programmes, and everyday moments.",
+  alternates: { canonical: "/gallery" },
+  openGraph: { url: "/gallery", type: "website" },
 };
 
 export const revalidate = 60;

@@ -22,6 +22,8 @@ import { resolveImage } from "@/lib/cms-images";
 export const metadata: Metadata = {
   title: "Notices",
   description: "Official notices, circulars, and announcements from the office of St. Joseph's School, Kingston, Rhenock, Sikkim.",
+  alternates: { canonical: "/notices" },
+  openGraph: { url: "/notices", type: "website" },
 };
 
 export const revalidate = 60;

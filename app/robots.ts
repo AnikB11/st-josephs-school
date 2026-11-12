@@ -7,9 +7,20 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/parent", "/alumni-portal", "/api/"],
+        disallow: [
+          "/admin",
+          "/teacher",
+          "/student",
+          "/parent",
+          "/alumni-portal",
+          "/login",
+          "/forgot-password",
+          "/reset-password",
+          "/api/",
+        ],
       },
     ],
     sitemap: `${base}/sitemap.xml`,
+    host: base,
   };
 }

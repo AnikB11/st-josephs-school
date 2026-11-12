@@ -14,6 +14,8 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "About",
   description: `${SCHOOL.name} is a co-educational ICSE school in Kingston, Rhenock, Pakyong District, Sikkim — established in 1996 under the Roman Catholic Diocese of Darjeeling–Sikkim.`,
+  alternates: { canonical: "/about" },
+  openGraph: { url: "/about", type: "website" },
 };
 
 

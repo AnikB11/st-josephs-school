@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   title: "Campus Life",
   description:
     "Sports, events, clubs, service, and cultural life at St. Joseph's School, Kingston — a co-educational ICSE school in Rhenock, Sikkim.",
+  alternates: { canonical: "/campus-life" },
+  openGraph: { url: "/campus-life", type: "website" },
 };
 
 const ACADEMIES = [

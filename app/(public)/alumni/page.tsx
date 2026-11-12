@@ -25,6 +25,8 @@ import { resolveImage } from "@/lib/cms-images";
 export const metadata: Metadata = {
   title: "Alumni",
   description: "The alumni community of St. Joseph's School, Kingston — reunions, stories, and ways to stay connected with the school in Rhenock, Sikkim.",
+  alternates: { canonical: "/alumni" },
+  openGraph: { url: "/alumni", type: "website" },
 };
 
 export const revalidate = 300;
