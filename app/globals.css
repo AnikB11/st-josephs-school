@@ -68,7 +68,7 @@
   }
   /* Headings get the serif by default for the ivy/premium feel */
   h1, h2, h3, h4 {
-    font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+    font-family: var(--font-serif), ui-serif, Georgia, serif;
     letter-spacing: -0.01em;
   }
 }

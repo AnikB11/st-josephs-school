@@ -1,20 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
+import { Inter, EB_Garamond } from "next/font/google";
 import { Toaster } from "sonner";
 import { SCHOOL } from "@/lib/constants";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-sans",
   display: "swap",
 });
 
-const fraunces = Fraunces({
+const garamond = EB_Garamond({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-serif",
   display: "swap",
-  axes: ["opsz"],
 });
 
 const APP_URL =
@@ -82,7 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${jakarta.variable} ${fraunces.variable}`}
+      className={`${inter.variable} ${garamond.variable}`}
       suppressHydrationWarning
     >
       <head>

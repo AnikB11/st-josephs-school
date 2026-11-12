@@ -22,9 +22,9 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
-        display: ["var(--font-fraunces)", "ui-serif", "Georgia", "serif"],
-        serif: ["var(--font-fraunces)", "ui-serif", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
+        serif: ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
