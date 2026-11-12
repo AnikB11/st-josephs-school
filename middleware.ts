@@ -136,7 +136,12 @@ export async function middleware(req: NextRequest) {
   }
 
   // ---------- Supabase Auth path (admin / teacher) ----------
-  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  // `res` is `let` because the supabase-ssr pattern re-creates the response
+  // inside setAll after refreshing auth cookies. If we don't re-create it,
+  // the downstream handler sees stale cookies (because we also pass
+  // `request: { headers }` which snapshots headers at creation time), and
+  // getAuthUser on the server fails even though the user is signed in.
+  let res = NextResponse.next({ request: { headers: requestHeaders } });
   res.headers.set(REQUEST_ID_HEADER, requestId);
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -145,10 +150,12 @@ export async function middleware(req: NextRequest) {
       cookies: {
         getAll: () => req.cookies.getAll(),
         setAll: (toSet: CookieSet[]) => {
-          toSet.forEach(({ name, value, options }) => {
-            req.cookies.set(name, value);
-            res.cookies.set(name, value, options);
-          });
+          toSet.forEach(({ name, value }) => req.cookies.set(name, value));
+          res = NextResponse.next({ request: { headers: requestHeaders } });
+          res.headers.set(REQUEST_ID_HEADER, requestId);
+          toSet.forEach(({ name, value, options }) =>
+            res.cookies.set(name, value, options),
+          );
         },
       },
     },
