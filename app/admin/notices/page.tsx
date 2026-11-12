@@ -40,7 +40,7 @@ export default async function NoticesAdminPage() {
   return (
     <>
       <TopNav title="Notices" subtitle="Publish and manage school announcements" />
-      <div className="space-y-6 px-6 py-8">
+      <div className="space-y-6 px-4 py-6 sm:px-6 sm:py-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
             Notices auto-archive when they expire, then delete after the retention window.
@@ -54,7 +54,10 @@ export default async function NoticesAdminPage() {
               No notices yet. Publish your first to share with parents and students.
             </div>
           ) : (
-            <Table>
+            // `min-w-[760px]` keeps the 7-column layout readable; the Table
+            // primitive already wraps in `overflow-auto`, so narrow viewports
+            // get a horizontal scroll strip instead of squashed columns.
+            <Table className="min-w-[760px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
